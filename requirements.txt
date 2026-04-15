@@ -1,0 +1,4 @@
+# Keep this minimal; pin only if needed for reproducibility.
+# Labeling tool (optional)
+label-studio>=1.23.0
+

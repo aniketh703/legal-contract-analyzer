@@ -1,0 +1,456 @@
+2026-04-07 21:36:23,482 [INFO] 
+==================================================
+2026-04-07 21:36:23,482 [INFO] Scraping clause type: termination (target: 5 snippets)
+2026-04-07 21:36:23,482 [INFO] ==================================================
+2026-04-07 21:36:23,483 [INFO] 
+Query: "vendor agreement" termination clause
+2026-04-07 21:36:26,472 [INFO]   Search '"vendor agreement" termination clause' page 0: 10 results
+2026-04-07 21:36:26,474 [INFO]   Fetching: M.S Velocis System Pvt Ltd vs Container Corporation Of India
+2026-04-07 21:36:29,479 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:36:31,988 [INFO]   Fetching: Dts Travels Pvt. Ltd vs Sachin Bhati on 10 December, 2018
+2026-04-07 21:36:34,971 [INFO]     Extracted 4 snippet(s) from this judgment
+2026-04-07 21:36:37,487 [INFO]   Fetching: Delhivery Private Limited vs Treasure Vase Ventures Private 
+2026-04-07 21:36:40,512 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:36:43,013 [INFO]   Fetching: Shri Nagendra S/O Devaray Birje vs Chairman/Assistant Commis
+2026-04-07 21:36:46,095 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:36:48,602 [INFO]   Fetching: Smt. Shyamabai W/O Shriram Sharma ... vs Ramkisan S/O Prabha
+2026-04-07 21:36:51,676 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:36:54,178 [INFO]   Fetching: Zreyah Semiconductors Pvt. Ltd vs Oyo Hotels And Homes Pvt. 
+2026-04-07 21:36:57,103 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:36:59,606 [INFO]   Fetching: Fis Payment Solutions And Services ... vs All Bengal Contrac
+2026-04-07 21:37:05,110 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:37:07,618 [INFO]   Fetching: Oyo Hotels And Homes Pvt Ltd vs Zreyah Semiconductors Pvt Lt
+2026-04-07 21:37:10,577 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:37:13,079 [INFO]   Fetching: Adappa B S vs Shivappa B T on 13 February, 2026
+2026-04-07 21:37:16,083 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:37:18,594 [INFO]   Fetching: Prime Trans Express Pvt Ltd vs Ss Supply Chain on 22 July, 2
+2026-04-07 21:37:21,537 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:37:24,041 [INFO] 
+Query: "termination clause" vendor agreement dispute
+2026-04-07 21:37:27,028 [INFO]   Search '"termination clause" vendor agreement dispute' page 0: 10 results
+2026-04-07 21:37:27,030 [INFO]   Fetching: Commissioner Of Income Tax-Xvii vs Idea Cellular Ltd. on 19 
+2026-04-07 21:37:30,058 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:37:32,567 [INFO]   Fetching: Old World Hospitality Pvt. Ltd. vs India Habitat Centre on 2
+2026-04-07 21:37:35,654 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:37:38,163 [INFO] 
+Total snippets for termination: 5
+2026-04-07 21:37:38,166 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:37:38,166 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-07 21:37:38,166 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-07 21:38:58,620 [INFO] 
+==================================================
+2026-04-07 21:38:58,621 [INFO] Scraping clause type: termination (target: 5 snippets)
+2026-04-07 21:38:58,621 [INFO] ==================================================
+2026-04-07 21:38:58,622 [INFO] 
+Query: "vendor agreement" termination clause
+2026-04-07 21:39:01,633 [INFO]   Search '"vendor agreement" termination clause' page 0: 10 results
+2026-04-07 21:39:01,635 [INFO]   Fetching: M.S Velocis System Pvt Ltd vs Container Corporation Of India
+2026-04-07 21:39:04,625 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:39:07,128 [INFO]   Fetching: Dts Travels Pvt. Ltd vs Sachin Bhati on 10 December, 2018
+2026-04-07 21:39:10,147 [INFO]     Extracted 4 snippet(s) from this judgment
+2026-04-07 21:39:12,659 [INFO]   Fetching: Delhivery Private Limited vs Treasure Vase Ventures Private 
+2026-04-07 21:39:15,675 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:39:18,189 [INFO]   Fetching: Shri Nagendra S/O Devaray Birje vs Chairman/Assistant Commis
+2026-04-07 21:39:21,225 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:39:23,726 [INFO]   Fetching: Smt. Shyamabai W/O Shriram Sharma ... vs Ramkisan S/O Prabha
+2026-04-07 21:39:26,727 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:39:29,228 [INFO]   Fetching: Zreyah Semiconductors Pvt. Ltd vs Oyo Hotels And Homes Pvt. 
+2026-04-07 21:39:32,176 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:39:34,683 [INFO]   Fetching: Fis Payment Solutions And Services ... vs All Bengal Contrac
+2026-04-07 21:39:37,575 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:39:40,089 [INFO]   Fetching: Oyo Hotels And Homes Pvt Ltd vs Zreyah Semiconductors Pvt Lt
+2026-04-07 21:39:43,015 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:39:45,522 [INFO]   Fetching: Adappa B S vs Shivappa B T on 13 February, 2026
+2026-04-07 21:39:48,527 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:39:51,030 [INFO]   Fetching: Prime Trans Express Pvt Ltd vs Ss Supply Chain on 22 July, 2
+2026-04-07 21:39:54,013 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:39:56,519 [INFO] 
+Query: "termination clause" vendor agreement dispute
+2026-04-07 21:39:59,479 [INFO]   Search '"termination clause" vendor agreement dispute' page 0: 10 results
+2026-04-07 21:39:59,481 [INFO]   Fetching: Commissioner Of Income Tax-Xvii vs Idea Cellular Ltd. on 19 
+2026-04-07 21:40:02,457 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:40:04,963 [INFO]   Fetching: Old World Hospitality Pvt. Ltd. vs India Habitat Centre on 2
+2026-04-07 21:40:08,062 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:40:10,570 [INFO] 
+Total snippets for termination: 5
+2026-04-07 21:40:10,572 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:40:10,573 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:40:20,585 [INFO] 
+==================================================
+2026-04-07 21:40:20,585 [INFO] Scraping clause type: indemnification (target: 5 snippets)
+2026-04-07 21:40:20,585 [INFO] ==================================================
+2026-04-07 21:40:20,586 [INFO] 
+Query: "service contract" indemnification clause
+2026-04-07 21:40:24,954 [INFO]   Search '"service contract" indemnification clause' page 0: 10 results
+2026-04-07 21:40:24,955 [INFO]   Fetching: Ms Srishty Medical Pvt. Ltd vs Sunil Singh Bisht on 23 Decem
+2026-04-07 21:40:27,980 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:40:30,488 [INFO]   Fetching: The Great Eastern Shipping Co. Ltd. vs State Of Karnataka on
+2026-04-07 21:40:33,451 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:40:35,955 [INFO]   Fetching: Commissioner OfServiceTax Delhi vs Quick Heal Technologies L
+2026-04-07 21:40:39,396 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:40:41,906 [INFO]   Fetching: T.A. Choudhary vs State Of A.P. And Ors. on 1 May, 2003
+2026-04-07 21:40:44,935 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:40:47,444 [INFO]   Fetching: Tower Vision India Private Limited vs Videocon Telecommunica
+2026-04-07 21:40:50,532 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:40:53,042 [INFO]   Fetching: Commissioner Of Income Tax vs Career Launcher India Ltd. on 
+2026-04-07 21:40:56,266 [INFO]     Extracted 4 snippet(s) from this judgment
+2026-04-07 21:40:58,769 [INFO]   Fetching: Viom Networks Limited vs Videocon Telecommunications Limited
+2026-04-07 21:41:01,807 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:41:04,310 [INFO] 
+Total snippets for indemnification: 5
+2026-04-07 21:41:04,313 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:41:04,313 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:41:14,319 [INFO] 
+==================================================
+2026-04-07 21:41:14,319 [INFO] Scraping clause type: non_compete (target: 5 snippets)
+2026-04-07 21:41:14,319 [INFO] ==================================================
+2026-04-07 21:41:14,320 [INFO] 
+Query: "restraint of trade" section 27 contract
+2026-04-07 21:41:18,674 [INFO]   Search '"restraint of trade" section 27 contract' page 0: 10 results
+2026-04-07 21:41:18,676 [INFO]   Fetching: Percept D'Markr (India) Pvt. Ltd vs Zaheer Khan & Anr on 22 
+2026-04-07 21:41:21,577 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:41:24,082 [INFO]   Fetching: Superintendence Company Of India (P) ... vs Krishan Murgai o
+2026-04-07 21:41:27,099 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:41:29,603 [INFO]   Fetching: Wipro Limited vs Beckman Coulter International S.A. on 11 Ju
+2026-04-07 21:41:32,652 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:41:35,156 [INFO]   Fetching: Superintendence Company Of India (P) ... vs Sh. Krishan Murg
+2026-04-07 21:41:38,215 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:41:40,729 [INFO]   Fetching: Zaheer Khan vs Percept D' Mark (India) Private Limited ... o
+2026-04-07 21:41:43,738 [INFO]     Extracted 5 snippet(s) from this judgment
+2026-04-07 21:41:46,239 [INFO] 
+Total snippets for non_compete: 5
+2026-04-07 21:41:46,241 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:41:46,242 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:41:56,257 [INFO] 
+==================================================
+2026-04-07 21:41:56,257 [INFO] Scraping clause type: arbitration (target: 5 snippets)
+2026-04-07 21:41:56,257 [INFO] ==================================================
+2026-04-07 21:41:56,258 [INFO] 
+Query: "arbitration clause" agreement dispute
+2026-04-07 21:42:01,282 [INFO]   Search '"arbitration clause" agreement dispute' page 0: 10 results
+2026-04-07 21:42:01,283 [INFO]   Fetching: I.T.C. Limited vs George Joseph Fernandes & Anr on 6 Februar
+2026-04-07 21:42:04,380 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:42:06,882 [INFO]   Fetching: Shri Gouri Ganesh Shri Balaji ... vs Executive Engineer on 3
+2026-04-07 21:42:10,194 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:42:12,712 [INFO]   Fetching: Van Oord Acz India Pvt. Ltd. vs Guajrat Adani Port Pvt. Ltd.
+2026-04-07 21:42:15,754 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:42:18,254 [INFO]   Fetching: Ultra Home Constructions (P) Ltd. vs Choice Hotels Internati
+2026-04-07 21:42:21,282 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:42:23,793 [INFO]   Fetching: Rajeev Agnihotri vs Ashok Jain on 23 August, 2021
+2026-04-07 21:42:26,946 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:42:29,454 [INFO]   Fetching: Gujarat Nre Coke Limited & Anr vs Jindal Steel & Power Limit
+2026-04-07 21:42:32,412 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-07 21:42:34,923 [INFO]   Fetching: Jalan Carbon And Chemicals Limited vs Passport Brand Clothin
+2026-04-07 21:42:37,884 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:42:40,385 [INFO]   Fetching: Faircot S.A., A Company Incorporated ... vs Tata Ssi Ltd. on
+2026-04-07 21:42:43,380 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:42:45,885 [INFO]   Fetching: Thirumuruga Kirupananda Variyar vs M/S.Sahu Trust on 18 Octo
+2026-04-07 21:42:49,097 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:42:51,608 [INFO]   Fetching: K. Mangayarkarasi vs N.J. Sundaresan on 9 May, 2025
+2026-04-07 21:42:54,538 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:42:57,041 [INFO] 
+Query: "law and arbitration" clause contract
+2026-04-07 21:43:02,697 [INFO]   Search '"law and arbitration" clause contract' page 0: 10 results
+2026-04-07 21:43:02,699 [INFO]   Fetching: Ford India Private Limited vs Vikram Motor Craft Private Lim
+2026-04-07 21:43:05,642 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:43:08,143 [INFO]   Fetching: M/S. Magma Leasing & Fin. Ltd. & Anr vs Potluri Madhavilata 
+2026-04-07 21:43:11,317 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:43:13,826 [INFO]   Fetching: National Thermal Power Corporation vs Singer Company And Ors
+2026-04-07 21:43:16,821 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:43:19,332 [INFO]   Fetching: Trimex International Fze Ltd.Dubai vs Vedanta Aluminium Limi
+2026-04-07 21:43:22,385 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:43:24,885 [INFO]   Fetching: National Textile Corporation Ltd.& ... vs Ashval Vaderaa on 
+2026-04-07 21:43:27,859 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:43:30,364 [INFO]   Fetching: Harmony Innovation Shipping Ltd vs Gupta Coal India Ltd. And
+2026-04-07 21:43:33,449 [INFO]     Extracted 6 snippet(s) from this judgment
+2026-04-07 21:43:35,964 [INFO] 
+Total snippets for arbitration: 10
+2026-04-07 21:43:35,966 [INFO] Saved 10 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:43:35,966 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:43:45,972 [INFO] 
+==================================================
+2026-04-07 21:43:45,972 [INFO] Scraping clause type: force_majeure (target: 5 snippets)
+2026-04-07 21:43:45,972 [INFO] ==================================================
+2026-04-07 21:43:45,973 [INFO] 
+Query: "force majeure" clause contract
+2026-04-07 21:43:50,306 [INFO]   Search '"force majeure" clause contract' page 0: 10 results
+2026-04-07 21:43:50,308 [INFO]   Fetching: Sarawjeet Singh & Anr. vs Asian Hotels North Ltd on 19 July,
+2026-04-07 21:43:53,294 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:43:55,795 [INFO]   Fetching: M/S N.S. Rathore Huf vs M/S Samtel Avionics Limited on 29 Fe
+2026-04-07 21:43:58,875 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:44:01,384 [INFO]   Fetching: Samtel Avionics Ltd. And Anr vs N.S. Rathore Huf on 29 Febru
+2026-04-07 21:44:04,392 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:44:06,896 [INFO]   Fetching: M/S Redefine Online Express Opc Prv Ltd vs M/S Trinity Consu
+2026-04-07 21:44:09,941 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:44:12,444 [INFO]   Fetching: M/S Trinity Constultants vs M/S Redefine Online Express Opc 
+2026-04-07 21:44:15,389 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:44:17,904 [INFO]   Fetching: Energy Watchdog vs Central Electricity Regulatory ... on 11 
+2026-04-07 21:44:21,022 [INFO]     Extracted 3 snippet(s) from this judgment
+2026-04-07 21:44:23,525 [INFO]   Fetching: Smita Conductors Ltd vs Euro Alloys Ltd on 31 August, 2001
+2026-04-07 21:44:26,547 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:44:29,050 [INFO]   Fetching: South East Asia Marine Engineering And ... vs Oil India Limi
+2026-04-07 21:44:32,037 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:44:34,541 [INFO]   Fetching: M/S Haliburton Offshore Services Inc. vs Vedanta Limited & A
+2026-04-07 21:44:48,729 [INFO]     Extracted 4 snippet(s) from this judgment
+2026-04-07 21:44:51,231 [INFO] 
+Total snippets for force_majeure: 8
+2026-04-07 21:44:51,234 [INFO] Saved 8 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:44:51,234 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:45:01,245 [INFO] 
+==================================================
+2026-04-07 21:45:01,245 [INFO] Scraping clause type: jurisdiction (target: 5 snippets)
+2026-04-07 21:45:01,245 [INFO] ==================================================
+2026-04-07 21:45:01,246 [INFO] 
+Query: "jurisdiction clause" agreement courts
+2026-04-07 21:45:08,806 [INFO]   Search '"jurisdiction clause" agreement courts' page 0: 10 results
+2026-04-07 21:45:08,808 [INFO]   Fetching: My Preferred Transformation And ... vs Sumithra Inn on 5 Jan
+2026-04-07 21:45:11,823 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:45:14,331 [INFO]   Fetching: Dr Mukesh Aghi vs Steria Ltd & Ors on 8 March, 2016
+2026-04-07 21:45:17,328 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:45:19,839 [INFO]   Fetching: Aniket Sa Investments Llc vs Janapriya Engineers Syndicate P
+2026-04-07 21:45:22,910 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:45:25,424 [INFO]   Fetching: Phthalo Colours And Chemicals (India) ... vs Upl Limited on 
+2026-04-07 21:45:28,559 [INFO]     Extracted 3 snippet(s) from this judgment
+2026-04-07 21:45:31,061 [INFO]   Fetching: Aryan Infraheight P Limited vs Signature Global India Ltd on
+2026-04-07 21:45:34,077 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:45:36,585 [INFO] 
+Total snippets for jurisdiction: 5
+2026-04-07 21:45:36,587 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:45:36,587 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:45:46,599 [INFO] 
+==================================================
+2026-04-07 21:45:46,599 [INFO] Scraping clause type: payment_terms (target: 5 snippets)
+2026-04-07 21:45:46,599 [INFO] ==================================================
+2026-04-07 21:45:46,600 [INFO] 
+Query: "payment terms" clause contract dispute
+2026-04-07 21:45:54,059 [INFO]   Search '"payment terms" clause contract dispute' page 0: 10 results
+2026-04-07 21:45:54,060 [INFO]   Fetching: Shubha Laxmi Grah Nirman Sah. Sanstha vs Suresh @ Gopal on 1
+2026-04-07 21:45:57,123 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:45:59,625 [INFO]   Fetching: Mmtc Ltd. vs Sterlite Industries (India) Ltd. on 5 August, 2
+2026-04-07 21:46:02,593 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:46:05,102 [INFO]   Fetching: Brahmani River Pellets Ltd. vs Kamachi Industries Ltd. on 25
+2026-04-07 21:46:08,041 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:46:10,551 [INFO]   Fetching: M/S Govind Rubber Ltd. vs M/S Louids Dreyfus Commodities Asi
+2026-04-07 21:46:13,510 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:46:16,012 [INFO]   Fetching: San-A Tradubg Co. Ltd vs I.C. Textiles Ltd on 28 April, 2006
+2026-04-07 21:46:18,934 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:46:21,447 [INFO]   Fetching: Peak Chemicalcorporation Inc. vs National Aluminium Co. Ltd.
+2026-04-07 21:46:24,463 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:46:26,980 [INFO]   Fetching: Rajratan Babulal Agarwal vs Solartex India Pvt. Ltd. on 13 O
+2026-04-07 21:46:30,133 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-07 21:46:32,639 [INFO]   Fetching: Shapoorji Pallonji And Co. Pvt. Ltd vs Rattan India Power Lt
+2026-04-07 21:46:35,638 [INFO]     Extracted 3 snippet(s) from this judgment
+2026-04-07 21:46:38,142 [INFO] 
+Total snippets for payment_terms: 6
+2026-04-07 21:46:38,144 [INFO] Saved 6 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:46:38,145 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:46:48,146 [INFO] 
+==================================================
+2026-04-07 21:46:48,146 [INFO] Scraping clause type: liability_cap (target: 5 snippets)
+2026-04-07 21:46:48,146 [INFO] ==================================================
+2026-04-07 21:46:48,147 [INFO] 
+Query: "limitation of liability" clause contract
+2026-04-07 21:46:52,559 [INFO]   Search '"limitation of liability" clause contract' page 0: 10 results
+2026-04-07 21:46:52,560 [INFO]   Fetching: Simplex Infrastructures Limited vs Siemens Limited And Anr o
+2026-04-07 21:46:56,028 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:46:58,535 [INFO]   Fetching: Manmohan Nanda vs United India Insurance Co. Ltd. . on 6 Dec
+2026-04-07 21:47:01,568 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:47:04,076 [INFO]   Fetching: Gammon India Ltd. vs Union Of India (Uoi) And Ors. on 11 Nov
+2026-04-07 21:47:07,062 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-07 21:47:09,566 [INFO]   Fetching: M/S C And C Constructions Ltd vs Ircon International Ltd on 
+2026-04-07 21:47:12,555 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:47:15,060 [INFO]   Fetching: Samsung India Electronics Pvt. Ltd. vs Vishal Video & Applia
+2026-04-07 21:47:18,067 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:47:20,570 [INFO]   Fetching: Bharat Sanchar Nigam Limited vs M/S Maverick Mobile Solution
+2026-04-07 21:47:23,599 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:47:26,114 [INFO]   Fetching: Indeen Bio Power Limited vs M/S. Efs Facilities Service (Ind
+2026-04-07 21:47:29,124 [INFO]     Extracted 3 snippet(s) from this judgment
+2026-04-07 21:47:31,636 [INFO] 
+Total snippets for liability_cap: 5
+2026-04-07 21:47:31,647 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:47:31,647 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:47:41,656 [INFO] 
+==================================================
+2026-04-07 21:47:41,656 [INFO] Scraping clause type: ip_assignment (target: 5 snippets)
+2026-04-07 21:47:41,656 [INFO] ==================================================
+2026-04-07 21:47:41,657 [INFO] 
+Query: "intellectual property" assignment clause contract
+2026-04-07 21:47:45,533 [INFO]   Search '"intellectual property" assignment clause contract' page 0: 10 results
+2026-04-07 21:47:45,534 [INFO]   Fetching: Global Impex vs Sipping Tea Cinemas Llp on 4 August, 2025
+2026-04-07 21:47:48,510 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:47:51,025 [INFO]   Fetching: Commissioner Of Income Tax vs M/S Mediworld Publications Pvt
+2026-04-07 21:47:54,027 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:47:56,541 [INFO]   Fetching: Mannu Bhandari vs Kala Vikas Pictures Pvt. Ltd. And Anr. on 
+2026-04-07 21:47:59,481 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:48:01,989 [INFO]   Fetching: Arun Chadha vs Oca Productions Pvt. Ltd. &Ors on 5 July, 201
+2026-04-07 21:48:05,018 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:48:07,530 [INFO]   Fetching: Eastern India Motion Pictures ... vs Indian Performing Right
+2026-04-07 21:48:10,511 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:48:13,020 [INFO]   Fetching: Subway Systems India Private Limited ... vs State Of Maharas
+2026-04-07 21:48:16,085 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:48:18,595 [INFO]   Fetching: Pine Labs Pvt. Ltd. vs Gemalto Terminals India Pvt. Ltd. & O
+2026-04-07 21:48:21,599 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:48:24,107 [INFO]   Fetching: Mad Man Film Ventures Pvt. Ltd vs Reliance Entertainment Stu
+2026-04-07 21:48:27,052 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:48:29,556 [INFO]   Fetching: Consortium Of Alstom Transport India ... vs Dedicated Freigh
+2026-04-07 21:48:32,506 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:48:35,016 [INFO]   Fetching: Commissioner Of Income Tax Ahmedabad Iv vs Mukesh Travels ..
+2026-04-07 21:48:37,962 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:48:40,477 [INFO] 
+Query: "IP assignment" agreement technology
+2026-04-07 21:48:44,023 [INFO]   Search '"IP assignment" agreement technology' page 0: 3 results
+2026-04-07 21:48:44,025 [INFO]   Fetching: Arm Digital Media Pvt Ltd & Ors vs Ritesh Singh on 1 Decembe
+2026-04-07 21:48:46,971 [INFO]     Extracted 3 snippet(s) from this judgment
+2026-04-07 21:48:49,478 [INFO] 
+Total snippets for ip_assignment: 5
+2026-04-07 21:48:49,480 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:48:49,480 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:48:59,492 [INFO] 
+==================================================
+2026-04-07 21:48:59,492 [INFO] Scraping clause type: confidentiality (target: 5 snippets)
+2026-04-07 21:48:59,492 [INFO] ==================================================
+2026-04-07 21:48:59,493 [INFO] 
+Query: "confidentiality clause" NDA agreement
+2026-04-07 21:49:02,805 [INFO]   Search '"confidentiality clause" NDA agreement' page 0: 3 results
+2026-04-07 21:49:02,807 [INFO]   Fetching: Trimble Solutions Corporation vs Mold-Tek Technologies Limit
+2026-04-07 21:49:05,742 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:49:08,254 [INFO]   Fetching: M/S J Kumar Infraprojects Limited vs National High Speed Rai
+2026-04-07 21:49:11,225 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:49:13,734 [INFO]   Fetching: Plivo Communications Private Ltd vs Arvind Eshwarlal on 23 F
+2026-04-07 21:49:16,729 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:49:19,244 [INFO] 
+Query: "non-disclosure" clause commercial contract
+2026-04-07 21:49:23,934 [INFO]   Search '"non-disclosure" clause commercial contract' page 0: 10 results
+2026-04-07 21:49:23,935 [INFO]   Fetching: A. Ayyasamy vs A. Paramasivam & Ors on 4 October, 2016
+2026-04-07 21:49:26,949 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:49:29,457 [INFO]   Fetching: Bharat Sanchar Nigam Ltd. vs Shri Chander Sekhar on 23 March
+2026-04-07 21:49:32,373 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:49:34,888 [INFO]   Fetching: Rba Consortium Throu Its Authorized ... vs State Of U.P.Thro
+2026-04-07 21:49:38,190 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:49:40,704 [INFO]   Fetching: Essar Steel India Limited vs The New India Assurance Co. Ltd
+2026-04-07 21:49:43,723 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:49:46,236 [INFO]   Fetching: Dr Mukesh Aghi vs Steria Ltd & Ors on 8 March, 2016
+2026-04-07 21:49:49,112 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:49:51,617 [INFO]   Fetching: Vfs Global Services Private Limited vs Mr. Suprit Roy on 10 
+2026-04-07 21:49:54,791 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:49:57,293 [INFO]   Fetching: M/S. Baroda Surgical (India) Pvt. Ltd. ... vs State Of Gujar
+2026-04-07 21:50:00,383 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:50:02,889 [INFO]   Fetching: Rohini Industrial Electricals Limited vs Mr.Gopal M.Kandoi o
+2026-04-07 21:50:05,881 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:50:08,389 [INFO]   Fetching: Barminco Indian Underground Mining ... vs Hindustan Zinc Lim
+2026-04-07 21:50:11,488 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:50:14,002 [INFO]   Fetching: M/S.Flsmidth Pvt.Ltd vs M/S.Secan Invescast (India) Pvt.Ltd 
+2026-04-07 21:50:16,974 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:50:19,488 [INFO] 
+Query: "confidential information" clause agreement breach
+2026-04-07 21:50:23,184 [INFO]   Search '"confidential information" clause agreement breach' page 0: 10 results
+2026-04-07 21:50:23,185 [INFO]   Fetching: Kenrise Media Pvt. Ltd., vs Mr. Ashish K Mishra on 3 June, 2
+2026-04-07 21:50:26,174 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:50:28,684 [INFO]   Fetching: Villa Moda General Trading Co. W.L.L. ... vs Chordia Fashion
+2026-04-07 21:50:31,657 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:50:34,158 [INFO]   Fetching: M/S StellarInformationTechnology ... vs Mr Rakesh Kumar & Or
+2026-04-07 21:50:37,125 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:50:39,633 [INFO]   Fetching: Fairfest Media Ltd vs Ite Group Plc & Ors on 8 January, 2015
+2026-04-07 21:50:42,622 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:50:45,134 [INFO]   Fetching: Astonfield Renewables Pvt. Ltd. & Anr. vs Ravinder Raina on 
+2026-04-07 21:50:48,158 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:50:50,663 [INFO]   Fetching: Dietrich Engineering Consultant ... vs . on 25 September, 20
+2026-04-07 21:50:53,879 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:50:56,392 [INFO]   Fetching: Calcom Cement India Ltd. vs Binod Kumar Bawri & Ors. on 17 O
+2026-04-07 21:51:00,273 [INFO]     Extracted 26 snippet(s) from this judgment
+2026-04-07 21:51:02,783 [INFO] 
+Total snippets for confidentiality: 27
+2026-04-07 21:51:02,786 [INFO] Saved 27 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:51:02,786 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:51:12,793 [INFO] 
+==================================================
+2026-04-07 21:51:12,793 [INFO] Scraping clause type: governing_law (target: 5 snippets)
+2026-04-07 21:51:12,793 [INFO] ==================================================
+2026-04-07 21:51:12,794 [INFO] 
+Query: "governing law" clause contract India
+2026-04-07 21:51:20,368 [INFO]   Search '"governing law" clause contract India' page 0: 10 results
+2026-04-07 21:51:20,370 [INFO]   Fetching: Union OfIndiavs Reliance Indstries Ltd & Anr on 22 March, 20
+2026-04-07 21:51:23,442 [INFO]     Extracted 8 snippet(s) from this judgment
+2026-04-07 21:51:25,945 [INFO] 
+Total snippets for governing_law: 8
+2026-04-07 21:51:25,955 [INFO] Saved 8 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:51:25,955 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:51:35,957 [INFO] 
+==================================================
+2026-04-07 21:51:35,957 [INFO] Scraping clause type: renewal (target: 5 snippets)
+2026-04-07 21:51:35,957 [INFO] ==================================================
+2026-04-07 21:51:35,958 [INFO] 
+Query: "renewal clause" contract agreement
+2026-04-07 21:51:40,899 [INFO]   Search '"renewal clause" contract agreement' page 0: 10 results
+2026-04-07 21:51:40,900 [INFO]   Fetching: M.P. Oil Extraction And Anr. Etc vs State Of Madhya Pradesh 
+2026-04-07 21:51:43,852 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:51:46,362 [INFO]   Fetching: D.D.A vs M/S.Anant Raj Agencies Pvt.Ltd on 12 April, 2016
+2026-04-07 21:51:49,367 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:51:51,870 [INFO]   Fetching: Connaught Plaza Restaurants Pvt. Ltd. vs Mrs. Niamat Kaur on
+2026-04-07 21:51:54,884 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:51:57,392 [INFO]   Fetching: K.N. Oil Industries And Anr vs State Of Madhya Pradesh And O
+2026-04-07 21:52:00,388 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:52:02,901 [INFO]   Fetching: Shree Ganesh Trading Co., Saugor vs The State Of Madhya Prad
+2026-04-07 21:52:05,935 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:52:08,441 [INFO]   Fetching: Asea Brown Boveri Limited vs Chiranjiv Lal Sharma on 19 Augu
+2026-04-07 21:52:11,381 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:52:13,892 [INFO]   Fetching: Anant Vishnu Muley And Ors. vs State Of Maharashtra And Ors.
+2026-04-07 21:52:19,852 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:52:22,357 [INFO]   Fetching: Royal Orchid Hotels Limited vs Rock Realty Private Limited o
+2026-04-07 21:52:25,369 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:52:27,871 [INFO]   Fetching: Ram Mohan Maheshwari vs Prem Inderjit Khurana & Ors on 28 Se
+2026-04-07 21:52:30,902 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:52:33,412 [INFO]   Fetching: Pepsico India Holding Pvt. Ltd vs Nishiland Park Limited on 
+2026-04-07 21:52:36,465 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:52:38,973 [INFO] 
+Query: "automatic renewal" commercial agreement
+2026-04-07 21:52:43,391 [INFO]   Search '"automatic renewal" commercial agreement' page 0: 10 results
+2026-04-07 21:52:43,393 [INFO]   Fetching: Fashion Television India Private ... vs Ftv Bvi on 8 Novembe
+2026-04-07 21:52:46,395 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:52:48,904 [INFO]   Fetching: M/S.Aradhana Distributors Pvt. Ltd vs M/S.Renault India Pvt.
+2026-04-07 21:52:51,933 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:52:54,434 [INFO]   Fetching: Sri A Boopathi vs A P Palaniveloo on 2 September, 2022
+2026-04-07 21:52:57,514 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:00,020 [INFO]   Fetching: Shri Satish Kumar Sakuja vs M/S. Appolo Cranes Pvt. Ltd. & O
+2026-04-07 21:53:03,058 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:05,560 [INFO]   Fetching: Amanpreet Kohli vs Pankaj Dayal on 17 May, 2024
+2026-04-07 21:53:08,497 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:11,004 [INFO]   Fetching: Amanpreet Kohli vs Pankaj Dayal on 27 March, 2023
+2026-04-07 21:53:13,958 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:16,467 [INFO]   Fetching: M/S. Rajarajeshware Builddcon Pvt. Ltd vs Mr. Henry Lachman 
+2026-04-07 21:53:19,440 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:21,950 [INFO]   Fetching: Avantika Elcon Private Limited vs Miraenan Tech Co, Ltd on 3
+2026-04-07 21:53:24,985 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:27,495 [INFO]   Fetching: Mr Heny Lachman Mahtani vs M/S Bharath Infraa-Tech on 2 Nove
+2026-04-07 21:53:30,471 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:32,977 [INFO]   Fetching: Taboola India Private Limited vs Eterno Infotech Pvt. Limite
+2026-04-07 21:53:35,922 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:38,424 [INFO] 
+Query: "term and renewal" clause contract dispute
+2026-04-07 21:53:42,881 [INFO]   Search '"term and renewal" clause contract dispute' page 0: 10 results
+2026-04-07 21:53:42,882 [INFO]   Fetching: Prahlad Tiwari vs Steel Authority Of India Limited And Anr o
+2026-04-07 21:53:45,781 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:48,282 [INFO]   Fetching: State Of U.P. And Anr vs Johri Mal on 21 April, 2004
+2026-04-07 21:53:51,874 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-07 21:53:54,388 [INFO]   Fetching: Hindustan Petroleum Corporation Ltd. ... vs Dolly Das on 13 
+2026-04-07 21:53:57,324 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:53:59,829 [INFO]   Fetching: Seth Loonkaran Sethiya And Ors. vs Mr. Ivan E. John And Ors.
+2026-04-07 21:54:02,785 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:54:05,295 [INFO]   Fetching: United India Insurance Co. Ltd vs Manubhai Dharmasinhbhai Ga
+2026-04-07 21:54:08,245 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:54:10,754 [INFO]   Fetching: Rajasthan Breweries Ltd. vs The Stroh Brewery Company on 12 
+2026-04-07 21:54:14,289 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:54:16,796 [INFO]   Fetching: Delhi Development Authority vs Durga Chand Kaushish on 28 Au
+2026-04-07 21:54:19,834 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:54:22,342 [INFO]   Fetching: Loon Karan Sethia Etc vs Ivan E. John & Ors. Etc on 20 Octob
+2026-04-07 21:54:25,284 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-07 21:54:27,786 [INFO]   Fetching: Oil And Natural Gas Commission And Anr vs Association Of Nat
+2026-04-07 21:54:30,920 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-07 21:54:33,423 [INFO] 
+Total snippets for renewal: 5
+2026-04-07 21:54:33,425 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-07 21:54:33,425 [INFO] Pausing 10 seconds between clause types...
+2026-04-07 21:54:43,435 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-07 21:54:43,436 [INFO] Manual review is important — regex extraction is not perfect.

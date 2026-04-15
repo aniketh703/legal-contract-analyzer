@@ -1,0 +1,33 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Python packaging
+build/
+dist/
+*.egg-info/
+
+# Logs
+*.log
+
+# Label Studio (local DB/media)
+label-studio/
+
+# Data artifacts (keep small samples only)
+data/raw/
+data/interim/
+data/external/
+

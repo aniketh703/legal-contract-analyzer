@@ -1,0 +1,54 @@
+<View>
+  <Header value="Step 1 — Source check"/>
+  <Text name="q" value="Is this verbatim contract wording, or court/lawyer language about the contract?"/>
+
+  <Header value="Clause text (label this)"/>
+  <Text name="clause" value="$clause_text"/>
+
+  <Header value="Reference metadata (do not label)"/>
+  <Text name="cid" value="$contract_id"/>
+  <Text name="ctype" value="$clause_type"/>
+  <Text name="risk" value="$risk_level"/>
+  <Text name="stat_scraped" value="$statute_reference"/>
+  <Text name="case" value="$source_case"/>
+  <Text name="url" value="$source_url"/>
+
+  <Choices name="text_source" toName="clause" choice="single" showInline="true" required="true">
+    <Choice value="verbatim_contract" hint="Quoted agreement wording — include in training"/>
+    <Choice value="court_discourse" hint="Judge/lawyer description — exclude"/>
+    <Choice value="truncated_or_intro_only" hint="Ends mid-sentence or before actual clause — exclude"/>
+  </Choices>
+
+  <View visibleWhen="choice-selected" whenTagName="text_source" whenChoiceValue="verbatim_contract">
+
+    <Header value="Step 2 — Correct clause type if scraped label is wrong"/>
+    <Choices name="clause_type_fixed" toName="clause" choice="single" showInline="true" required="true">
+      <Choice value="no_change" hint="Scraped type is correct"/>
+      <Choice value="Termination"/>
+      <Choice value="Indemnification"/>
+      <Choice value="Jurisdiction"/>
+      <Choice value="PaymentTerms"/>
+      <Choice value="NonCompete"/>
+      <Choice value="ForceMajeure"/>
+      <Choice value="Arbitration"/>
+      <Choice value="IPAssignment"/>
+      <Choice value="Confidentiality"/>
+      <Choice value="GoverningLaw"/>
+      <Choice value="LiabilityCap"/>
+      <Choice value="Renewal"/>
+      <Choice value="other_or_unsure"/>
+    </Choices>
+
+    <Header value="Step 3 — Correct risk level if wrong"/>
+    <Choices name="risk_level_fixed" toName="clause" choice="single" showInline="true" required="true">
+      <Choice value="no_change" hint="Scraped risk level is correct"/>
+      <Choice value="HIGH"/>
+      <Choice value="MEDIUM"/>
+      <Choice value="LOW"/>
+    </Choices>
+
+    <Header value="Step 4 — Statute reference (correct or add if applicable)"/>
+    <TextArea name="statute_reference" toName="clause" placeholder="e.g. Indian Contract Act 1872, Arbitration Act 1996 s.34; leave blank if none" rows="3" required="false"/>
+
+  </View>
+</View>
