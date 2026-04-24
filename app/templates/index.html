@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Legal Contract Analyzer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f1f5f9;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+      padding: 2.5rem 3rem;
+      max-width: 520px;
+      width: 100%;
+    }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 0.25rem;
+    }
+    .logo span { color: #6366f1; }
+    .subtitle {
+      font-size: 0.88rem;
+      color: #64748b;
+      margin-bottom: 2rem;
+    }
+    .drop-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+    .drop-zone.drag-over {
+      border-color: #6366f1;
+      background: #eef2ff;
+    }
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .drop-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .drop-text {
+      font-size: 0.92rem;
+      color: #475569;
+    }
+    .drop-text strong { color: #6366f1; }
+    .drop-hint {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      margin-top: 0.3rem;
+    }
+    .file-chosen {
+      display: none;
+      align-items: center;
+      gap: 0.5rem;
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.85rem;
+      color: #166534;
+      margin-bottom: 1.25rem;
+    }
+    .file-chosen.visible { display: flex; }
+    .btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #4f46e5; }
+    .btn:disabled { background: #a5b4fc; cursor: not-allowed; }
+    .progress {
+      display: none;
+      margin-top: 1.25rem;
+      text-align: center;
+    }
+    .progress.visible { display: block; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #6366f1;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 0.75rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .progress-text { font-size: 0.88rem; color: #64748b; }
+    .error-box {
+      display: none;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      color: #991b1b;
+      margin-top: 1rem;
+    }
+    .error-box.visible { display: block; }
+    .divider {
+      border: none;
+      border-top: 1px solid #e2e8f0;
+      margin: 1.5rem 0;
+    }
+    .how-it-works { font-size: 0.78rem; color: #94a3b8; }
+    .how-it-works ol { padding-left: 1.2rem; margin-top: 0.4rem; line-height: 1.8; }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Legal<span>Lens</span></div>
+  <div class="subtitle">Indian Contract Act 1872 · Clause risk analysis in seconds</div>
+
+  <form id="upload-form" enctype="multipart/form-data">
+    <div class="drop-zone" id="drop-zone">
+      <input type="file" name="contract" id="file-input" accept=".pdf,.txt" />
+      <div class="drop-icon">📄</div>
+      <div class="drop-text"><strong>Click to upload</strong> or drag & drop</div>
+      <div class="drop-hint">PDF or TXT · max 10 MB</div>
+    </div>
+
+    <div class="file-chosen" id="file-chosen">
+      ✅ <span id="file-name"></span>
+    </div>
+
+    <button class="btn" id="submit-btn" type="submit" disabled>Analyse Contract</button>
+  </form>
+
+  <div class="progress" id="progress">
+    <div class="spinner"></div>
+    <div class="progress-text" id="progress-text">Segmenting clauses…</div>
+  </div>
+
+  <div class="error-box" id="error-box"></div>
+
+  <hr class="divider"/>
+  <div class="how-it-works">
+    <strong>How it works</strong>
+    <ol>
+      <li>Upload your contract (PDF or plain text)</li>
+      <li>Clauses are extracted and classified by type &amp; risk</li>
+      <li>Relevant ICA 1872 statutes are retrieved</li>
+      <li>A full risk report is generated instantly</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+  const dropZone  = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const fileChosen = document.getElementById('file-chosen');
+  const fileName  = document.getElementById('file-name');
+  const submitBtn = document.getElementById('submit-btn');
+  const progress  = document.getElementById('progress');
+  const progressText = document.getElementById('progress-text');
+  const errorBox  = document.getElementById('error-box');
+  const form      = document.getElementById('upload-form');
+
+  const STEPS = [
+    'Segmenting clauses…',
+    'Classifying clause types…',
+    'Retrieving ICA 1872 statutes…',
+    'Generating risk report…',
+  ];
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files.length) {
+      fileName.textContent = fileInput.files[0].name;
+      fileChosen.classList.add('visible');
+      submitBtn.disabled = false;
+    }
+  });
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) {
+      fileInput.files = e.dataTransfer.files;
+      fileName.textContent = e.dataTransfer.files[0].name;
+      fileChosen.classList.add('visible');
+      submitBtn.disabled = false;
+    }
+  });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    errorBox.classList.remove('visible');
+    submitBtn.disabled = true;
+    progress.classList.add('visible');
+
+    // Cycle through step labels while waiting
+    let step = 0;
+    progressText.textContent = STEPS[step];
+    const ticker = setInterval(() => {
+      step = (step + 1) % STEPS.length;
+      progressText.textContent = STEPS[step];
+    }, 2500);
+
+    try {
+      const data = new FormData(form);
+      const resp = await fetch('/analyse', { method: 'POST', body: data });
+
+      clearInterval(ticker);
+      progress.classList.remove('visible');
+
+      if (!resp.ok) {
+        const msg = await resp.text();
+        errorBox.textContent = msg || 'Something went wrong. Please try again.';
+        errorBox.classList.add('visible');
+        submitBtn.disabled = false;
+        return;
+      }
+
+      // Report comes back as HTML — open in new tab
+      const html = await resp.text();
+      const blob = new Blob([html], { type: 'text/html' });
+      const url  = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      submitBtn.disabled = false;
+
+    } catch (err) {
+      clearInterval(ticker);
+      progress.classList.remove('visible');
+      errorBox.textContent = 'Network error: ' + err.message;
+      errorBox.classList.add('visible');
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+MASTER SERVICE AGREEMENT
+
+This Master Service Agreement ("Agreement") is entered into as of 1st January 2025 between
+TechCorp India Pvt. Ltd. ("Service Provider") and GlobalRetail Ltd. ("Client").
+
+1. TERM AND TERMINATION
+1.1 This Agreement shall commence on the Effective Date and continue for a period of
+twelve (12) months unless terminated earlier in accordance with this Agreement.
+1.2 Either party may terminate this Agreement upon thirty (30) days written notice to
+the other party in the event of a material breach that remains uncured after such notice.
+1.3 The Company may terminate this Agreement immediately without notice if the Service
+Provider becomes insolvent or ceases to carry on business.
+
+2. CONFIDENTIALITY
+2.1 Each party agrees to keep confidential all proprietary and confidential information
+disclosed by the other party under this Agreement and shall not disclose such information
+to any third party without prior written consent of the disclosing party.
+2.2 The obligations of confidentiality shall survive termination of this Agreement for
+a period of three (3) years.
+
+3. INDEMNIFICATION
+3.1 The Service Provider shall indemnify and hold harmless the Client from any claims,
+damages, losses, liabilities or expenses (including legal fees) arising from the Service
+Provider's breach of this Agreement or gross negligence or wilful misconduct.
+
+4. NON-COMPETE
+4.1 The Service Provider shall not engage in any competing business activities or provide
+similar services to any direct competitor of the Client for a period of two (2) years
+after the termination of this Agreement without prior written consent.
+
+5. LIMITATION OF LIABILITY
+5.1 In no event shall either party be liable for indirect, incidental, special or
+consequential damages arising out of this Agreement.
+5.2 The aggregate liability of either party under this Agreement shall not exceed the
+total fees paid by the Client in the six (6) months preceding the claim.
+
+6. FORCE MAJEURE
+6.1 Neither party shall be liable for any failure or delay in performance under this
+Agreement to the extent caused by events beyond their reasonable control, including acts
+of God, war, terrorism, earthquake, flood or other natural disasters.
+
+7. ARBITRATION
+7.1 Any dispute, controversy or claim arising out of or in connection with this Agreement
+shall be referred to and finally resolved by arbitration under the Arbitration and
+Conciliation Act, 1996. The seat of arbitration shall be New Delhi, India.
+7.2 The arbitration shall be conducted by a sole arbitrator mutually appointed by the parties.
+
+8. GOVERNING LAW
+8.1 This Agreement shall be governed by and construed in accordance with the laws of
+India. The parties submit to the exclusive jurisdiction of the courts at New Delhi.
+
+9. PAYMENT TERMS
+9.1 The Client shall pay all invoices within thirty (30) days of receipt.
+9.2 Late payments shall attract interest at the rate of 18% per annum from the due date.
+9.3 Payment terms are strictly net 30 from the date of invoice.

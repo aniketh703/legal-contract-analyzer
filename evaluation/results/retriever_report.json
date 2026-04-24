@@ -1,0 +1,87 @@
+{
+  "top_k": 5,
+  "bm25_only": {
+    "Arbitration": {
+      "hit_rate": 0.97,
+      "n": 33
+    },
+    "Termination": {
+      "hit_rate": 0.0,
+      "n": 17
+    },
+    "PaymentTerms": {
+      "hit_rate": 0.062,
+      "n": 16
+    },
+    "IPAssignment": {
+      "hit_rate": 0.067,
+      "n": 30
+    },
+    "NonCompete": {
+      "hit_rate": 0.706,
+      "n": 17
+    },
+    "Confidentiality": {
+      "hit_rate": 0.25,
+      "n": 12
+    },
+    "ForceMajeure": {
+      "hit_rate": 0.0,
+      "n": 14
+    },
+    "Indemnification": {
+      "hit_rate": 0.25,
+      "n": 4
+    },
+    "Renewal": {
+      "hit_rate": 0.0,
+      "n": 19
+    },
+    "LiabilityCap": {
+      "hit_rate": 0.0,
+      "n": 9
+    }
+  },
+  "statute_map_plus_bm25": {
+    "Arbitration": {
+      "hit_rate": 1.0,
+      "n": 33
+    },
+    "Termination": {
+      "hit_rate": 1.0,
+      "n": 17
+    },
+    "PaymentTerms": {
+      "hit_rate": 1.0,
+      "n": 16
+    },
+    "IPAssignment": {
+      "hit_rate": 1.0,
+      "n": 30
+    },
+    "NonCompete": {
+      "hit_rate": 1.0,
+      "n": 17
+    },
+    "Confidentiality": {
+      "hit_rate": 1.0,
+      "n": 12
+    },
+    "ForceMajeure": {
+      "hit_rate": 1.0,
+      "n": 14
+    },
+    "Indemnification": {
+      "hit_rate": 1.0,
+      "n": 4
+    },
+    "Renewal": {
+      "hit_rate": 1.0,
+      "n": 19
+    },
+    "LiabilityCap": {
+      "hit_rate": 1.0,
+      "n": 9
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Legal Contract Analyzer (Flask App)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["app/main.py"],
+      "port": 5000
+    },
+    {
+      "name": "Label Studio (Annotation)",
+      "runtimeExecutable": "venv/Scripts/label-studio.exe",
+      "runtimeArgs": ["start", "--host", "127.0.0.1", "--port", "8080"],
+      "port": 8080
+    },
+    {
+      "name": "Report Preview (HTTP Server)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8000", "--bind", "127.0.0.1"],
+      "port": 8000
+    }
+  ]
+}

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contract Analysis — Demo Contract</title>
+  <style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f8fafc;
+    color: #1e293b;
+    padding: 2rem;
+    line-height: 1.6;
+}
+h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; }
+.meta { color: #64748b; font-size: 0.85rem; margin-bottom: 2rem; }
+.clause-card {
+    background: #fff;
+    border-radius: 10px;
+    border-left: 5px solid #94a3b8;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+.badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+.clause-id { font-size: 0.78rem; color: #94a3b8; margin-left: auto; }
+.clause-text {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    color: #475569;
+    margin-bottom: 0.9rem;
+    font-style: italic;
+    max-height: 120px;
+    overflow-y: auto;
+}
+.section-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94a3b8;
+    margin-bottom: 0.35rem;
+}
+.statute-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+.pill {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-radius: 4px;
+    padding: 0.18rem 0.55rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: default;
+}
+.pill.guaranteed { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
+.explanation { font-size: 0.9rem; color: #334155; margin-bottom: 0.75rem; }
+.action-box {
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 6px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.85rem;
+    color: #166534;
+}
+.action-box strong { margin-right: 0.4rem; }
+
+/* Summary */
+.summary-card {
+    background: #1e293b;
+    color: #f1f5f9;
+    border-radius: 10px;
+    padding: 1.5rem 1.75rem;
+    margin-top: 2rem;
+}
+.summary-card h2 { font-size: 1.15rem; margin-bottom: 1rem; }
+.summary-grid { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.summary-stat { text-align: center; }
+.summary-stat .number { font-size: 2rem; font-weight: 800; }
+.summary-stat .label { font-size: 0.78rem; color: #94a3b8; text-transform: uppercase; }
+.high-num   { color: #f87171; }
+.medium-num { color: #fbbf24; }
+.low-num    { color: #4ade80; }
+.verdict {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.verdict.high   { background: #7f1d1d; color: #fecaca; }
+.verdict.medium { background: #713f12; color: #fef9c3; }
+.verdict.low    { background: #14532d; color: #dcfce7; }
+</style>
+</head>
+<body>
+  <h1>Contract Risk Analysis</h1>
+  <div class="meta">
+    Demo Contract &nbsp;&middot;&nbsp; 5 clauses analysed
+    &nbsp;&middot;&nbsp; 2 high-risk &nbsp;&middot;&nbsp; 24 April 2026
+  </div>
+
+  
+<div class="clause-card" style="border-left-color:#eab308;background:#fef9c3">
+  <div class="card-header">
+    <span class="badge" style="background:#6366f1">Termination</span>
+    <span class="badge" style="background:#eab308">MEDIUM</span>
+    <span class="clause-id">demo_c00</span>
+  </div>
+  <div class="clause-text">1.1 Either party may terminate this Agreement upon thirty (30) days written notice in the event of a material breach.</div>
+  
+        <div class="section-label">Relevant ICA Statutes</div>
+        <div class="statute-pills"><span class="pill guaranteed" title="Compensation for loss or damage caused by breach of contract">ICA_S73</span><span class="pill guaranteed" title="Compensation for breach of contract where penalty stipulated">ICA_S74</span><span class="pill" title="Agreement contingent on impossible events void">ICA_S36</span><span class="pill" title="Agreements in restraint of legal proceeding void">ICA_S28</span><span class="pill" title="Communication, acceptance and revocation of proposals">ICA_S3</span></div>
+  <div class="section-label">Analysis</div>
+  <div class="explanation">This clause governs how and when the agreement can be ended. Under <strong>ICA Section 73</strong>, compensation is available for losses naturally arising from a breach. Key risks include asymmetric termination rights, inadequate notice periods, and ambiguity around what constitutes a curable breach.</div>
+  <div class="action-box"><strong>Recommended action:</strong>Confirm notice periods are symmetric and that breach cure rights are clearly defined.</div>
+</div>
+
+<div class="clause-card" style="border-left-color:#ef4444;background:#fee2e2">
+  <div class="card-header">
+    <span class="badge" style="background:#6366f1">NonCompete</span>
+    <span class="badge" style="background:#ef4444">HIGH</span>
+    <span class="clause-id">demo_c01</span>
+  </div>
+  <div class="clause-text">2.1 The employee shall not engage in any competing business activities for two (2) ye ars after termination.</div>
+  
+        <div class="section-label">Relevant ICA Statutes</div>
+        <div class="statute-pills"><span class="pill guaranteed" title="Agreement in restraint of trade, void">ICA_S27</span><span class="pill" title="Agreements in restraint of legal proceeding void">ICA_S28</span><span class="pill" title="Agent cannot personally enforce, nor be bound by, contracts ">ICA_S230</span><span class="pill" title="Termination of agency">ICA_S201</span><span class="pill" title="Revocation of proposals and acceptances">ICA_S5</span></div>
+  <div class="section-label">Analysis</div>
+  <div class="explanation">This clause restricts competitive activity after the agreement ends. Under <strong>ICA Section 27</strong>, agreements in restraint of trade are void in India unless a narrow exception applies. Non-compete clauses are frequently challenged under Indian law and may be wholly or partially unenforceable depending on their scope and duration.</div>
+  <div class="action-box"><strong>Recommended action:</strong>Negotiate the scope and duration. Seek legal advice on enforceability under ICA S.27.</div>
+</div>
+
+<div class="clause-card" style="border-left-color:#ef4444;background:#fee2e2">
+  <div class="card-header">
+    <span class="badge" style="background:#6366f1">Indemnification</span>
+    <span class="badge" style="background:#ef4444">HIGH</span>
+    <span class="clause-id">demo_c02</span>
+  </div>
+  <div class="clause-text">3.1 The Service Provider shall indemnify and hold harmless the Client from any claims or expenses arising from breach or negligence.</div>
+  
+        <div class="section-label">Relevant ICA Statutes</div>
+        <div class="statute-pills"><span class="pill" title="Liability of bailee making unauthorized use of goods bailed">ICA_S154</span><span class="pill" title="Compensation for loss or damage caused by breach of contract">ICA_S73</span><span class="pill guaranteed" title="Contract of indemnity” defined">ICA_S124</span><span class="pill guaranteed" title="Rights of indemnity-holder when sued">ICA_S125</span><span class="pill" title="Agent’s lien on principal’s property">ICA_S221</span></div>
+  <div class="section-label">Analysis</div>
+  <div class="explanation">This clause requires one party to compensate the other for specified losses or liabilities. Under <strong>ICA Section 73</strong>, compensation is available for losses naturally arising from a breach. Watch for uncapped indemnities, broad definitions of 'losses', and whether indemnity is triggered by negligence alone or requires wilful breach.</div>
+  <div class="action-box"><strong>Recommended action:</strong>Negotiate a liability cap on indemnities and exclude consequential loss where possible.</div>
+</div>
+
+<div class="clause-card" style="border-left-color:#eab308;background:#fef9c3">
+  <div class="card-header">
+    <span class="badge" style="background:#6366f1">ForceMajeure</span>
+    <span class="badge" style="background:#eab308">MEDIUM</span>
+    <span class="clause-id">demo_c03</span>
+  </div>
+  <div class="clause-text">4.1 Neither party shall be liable for delays caused by events beyond their reasonable control.</div>
+  
+        <div class="section-label">Relevant ICA Statutes</div>
+        <div class="statute-pills"><span class="pill" title="Effect of neglect of promisee to afford promisor reasonable ">ICA_S67</span><span class="pill" title="Compensation for loss or damage caused by breach of contract">ICA_S73</span><span class="pill guaranteed" title="Agreement to do impossible act">ICA_S56</span><span class="pill" title="Application of payment where neither party appropriates">ICA_S61</span><span class="pill" title="Bailor’s duty to disclose faults in goods bailed">ICA_S150</span></div>
+  <div class="section-label">Analysis</div>
+  <div class="explanation">This clause limits liability for failures caused by extraordinary events outside a party's control. Under <strong>ICA Section 73</strong>, compensation is available for losses naturally arising from a breach. Ensure the definition of qualifying events is neither too narrow (leaving gaps) nor too broad (excusing foreseeable delays).</div>
+  <div class="action-box"><strong>Recommended action:</strong>Review the list of qualifying events and ensure obligations resume promptly after the event ends.</div>
+</div>
+
+<div class="clause-card" style="border-left-color:#eab308;background:#fef9c3">
+  <div class="card-header">
+    <span class="badge" style="background:#6366f1">Arbitration</span>
+    <span class="badge" style="background:#eab308">MEDIUM</span>
+    <span class="clause-id">demo_c04</span>
+  </div>
+  <div class="clause-text">5.1 All disputes shall be resolved by arbitration under the Arbitration and Conciliat ion Act, 1996, seated at New Delhi.</div>
+  
+        <div class="section-label">Relevant ICA Statutes</div>
+        <div class="statute-pills"><span class="pill guaranteed" title="Agreements in restraint of legal proceeding void">ICA_S28</span><span class="pill" title="Revocation of proposals and acceptances">ICA_S5</span><span class="pill" title="Short title">ICA_S1</span><span class="pill" title="Effect of novation, rescission, and alteration of contract">ICA_S62</span><span class="pill" title="Communication, acceptance and revocation of proposals">ICA_S3</span></div>
+  <div class="section-label">Analysis</div>
+  <div class="explanation">This clause routes disputes to private arbitration rather than courts. Under <strong>ICA Section 28</strong>, clauses that restrict legal proceedings are generally void, with exceptions for arbitration. Confirm the seat of arbitration, governing rules, number of arbitrators, and whether interim relief from courts is preserved.</div>
+  <div class="action-box"><strong>Recommended action:</strong>Agree on a neutral seat and confirm interim relief from courts is not excluded.</div>
+</div>
+  
+<div class="summary-card">
+  <h2>Contract Summary — Demo Contract</h2>
+  <div class="summary-grid">
+    <div class="summary-stat">
+      <div class="number">5</div>
+      <div class="label">Total Clauses</div>
+    </div>
+    <div class="summary-stat">
+      <div class="number high-num">2</div>
+      <div class="label">High Risk</div>
+    </div>
+    <div class="summary-stat">
+      <div class="number medium-num">3</div>
+      <div class="label">Medium Risk</div>
+    </div>
+    <div class="summary-stat">
+      <div class="number low-num">0</div>
+      <div class="label">Low Risk</div>
+    </div>
+  </div>
+  <table style="border-collapse:collapse;font-size:0.85rem;width:100%;margin-bottom:0.75rem">
+    <thead>
+      <tr style="color:#94a3b8">
+        <th style="text-align:left;padding:0.2rem 0.5rem">Clause Type</th>
+        <th style="text-align:left;padding:0.2rem 0.5rem">Count</th>
+      </tr>
+    </thead>
+    <tbody style="color:#e2e8f0">
+      <tr><td>Termination</td><td>1</td></tr><tr><td>NonCompete</td><td>1</td></tr><tr><td>Indemnification</td><td>1</td></tr><tr><td>ForceMajeure</td><td>1</td></tr><tr><td>Arbitration</td><td>1</td></tr>
+    </tbody>
+  </table>
+  <div class="verdict high">This contract contains <strong>2 HIGH-risk clause(s)</strong>. Legal review is strongly recommended before signing.</div>
+  <div style="margin-top:0.75rem;font-size:0.75rem;color:#64748b">
+    Generated by Legal Contract Analyzer &middot; 24 Apr 2026, 07:31 &middot; Statutes: Indian Contract Act 1872
+  </div>
+</div>
+</body>
+</html>

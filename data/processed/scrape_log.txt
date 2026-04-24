@@ -454,3 +454,1145 @@ Total snippets for renewal: 5
 2026-04-07 21:54:43,435 [INFO] 
 Done. Review data/processed/clauses.jsonl before loading into Label Studio.
 2026-04-07 21:54:43,436 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:17:24,566 [INFO] 
+==================================================
+2026-04-23 09:17:24,567 [INFO] Scraping clause type: termination (target: 25 snippets)
+2026-04-23 09:17:24,568 [INFO] ==================================================
+2026-04-23 09:17:24,568 [INFO] 
+Query: "vendor agreement" termination clause
+2026-04-23 09:17:29,297 [INFO]   Search '"vendor agreement" termination clause' page 0: 10 results
+2026-04-23 09:17:29,299 [INFO]   Skipping (already scraped): 91244874
+2026-04-23 09:17:29,299 [INFO]   Skipping (already scraped): 47162063
+2026-04-23 09:17:29,301 [INFO]   Skipping (already scraped): 192445422
+2026-04-23 09:17:29,302 [INFO]   Skipping (already scraped): 148538793
+2026-04-23 09:17:29,304 [INFO]   Skipping (already scraped): 531624
+2026-04-23 09:17:29,305 [INFO]   Skipping (already scraped): 119169594
+2026-04-23 09:17:29,306 [INFO]   Skipping (already scraped): 43010427
+2026-04-23 09:17:29,307 [INFO]   Skipping (already scraped): 180676484
+2026-04-23 09:17:29,307 [INFO]   Skipping (already scraped): 131085843
+2026-04-23 09:17:29,308 [INFO]   Skipping (already scraped): 124810137
+2026-04-23 09:17:29,309 [INFO] 
+Query: "termination clause" vendor agreement dispute
+2026-04-23 09:17:34,685 [INFO]   Search '"termination clause" vendor agreement dispute' page 0: 10 results
+2026-04-23 09:17:34,687 [INFO]   Skipping (already scraped): 1440065
+2026-04-23 09:17:34,688 [INFO]   Skipping (already scraped): 290167
+2026-04-23 09:17:34,690 [INFO]   Skipping (already scraped): 36463772
+2026-04-23 09:17:34,691 [INFO]   Skipping (already scraped): 69091955
+2026-04-23 09:17:34,693 [INFO]   Skipping (already scraped): 158000957
+2026-04-23 09:17:34,695 [INFO]   Skipping (already scraped): 164631584
+2026-04-23 09:17:34,697 [INFO]   Skipping (already scraped): 164119093
+2026-04-23 09:17:34,699 [INFO]   Skipping (already scraped): 173011540
+2026-04-23 09:17:34,699 [INFO]   Skipping (already scraped): 89253637
+2026-04-23 09:17:34,700 [INFO]   Skipping (already scraped): 98261856
+2026-04-23 09:17:34,701 [INFO] 
+Query: "service agreement" termination notice breach
+2026-04-23 09:17:39,672 [INFO]   Search '"service agreement" termination notice breach' page 0: 10 results
+2026-04-23 09:17:39,674 [INFO]   Skipping (already scraped): 144321398
+2026-04-23 09:17:39,675 [INFO]   Skipping (already scraped): 112795891
+2026-04-23 09:17:39,677 [INFO]   Skipping (already scraped): 20035444
+2026-04-23 09:17:39,678 [INFO]   Skipping (already scraped): 192427143
+2026-04-23 09:17:39,679 [INFO]   Skipping (already scraped): 166988522
+2026-04-23 09:17:39,679 [INFO]   Skipping (already scraped): 149924687
+2026-04-23 09:17:39,680 [INFO]   Skipping (already scraped): 489993
+2026-04-23 09:17:39,681 [INFO]   Skipping (already scraped): 1792777
+2026-04-23 09:17:39,682 [INFO]   Fetching: Offhome Hotels And Resorts ... vs The State Of Ap on 5 Septe
+2026-04-23 09:17:43,431 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:17:45,934 [INFO]   Fetching: M/S. Offhome Hotels And Resorts Mypadu ... vs State Of Andhr
+2026-04-23 09:17:49,688 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:17:52,203 [INFO] 
+Total snippets for termination: 5
+2026-04-23 09:17:52,205 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:17:52,205 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:18:02,217 [INFO] 
+==================================================
+2026-04-23 09:18:02,217 [INFO] Scraping clause type: indemnification (target: 25 snippets)
+2026-04-23 09:18:02,218 [INFO] ==================================================
+2026-04-23 09:18:02,219 [INFO] 
+Query: "service contract" indemnification clause
+2026-04-23 09:18:06,798 [INFO]   Search '"service contract" indemnification clause' page 0: 10 results
+2026-04-23 09:18:06,800 [INFO]   Skipping (already scraped): 150045826
+2026-04-23 09:18:06,801 [INFO]   Skipping (already scraped): 187603279
+2026-04-23 09:18:06,802 [INFO]   Skipping (already scraped): 72815749
+2026-04-23 09:18:06,804 [INFO]   Skipping (already scraped): 750366
+2026-04-23 09:18:06,805 [INFO]   Skipping (already scraped): 185278182
+2026-04-23 09:18:06,806 [INFO]   Skipping (already scraped): 25342349
+2026-04-23 09:18:06,807 [INFO]   Skipping (already scraped): 198510075
+2026-04-23 09:18:06,808 [INFO]   Fetching: Indus Towers Limited vs Videocon Telecommunications Limited 
+2026-04-23 09:18:10,764 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:18:13,279 [INFO]   Fetching: Jayanta Kumar Ghosh Outdoor Catering ... vs The State Of Mah
+2026-04-23 09:18:17,335 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:18:19,847 [INFO]   Fetching: Atc Telecom Tower Corporation Pvt. Ltd. vs Videocon Telecomm
+2026-04-23 09:18:24,113 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:18:26,627 [INFO] 
+Query: "indemnify and hold harmless" contract
+2026-04-23 09:18:31,562 [INFO]   Search '"indemnify and hold harmless" contract' page 0: 10 results
+2026-04-23 09:18:31,564 [INFO]   Fetching: Consortium Of Deepak Cable India ... vs Teestavalley Power T
+2026-04-23 09:18:35,681 [INFO]     Extracted 8 snippet(s) from this judgment
+2026-04-23 09:18:38,193 [INFO]   Fetching: Tmt.Rajeshwari vs The Government Of Tamil Nadu on 16 August,
+2026-04-23 09:18:42,242 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:18:44,746 [INFO]   Fetching: Tmt.Rajeshwari vs The Government Of Tamil Nadu on 16 August,
+2026-04-23 09:18:48,766 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:18:51,272 [INFO]   Fetching: M/S Ucm Coal Co. Ltd. Lko. Thru. Its ... vs Adani Enterprise
+2026-04-23 09:18:55,147 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:18:57,658 [INFO]   Fetching: Ptc Energy Limited vs The State Of Karnataka on 24 September
+2026-04-23 09:19:01,530 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:19:04,032 [INFO]   Fetching: State Of Karnataka & Ors vs Kgsd Canteen Employees Welfare .
+2026-04-23 09:19:08,088 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:19:10,598 [INFO]   Fetching: National High Speed Rail Corporation ... vs Montecarlo Limit
+2026-04-23 09:19:14,823 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:19:17,336 [INFO]   Fetching: Balwant Rai Saluja & Anr Etc.Etc vs Air India Ltd.& Ors on 2
+2026-04-23 09:19:21,570 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:19:24,071 [INFO]   Fetching: Haldia Refinery Canteen Emps. Union & ... vs M/S. Indian Oil
+2026-04-23 09:19:28,136 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:19:30,639 [INFO]   Fetching: Commissioner Of Income-Tax (Central) vs Empire Jute Company 
+2026-04-23 09:19:34,440 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:19:36,956 [INFO] 
+Query: "indemnification clause" commercial agreement
+2026-04-23 09:19:41,635 [INFO]   Search '"indemnification clause" commercial agreement' page 0: 10 results
+2026-04-23 09:19:41,637 [INFO]   Fetching: Kriishiv Complex Private Limited vs Abira Nirman Udyog Limit
+2026-04-23 09:19:45,409 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:19:47,913 [INFO]   Fetching: M/S Thyssenkrupp Elevators (India) ... vs M.K. Jaswani on 19
+2026-04-23 09:19:51,484 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:19:53,996 [INFO]   Fetching: Sfdc Ireland Limited vs Commissioner Of Income Tax & Anr. on
+2026-04-23 09:19:58,032 [INFO]     Extracted 4 snippet(s) from this judgment
+2026-04-23 09:20:00,539 [INFO]   Fetching: M/S.Ravindranath Ge Medical ... vs M/S.Dusters Total Solutio
+2026-04-23 09:20:04,500 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:20:07,003 [INFO]   Fetching: Ms Affordable Infrastructure And ... vs Ms Segrow Bio Techni
+2026-04-23 09:20:10,760 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:20:13,260 [INFO]   Fetching: Hogar Controls India Pvt Ltd vs Anadasu Vijay Kumar & Ors. o
+2026-04-23 09:20:17,409 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:20:19,914 [INFO]   Fetching: General Manager,Oil & Natural Gas ... vs Gandhar Salt & Chem
+2026-04-23 09:20:24,040 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:20:26,554 [INFO]   Fetching: Southern Asia Division Of Seventh Day ... vs Pastor Sam Sudh
+2026-04-23 09:20:31,032 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:20:33,547 [INFO]   Fetching: M/S.Beml Limited vs M/S Veer Engineering Works on 3 January,
+2026-04-23 09:20:37,808 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:20:40,314 [INFO]   Fetching: Revpro Hotels vs M/S Msx Buildcon Pvt. Ltd on 17 October, 20
+2026-04-23 09:20:44,206 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:20:46,715 [INFO] 
+Total snippets for indemnification: 19
+2026-04-23 09:20:46,721 [INFO] Saved 19 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:20:46,722 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:20:56,731 [INFO] 
+==================================================
+2026-04-23 09:20:56,731 [INFO] Scraping clause type: non_compete (target: 25 snippets)
+2026-04-23 09:20:56,731 [INFO] ==================================================
+2026-04-23 09:20:56,731 [INFO] 
+Query: "restraint of trade" section 27 contract
+2026-04-23 09:21:02,433 [INFO]   Search '"restraint of trade" section 27 contract' page 0: 10 results
+2026-04-23 09:21:02,435 [INFO]   Skipping (already scraped): 571375
+2026-04-23 09:21:02,436 [INFO]   Skipping (already scraped): 1186410
+2026-04-23 09:21:02,437 [INFO]   Skipping (already scraped): 647033
+2026-04-23 09:21:02,438 [INFO]   Skipping (already scraped): 793778
+2026-04-23 09:21:02,439 [INFO]   Skipping (already scraped): 1082221
+2026-04-23 09:21:02,440 [INFO]   Fetching: Ev Motors India Private Limited vs Anurag Agarwal And Anr. o
+2026-04-23 09:21:06,242 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:21:08,757 [INFO]   Fetching: M/S.Flsmidth Pvt.Ltd vs M/S.Secan Invescast (India) Pvt.Ltd 
+2026-04-23 09:21:13,144 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:21:15,656 [INFO]   Fetching: Global Music Junction Pvt. Ltd. vs Shatrughan Kumar Aka Khes
+2026-04-23 09:21:19,811 [INFO]     Extracted 6 snippet(s) from this judgment
+2026-04-23 09:21:22,317 [INFO]   Fetching: Neosky India Limited & Anr vs Mr Nagendran Kandasamy & Ors o
+2026-04-23 09:21:26,251 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:21:28,751 [INFO]   Fetching: Arun Rambhai Desai S/O Rambhai Desai vs Deepak Nitrite Limit
+2026-04-23 09:21:32,623 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:21:35,132 [INFO] 
+Query: "non-compete" clause employment agreement section 27
+2026-04-23 09:21:40,571 [INFO]   Search '"non-compete" clause employment agreement section ' page 0: 10 results
+2026-04-23 09:21:40,574 [INFO]   Skipping (already scraped): 177004493
+2026-04-23 09:21:40,575 [INFO]   Fetching: Varun Tyagi vs Daffodil Software Private Limited on 25 June,
+2026-04-23 09:21:44,439 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:21:46,946 [INFO]   Skipping (already scraped): 42876706
+2026-04-23 09:21:46,948 [INFO]   Fetching: Modi Rubber Ltd. vs Guardian International Corp. on 28 March
+2026-04-23 09:21:51,069 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:21:53,572 [INFO]   Fetching: Affle Holdings Pte Limited vs Saurabh Singh And Ors. on 22 J
+2026-04-23 09:21:57,426 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:21:59,937 [INFO]   Fetching: M/S Deccan 360 Airsea Logistics P Ltd vs Kanhiya Lal on 18 O
+2026-04-23 09:22:03,723 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:22:06,233 [INFO]   Fetching: M/S Robotech Pvt Ltd vs Biju Kumar Deori on 31 August, 2023
+2026-04-23 09:22:09,990 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:22:12,498 [INFO]   Fetching: Luman Inds vs Shabbir Ahmed Khazi on 16 April, 2026
+2026-04-23 09:22:16,321 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:22:18,825 [INFO]   Fetching: Usha Drager Private Ltd. vs Draegerwerk Aktiengesellschaft o
+2026-04-23 09:22:22,950 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:22:25,466 [INFO]   Fetching: Tapas Kanti Mandal vs Cosmo Films Ltd on 16 August, 2018
+2026-04-23 09:22:29,545 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:22:32,056 [INFO] 
+Query: "shall not engage" competing business contract
+2026-04-23 09:22:38,781 [INFO]   Search '"shall not engage" competing business contract' page 0: 10 results
+2026-04-23 09:22:38,784 [INFO]   Fetching: M/S. Oriental Hotels Limited vs The Assistant Commissioner O
+2026-04-23 09:22:42,501 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:22:45,014 [INFO]   Fetching: ManipalBusinessSolutions Private ... vs Aurigain Consulants 
+2026-04-23 09:22:48,940 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:22:51,449 [INFO]   Fetching: Niranjan Shankar Golikari vs The Century Spinning And Mfg. C
+2026-04-23 09:22:56,587 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:22:59,093 [INFO]   Fetching: Shivnandan Sharma vs The Punjab National Bank Ltd on 15 Marc
+2026-04-23 09:23:05,271 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:23:07,786 [INFO]   Fetching: Sukumar Mukherjee Ors. vs State Of West Bengal And Another o
+2026-04-23 09:23:13,004 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:23:15,512 [INFO]   Fetching: Hardwari Lal vs G.D. Tapase And Ors. on 16 September, 1981
+2026-04-23 09:23:19,793 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:23:22,298 [INFO]   Fetching: Akshay N. Patel vs Reserve Bank Of India on 6 December, 2021
+2026-04-23 09:23:26,395 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:23:28,903 [INFO]   Fetching: Karnataka Breweries And Distilleries ... vs State Of Karnata
+2026-04-23 09:23:32,962 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:23:35,464 [INFO]   Fetching: Krantikari Suraksha Rakshak ... vs A.L. Alaspurkar And Ors. 
+2026-04-23 09:23:39,887 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:23:42,398 [INFO]   Fetching: Arvinder Singh & Anr. vs Lal Pathlabs Pvt. Ltd. & Ors. on 26
+2026-04-23 09:23:46,470 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:23:48,972 [INFO] 
+Total snippets for non_compete: 20
+2026-04-23 09:23:48,975 [INFO] Saved 20 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:23:48,975 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:23:58,987 [INFO] 
+==================================================
+2026-04-23 09:23:58,987 [INFO] Scraping clause type: arbitration (target: 25 snippets)
+2026-04-23 09:23:58,987 [INFO] ==================================================
+2026-04-23 09:23:58,988 [INFO] 
+Query: "arbitration clause" agreement dispute
+2026-04-23 09:24:12,103 [INFO]   Search '"arbitration clause" agreement dispute' page 0: 10 results
+2026-04-23 09:24:12,106 [INFO]   Skipping (already scraped): 513869
+2026-04-23 09:24:12,108 [INFO]   Skipping (already scraped): 106123499
+2026-04-23 09:24:12,110 [INFO]   Skipping (already scraped): 472187
+2026-04-23 09:24:12,112 [INFO]   Skipping (already scraped): 66639295
+2026-04-23 09:24:12,113 [INFO]   Skipping (already scraped): 73838271
+2026-04-23 09:24:12,114 [INFO]   Skipping (already scraped): 3929992
+2026-04-23 09:24:12,115 [INFO]   Skipping (already scraped): 197802554
+2026-04-23 09:24:12,116 [INFO]   Skipping (already scraped): 408407
+2026-04-23 09:24:12,117 [INFO]   Skipping (already scraped): 521851
+2026-04-23 09:24:12,119 [INFO]   Skipping (already scraped): 49485476
+2026-04-23 09:24:12,120 [INFO] 
+Query: "law and arbitration" clause contract
+2026-04-23 09:24:18,332 [INFO]   Search '"law and arbitration" clause contract' page 0: 10 results
+2026-04-23 09:24:18,334 [INFO]   Skipping (already scraped): 60665005
+2026-04-23 09:24:18,340 [INFO]   Skipping (already scraped): 200767
+2026-04-23 09:24:18,342 [INFO]   Skipping (already scraped): 633347
+2026-04-23 09:24:18,345 [INFO]   Skipping (already scraped): 658803
+2026-04-23 09:24:18,347 [INFO]   Skipping (already scraped): 1693099
+2026-04-23 09:24:18,349 [INFO]   Skipping (already scraped): 169405928
+2026-04-23 09:24:18,352 [INFO]   Fetching: National Agricultural Co-Op. ... vs Gains Trading Ltd on 22 
+2026-04-23 09:24:22,122 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:24:24,637 [INFO]   Fetching: Lets Engineering & Technology Services ... vs Manoj Das on 4
+2026-04-23 09:24:28,437 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:24:30,953 [INFO]   Fetching: Hsbc Pi Holdings (Mauritius) Limited vs Avitel Post Studioz 
+2026-04-23 09:24:35,170 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:24:37,674 [INFO]   Fetching: M/S. P. Manohar Reddy & Bros vs Maharashtra Krishna Valley .
+2026-04-23 09:24:41,500 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:24:44,007 [INFO] 
+Query: "arbitration agreement" section 7 commercial
+2026-04-23 09:24:50,678 [INFO]   Search '"arbitration agreement" section 7 commercial' page 0: 10 results
+2026-04-23 09:24:50,679 [INFO]   Fetching: Ssangyong Engineering And ... vs National Highways Authority
+2026-04-23 09:24:54,729 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:24:57,245 [INFO]   Fetching: M/S Duro Felguera S.A vs M/S. Gangavaram Port Limited on 10 
+2026-04-23 09:25:01,236 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:25:03,736 [INFO]   Fetching: Tdm Infrastructure Private Limited vs Ue Development India P
+2026-04-23 09:25:07,880 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:25:10,383 [INFO]   Fetching: M/S.Shriram Transport Finance Co. Ltd vs Naduvacheri Balakri
+2026-04-23 09:25:14,472 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:25:16,976 [INFO]   Fetching: Cox And Kings Ltd. vs Sap India Pvt. Ltd. on 6 December, 202
+2026-04-23 09:25:21,305 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:25:23,820 [INFO]   Fetching: Maharashtra State Electricity ... vs R Z Malpani on 9 April,
+2026-04-23 09:25:27,643 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:25:30,151 [INFO]   Fetching: R.P. Infosystems Private Limited vs Redington (India) Limite
+2026-04-23 09:25:34,118 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:25:36,621 [INFO]   Fetching: M/S Swatantra Properties (P) Ltd. vs M/S Airplaza Retail Hol
+2026-04-23 09:25:40,523 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:25:43,034 [INFO]   Fetching: M/S Duro Felguera S.A vs M/S. Gangavaram Port Limited on 10 
+2026-04-23 09:25:47,347 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:25:49,857 [INFO]   Fetching: Super Smelters Limited vs Universal Cables Limited on 30 Jun
+2026-04-23 09:25:54,189 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:25:56,701 [INFO] 
+Total snippets for arbitration: 16
+2026-04-23 09:25:56,703 [INFO] Saved 16 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:25:56,703 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:26:06,706 [INFO] 
+==================================================
+2026-04-23 09:26:06,706 [INFO] Scraping clause type: force_majeure (target: 25 snippets)
+2026-04-23 09:26:06,706 [INFO] ==================================================
+2026-04-23 09:26:06,707 [INFO] 
+Query: "force majeure" clause contract
+2026-04-23 09:26:11,907 [INFO]   Search '"force majeure" clause contract' page 0: 10 results
+2026-04-23 09:26:11,909 [INFO]   Skipping (already scraped): 89643153
+2026-04-23 09:26:11,910 [INFO]   Skipping (already scraped): 108252203
+2026-04-23 09:26:11,912 [INFO]   Skipping (already scraped): 46026360
+2026-04-23 09:26:11,915 [INFO]   Skipping (already scraped): 30298412
+2026-04-23 09:26:11,916 [INFO]   Skipping (already scraped): 143733805
+2026-04-23 09:26:11,918 [INFO]   Skipping (already scraped): 29719380
+2026-04-23 09:26:11,920 [INFO]   Skipping (already scraped): 1699016
+2026-04-23 09:26:11,921 [INFO]   Skipping (already scraped): 108276358
+2026-04-23 09:26:11,922 [INFO]   Skipping (already scraped): 123403504
+2026-04-23 09:26:11,923 [INFO]   Fetching: Ramanand & Ors vs Dr Girish Soni & Anr on 21 May, 2020
+2026-04-23 09:26:16,034 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:26:18,538 [INFO] 
+Query: "beyond reasonable control" clause agreement
+2026-04-23 09:26:29,409 [INFO]   Search '"beyond reasonable control" clause agreement' page 0: 10 results
+2026-04-23 09:26:29,411 [INFO]   Fetching: Holder vs State Of Maharashtra on 5 April, 2011
+2026-04-23 09:26:33,514 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:26:36,023 [INFO]   Fetching: National Highways Authority Of India vs M/S Kochi Aroor Toll
+2026-04-23 09:26:40,161 [INFO]     Extracted 3 snippet(s) from this judgment
+2026-04-23 09:26:42,664 [INFO]   Fetching: Psl Infratech Private Limited vs National Highways Authority
+2026-04-23 09:26:46,711 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:26:49,224 [INFO]   Fetching: Commissioner Of Income-Tax vs Bharat General And Textile Ind
+2026-04-23 09:26:53,031 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:26:55,536 [INFO]   Fetching: Oil & Natural Gas Commission, Mumbai vs Macqreqor-Navire Por
+2026-04-23 09:26:59,432 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:27:01,940 [INFO]   Fetching: Union Of India vs M/S. Chenab Construction Joint Venture on 
+2026-04-23 09:27:05,803 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:27:08,303 [INFO]   Fetching: M/S Arif Azim Co. Ltd. vs M/S Aptech Ltd. on 1 March, 2024
+2026-04-23 09:27:12,322 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:27:14,837 [INFO]   Fetching: Ashok Shankarrao Chavan vs Election Commission Of India & Or
+2026-04-23 09:27:19,028 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:27:21,534 [INFO]   Fetching: M/S United Coal Carrier vs Rajasthan State Mines And Mineral
+2026-04-23 09:27:25,680 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:27:28,188 [INFO]   Fetching: Union Of India vs Chenab Construction Joint Venture on 9 Feb
+2026-04-23 09:27:32,030 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:27:34,541 [INFO] 
+Query: "force majeure" means contract dispute
+2026-04-23 09:27:39,143 [INFO]   Search '"force majeure" means contract dispute' page 0: 10 results
+2026-04-23 09:27:39,147 [INFO]   Fetching: Dhampur Sugar Mills Ltd vs Indian Oil Corporation Ltd on 25 
+2026-04-23 09:27:43,303 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:27:45,803 [INFO]   Skipping (already scraped): 29719380
+2026-04-23 09:27:45,805 [INFO]   Skipping (already scraped): 123403504
+2026-04-23 09:27:45,806 [INFO]   Fetching: Wapcos Ltd. vs Salma Dam Joint Venture on 14 November, 2019
+2026-04-23 09:27:49,895 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:27:52,412 [INFO]   Fetching: The Andhra Pradesh Mineral Development ... vs M/S.Pottem Bro
+2026-04-23 09:27:56,738 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:27:59,246 [INFO]   Fetching: Cmc Ltd vs Unit Trust Of India on 6 February, 2015
+2026-04-23 09:28:03,448 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:28:05,959 [INFO]   Fetching: M/S. Global Steel Philippines ... vs Stc Of India Ltd. & Ors
+2026-04-23 09:28:10,106 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:28:12,623 [INFO]   Fetching: Kalyan Mukherjee vs M/S. Rahut Syndicate on 3 August, 1990
+2026-04-23 09:28:16,367 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:28:18,869 [INFO]   Fetching: The Oriental Insurance Co. Ltd. vs Hcl Infosystems Limited o
+2026-04-23 09:28:22,851 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:28:25,356 [INFO]   Fetching: M/S. Dlf Home Developers Ltd vs Samuel V Thomas on 31 May, 2
+2026-04-23 09:28:29,421 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:28:31,926 [INFO] 
+Total snippets for force_majeure: 23
+2026-04-23 09:28:31,929 [INFO] Saved 23 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:28:31,929 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:28:41,931 [INFO] 
+==================================================
+2026-04-23 09:28:41,931 [INFO] Scraping clause type: jurisdiction (target: 25 snippets)
+2026-04-23 09:28:41,931 [INFO] ==================================================
+2026-04-23 09:28:41,932 [INFO] 
+Query: "jurisdiction clause" agreement courts
+2026-04-23 09:28:59,946 [ERROR] Search failed for '"jurisdiction clause" agreement courts': HTTPSConnectionPool(host='indiankanoon.org', port=443): Read timed out. (read timeout=15)
+2026-04-23 09:28:59,946 [WARNING]   No results for query: "jurisdiction clause" agreement courts
+2026-04-23 09:28:59,946 [INFO] 
+Query: "exclusive jurisdiction" contract dispute
+2026-04-23 09:29:14,812 [INFO]   Search '"exclusive jurisdiction" contract dispute' page 0: 10 results
+2026-04-23 09:29:14,813 [INFO]   Fetching: Modi Entertainment Network & Anr vs W.S.G.Cricket Pte. Ltd o
+2026-04-23 09:29:19,485 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:29:21,989 [INFO]   Fetching: Enercon (India) Ltd And Ors vs Enercon Gmbh And Anr on 14 Fe
+2026-04-23 09:29:26,369 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:29:28,882 [INFO]   Fetching: M/S Emkay Global Financial Services ... vs Gindhar Sondhi on
+2026-04-23 09:29:32,921 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:29:35,423 [INFO]   Fetching: National Thermal Power Corporation vs Singer Company And Ors
+2026-04-23 09:29:39,173 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:29:41,675 [INFO]   Fetching: Salem Chemical Industries, A ... vs Bird And Co. (P) Ltd., C
+2026-04-23 09:29:45,713 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:29:48,226 [INFO]   Fetching: Mitsubishi France vs Neyveli Lignite Corporation Ltd. And ..
+2026-04-23 09:29:52,539 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:29:55,044 [INFO]   Skipping (already scraped): 63240555
+2026-04-23 09:29:55,046 [INFO]   Fetching: Spentex Industries Ltd. vs Louis Dreyfus Commodities India P
+2026-04-23 09:29:59,194 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:30:01,697 [INFO]   Fetching: Piramal Healthcare Limited vs Diasorin S.P.A. on 26 August, 
+2026-04-23 09:30:05,694 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:30:08,198 [INFO]   Fetching: Devi Resources Limited vs Ambo Exports Limited on 13 Februar
+2026-04-23 09:30:11,924 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:30:14,424 [INFO] 
+Query: "subject to jurisdiction" commercial contract
+2026-04-23 09:30:22,065 [INFO]   Search '"subject to jurisdiction" commercial contract' page 0: 10 results
+2026-04-23 09:30:22,066 [INFO]   Fetching: M/S Stelling Technologies Pvt. Ltd. ... vs Indian Railway Ca
+2026-04-23 09:30:26,208 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:30:28,723 [INFO]   Fetching: M/S Amit Engineering, Mainpuri Thru. ... vs Superintending E
+2026-04-23 09:30:32,562 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:30:35,067 [INFO]   Fetching: Gas Authority Of India Ltd. vs Spie Capag, S.A. And Others o
+2026-04-23 09:30:39,772 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:30:42,278 [INFO]   Fetching: S. Manuel Raj And Co. vs J. Manilal And Co. on 29 August, 19
+2026-04-23 09:30:46,109 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:30:48,621 [INFO]   Fetching: Surajmall Shiwbhagawan vs Kalinga Iron Works on 9 March, 197
+2026-04-23 09:30:52,362 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:30:54,863 [INFO]   Fetching: Jaishree Luxury House, Kota And Anr. vs Kathotia Sons, Regis
+2026-04-23 09:30:58,592 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:31:01,104 [INFO]   Fetching: West Fort Hospital vs State Of Kerala on 6 August, 2004
+2026-04-23 09:31:07,246 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:31:09,755 [INFO]   Fetching: Audio Devices vs Bank Of India & Anr. on 13 February, 2013
+2026-04-23 09:31:15,202 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:31:17,708 [INFO]   Fetching: Ikon Associates vs M/S Gopinath Enterprise Private ... on 2 
+2026-04-23 09:31:22,213 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:31:24,724 [INFO]   Fetching: M/S Talbros Sealing Materials Pvt. Ltd vs M/S Slach Hydratec
+2026-04-23 09:31:30,506 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:31:33,011 [INFO] 
+Total snippets for jurisdiction: 6
+2026-04-23 09:31:33,013 [INFO] Saved 6 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:31:33,013 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:31:43,018 [INFO] 
+==================================================
+2026-04-23 09:31:43,018 [INFO] Scraping clause type: payment_terms (target: 25 snippets)
+2026-04-23 09:31:43,018 [INFO] ==================================================
+2026-04-23 09:31:43,019 [INFO] 
+Query: "payment terms" clause contract dispute
+2026-04-23 09:31:58,591 [INFO]   Search '"payment terms" clause contract dispute' page 0: 10 results
+2026-04-23 09:31:58,593 [INFO]   Skipping (already scraped): 174882528
+2026-04-23 09:31:58,595 [INFO]   Skipping (already scraped): 1100416
+2026-04-23 09:31:58,597 [INFO]   Skipping (already scraped): 116972057
+2026-04-23 09:31:58,598 [INFO]   Skipping (already scraped): 171214938
+2026-04-23 09:31:58,600 [INFO]   Skipping (already scraped): 1026511
+2026-04-23 09:31:58,601 [INFO]   Skipping (already scraped): 9109979
+2026-04-23 09:31:58,602 [INFO]   Skipping (already scraped): 147930952
+2026-04-23 09:31:58,604 [INFO]   Skipping (already scraped): 119409580
+2026-04-23 09:31:58,606 [INFO]   Fetching: Esar Procurement Services Ltd vs Paramount Constructions on 
+2026-04-23 09:32:03,403 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:32:05,915 [INFO]   Fetching: Ok Play Auto Pvt. Ltd. vs Indian Commerce & Industries Co. P
+2026-04-23 09:32:09,792 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:32:12,294 [INFO] 
+Query: "invoice" "payment within" days contract
+2026-04-23 09:32:20,543 [INFO]   Search '"invoice" "payment within" days contract' page 0: 10 results
+2026-04-23 09:32:20,546 [INFO]   Fetching: M/S. Porwal Sales Thr. Its Proprietor ... vs M/S. Flame Cont
+2026-04-23 09:32:24,414 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:32:26,931 [INFO]   Fetching: M/S New Gurindra Handloom House vs M/S Sheetal Drape (I) Pvt
+2026-04-23 09:32:30,691 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:32:33,206 [INFO]   Fetching: M/S Jet Freight Logistics Limited vs Jr Macc Software Innova
+2026-04-23 09:32:37,085 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:32:39,587 [INFO]   Fetching: Lalit Kumar Tatar vs Gill Agricultural Implements Pvt Ltd on
+2026-04-23 09:32:43,455 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:32:45,969 [INFO]   Fetching: Asia Today Limited And Anr. vs Sinhal Metal Industries Limit
+2026-04-23 09:32:49,916 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:32:52,420 [INFO]   Fetching: Thomas Cook India Limited vs Hindustan Theremo Prints Limite
+2026-04-23 09:32:56,600 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:32:59,101 [INFO]   Fetching: Mohanlal Kashinath vs Krishna Premji And Co. on 8 December, 
+2026-04-23 09:33:02,686 [ERROR]   Failed to fetch https://indiankanoon.org/doc/1477903/: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+2026-04-23 09:33:02,686 [INFO]   Fetching: M/S Vista Information Systems Pvt Ltd vs M/S Beijing Nationa
+2026-04-23 09:33:06,402 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:33:08,909 [INFO]   Fetching: Omron Automation Pvt. Ltd vs Mars Electronics on 6 August, 2
+2026-04-23 09:33:13,003 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:33:15,513 [INFO]   Fetching: Microgenesis Techsoft Private Limited vs Advanced Rail Contr
+2026-04-23 09:33:19,303 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:33:21,811 [INFO] 
+Query: "delayed payment" clause commercial agreement
+2026-04-23 09:33:28,049 [INFO]   Search '"delayed payment" clause commercial agreement' page 0: 10 results
+2026-04-23 09:33:28,050 [INFO]   Fetching: Smt. Shahnaz Begum vs Ali Mohd on 1 October, 2011
+2026-04-23 09:33:31,783 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:33:34,294 [INFO]   Fetching: M/S Kaytin Transport Pvt. Ltd.Ktp vs M/S South Eastern Coal 
+2026-04-23 09:33:38,193 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:33:40,708 [INFO]   Fetching: Purvanchal Vidyut Vitran Nigam Ltd. vs Shashi Cables Ltd. An
+2026-04-23 09:33:44,388 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:33:46,893 [INFO]   Fetching: North Delhi Municipal Corporation vs Ashok Kumar Gupta on 5 
+2026-04-23 09:33:50,818 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:33:53,319 [INFO]   Fetching: M/S.Suraj Metal Industries vs Sri.Basaveshwara Enterprises o
+2026-04-23 09:33:57,157 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:33:59,663 [INFO]   Fetching: Bangalore Metro Rail Corporation vs M/S.Street Smart Media S
+2026-04-23 09:34:03,664 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:34:06,166 [INFO]   Fetching: H And B Stores Pvt Ltd vs Snapdeal Pvt Ltd on 23 March, 2026
+2026-04-23 09:34:09,982 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:34:12,490 [INFO]   Fetching: Prasar Bharati vs Arun Govil Creations on 28 February, 2022
+2026-04-23 09:34:16,467 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:34:18,980 [INFO]   Fetching: In Re vs Sh. Ashok Kumar Gupta on 26 November, 2013
+2026-04-23 09:34:22,713 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:34:25,228 [INFO]   Fetching: Maharashtra State Electricity ... vs Maharashtra Electricity
+2026-04-23 09:34:29,430 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:34:31,943 [INFO] 
+Total snippets for payment_terms: 8
+2026-04-23 09:34:31,963 [INFO] Saved 8 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:34:31,964 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:34:41,968 [INFO] 
+==================================================
+2026-04-23 09:34:41,968 [INFO] Scraping clause type: liability_cap (target: 25 snippets)
+2026-04-23 09:34:41,968 [INFO] ==================================================
+2026-04-23 09:34:41,969 [INFO] 
+Query: "limitation of liability" clause contract
+2026-04-23 09:34:47,544 [INFO]   Search '"limitation of liability" clause contract' page 0: 10 results
+2026-04-23 09:34:47,547 [INFO]   Skipping (already scraped): 113728349
+2026-04-23 09:34:47,550 [INFO]   Skipping (already scraped): 6497395
+2026-04-23 09:34:47,552 [INFO]   Skipping (already scraped): 785517
+2026-04-23 09:34:47,555 [INFO]   Skipping (already scraped): 5134095
+2026-04-23 09:34:47,558 [INFO]   Skipping (already scraped): 8843511
+2026-04-23 09:34:47,560 [INFO]   Skipping (already scraped): 168302871
+2026-04-23 09:34:47,563 [INFO]   Skipping (already scraped): 103810119
+2026-04-23 09:34:47,565 [INFO]   Fetching: Vandana Sahni vs Hdfc Ergo General Insurance Co Ltd on 16 Ja
+2026-04-23 09:34:51,387 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:34:53,894 [INFO]   Fetching: Pawan Hans Ltd vs The New India Assurance Co,. Ltd on 15 Jan
+2026-04-23 09:34:57,957 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:35:00,461 [INFO]   Fetching: Burjor F.R. Joshi vs Ellerman City Lines Limited on 1 July, 
+2026-04-23 09:35:04,258 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:35:06,765 [INFO] 
+Query: "liability shall not exceed" agreement
+2026-04-23 09:35:14,706 [INFO]   Search '"liability shall not exceed" agreement' page 0: 10 results
+2026-04-23 09:35:14,708 [INFO]   Fetching: John Zachariah vs Union Of India on 16 February, 2022
+2026-04-23 09:35:18,433 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:35:20,940 [INFO]   Fetching: General Manager ( N F Railway) vs M/S. Ganapati Service on 1
+2026-04-23 09:35:24,632 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:35:27,143 [INFO]   Fetching: Ssj Power Projects And Infrastructure ... vs Fimer India Pri
+2026-04-23 09:35:30,945 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:35:33,460 [INFO]   Fetching: All India Power Engineer Federation & ... vs Sasan Power Ltd
+2026-04-23 09:35:37,696 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:35:40,211 [INFO]   Fetching: All India Power Engineer Federation vs Sasan Power Ltd. & Or
+2026-04-23 09:35:44,846 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:35:47,358 [INFO]   Fetching: Harjit Kaur Dhingra vs Pan American World Airways & Anr. on 
+2026-04-23 09:35:54,064 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:35:56,579 [INFO]   Fetching: Appellants vs M/S.Alitalia Airlines on 7 January, 2011
+2026-04-23 09:36:02,861 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:36:05,371 [INFO]   Fetching: Air India Ltd. vs Tej Shoe Exporters P. Ltd. And Anr on 19 S
+2026-04-23 09:36:11,304 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:36:13,815 [INFO]   Fetching: Thiess Minecs India Pvt Ltd vs Ntpc Ltd on 1 July, 2014
+2026-04-23 09:36:17,555 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:36:20,069 [INFO]   Fetching: Birttania Staem Ship Insurance ... vs Gokul Agro Resources L
+2026-04-23 09:36:23,857 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:36:26,363 [INFO] 
+Query: "cap on liability" commercial contract
+2026-04-23 09:36:31,704 [INFO]   Search '"cap on liability" commercial contract' page 0: 3 results
+2026-04-23 09:36:31,706 [INFO]   Fetching: Hba Offshore Pte. Ltd. vs Samsung Heavy Industries India Pri
+2026-04-23 09:36:35,682 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:36:38,192 [INFO]   Fetching: North Delhi Power Ltd vs Govt. Of N.C.T. & Ors on 3 May, 201
+2026-04-23 09:36:42,010 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:36:44,527 [INFO]   Fetching: Tungsten Automation England Limited ... vs Deputy Commission
+2026-04-23 09:36:48,554 [INFO]     Extracted 4 snippet(s) from this judgment
+2026-04-23 09:36:51,068 [INFO] 
+Total snippets for liability_cap: 14
+2026-04-23 09:36:51,070 [INFO] Saved 14 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:36:51,071 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:37:01,074 [INFO] 
+==================================================
+2026-04-23 09:37:01,074 [INFO] Scraping clause type: ip_assignment (target: 25 snippets)
+2026-04-23 09:37:01,074 [INFO] ==================================================
+2026-04-23 09:37:01,075 [INFO] 
+Query: "intellectual property" assignment clause contract
+2026-04-23 09:37:06,456 [INFO]   Search '"intellectual property" assignment clause contract' page 0: 10 results
+2026-04-23 09:37:06,458 [INFO]   Skipping (already scraped): 74218130
+2026-04-23 09:37:06,459 [INFO]   Skipping (already scraped): 83660074
+2026-04-23 09:37:06,460 [INFO]   Skipping (already scraped): 331111
+2026-04-23 09:37:06,462 [INFO]   Skipping (already scraped): 99260867
+2026-04-23 09:37:06,464 [INFO]   Skipping (already scraped): 762055
+2026-04-23 09:37:06,466 [INFO]   Skipping (already scraped): 165646988
+2026-04-23 09:37:06,469 [INFO]   Skipping (already scraped): 116036320
+2026-04-23 09:37:06,471 [INFO]   Skipping (already scraped): 161077735
+2026-04-23 09:37:06,473 [INFO]   Skipping (already scraped): 52450803
+2026-04-23 09:37:06,474 [INFO]   Skipping (already scraped): 122960969
+2026-04-23 09:37:06,475 [INFO] 
+Query: "IP assignment" agreement technology
+2026-04-23 09:37:10,677 [INFO]   Search '"IP assignment" agreement technology' page 0: 3 results
+2026-04-23 09:37:10,679 [INFO]   Skipping (already scraped): 150926892
+2026-04-23 09:37:10,682 [INFO]   Fetching: Deepali Khanna vs Global Alliance For Improved Nutrition ...
+2026-04-23 09:37:14,811 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:37:17,316 [INFO]   Fetching: Desai Hospitals Ventures Llp vs Dhi Global Holdings Ltd (Uk)
+2026-04-23 09:37:20,873 [INFO]     Extracted 1 snippet(s) from this judgment
+2026-04-23 09:37:23,381 [INFO] 
+Query: "copyright assignment" clause service agreement
+2026-04-23 09:37:28,032 [INFO]   Search '"copyright assignment" clause service agreement' page 0: 10 results
+2026-04-23 09:37:28,034 [INFO]   Fetching: M/S.Agi Music Sdn Bhd vs Ilaiyaraja on 24 November, 2007
+2026-04-23 09:37:32,254 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:37:34,763 [INFO]   Fetching: Sunilkumar Rameshchandra Garg vs State Of Maharashtra on 5 D
+2026-04-23 09:37:38,642 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:37:41,155 [INFO]   Fetching: Deshmukh And Co. (Publishers) Pvt. Ltd. vs Avinash Vishnu Kh
+2026-04-23 09:37:44,967 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:37:47,476 [INFO]   Fetching: Saregama Ltd vs The New Digital Media & Ors on 22 December, 
+2026-04-23 09:37:52,563 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:37:55,071 [INFO]   Fetching: Asia Publishing House vs John Wiley And Sons, Inc. on 18 Aug
+2026-04-23 09:37:58,744 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:38:01,260 [INFO]   Fetching: Mrs.K.Bhagyalakshmi vs The Deputy Commissioner Of Income Tax
+2026-04-23 09:38:06,436 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:38:08,947 [INFO]   Fetching: Super Cassettes Industries Ltd. vs M/S Shreya Broadcasting P
+2026-04-23 09:38:13,322 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:38:15,829 [INFO]   Fetching: Transformative Learning Solutions ... vs Pawajot Kaur Baweja
+2026-04-23 09:38:19,723 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:38:22,230 [INFO]   Fetching: Ghanshyam Hemdev vs Bharathi Raja on 31 March, 2023
+2026-04-23 09:38:26,346 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:38:28,857 [INFO]   Fetching: M/S.Indian Record Manufacturing Co. ... vs / on 6 January, 2
+2026-04-23 09:38:33,699 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:38:36,203 [INFO] 
+Total snippets for ip_assignment: 6
+2026-04-23 09:38:36,204 [INFO] Saved 6 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:38:36,204 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:38:46,209 [INFO] 
+==================================================
+2026-04-23 09:38:46,209 [INFO] Scraping clause type: confidentiality (target: 25 snippets)
+2026-04-23 09:38:46,209 [INFO] ==================================================
+2026-04-23 09:38:46,211 [INFO] 
+Query: "confidentiality clause" NDA agreement
+2026-04-23 09:38:50,336 [INFO]   Search '"confidentiality clause" NDA agreement' page 0: 3 results
+2026-04-23 09:38:50,337 [INFO]   Skipping (already scraped): 64585329
+2026-04-23 09:38:50,338 [INFO]   Skipping (already scraped): 38107070
+2026-04-23 09:38:50,339 [INFO]   Skipping (already scraped): 34079169
+2026-04-23 09:38:50,340 [INFO] 
+Query: "non-disclosure" clause commercial contract
+2026-04-23 09:38:55,489 [INFO]   Search '"non-disclosure" clause commercial contract' page 0: 10 results
+2026-04-23 09:38:55,491 [INFO]   Skipping (already scraped): 180680303
+2026-04-23 09:38:55,492 [INFO]   Skipping (already scraped): 7926018
+2026-04-23 09:38:55,495 [INFO]   Skipping (already scraped): 52973828
+2026-04-23 09:38:55,497 [INFO]   Skipping (already scraped): 183403827
+2026-04-23 09:38:55,498 [INFO]   Skipping (already scraped): 161000801
+2026-04-23 09:38:55,499 [INFO]   Skipping (already scraped): 1547420
+2026-04-23 09:38:55,500 [INFO]   Skipping (already scraped): 106681568
+2026-04-23 09:38:55,501 [INFO]   Skipping (already scraped): 179193081
+2026-04-23 09:38:55,502 [INFO]   Skipping (already scraped): 45310630
+2026-04-23 09:38:55,503 [INFO]   Skipping (already scraped): 16422195
+2026-04-23 09:38:55,504 [INFO] 
+Query: "confidential information" clause agreement breach
+2026-04-23 09:39:00,499 [INFO]   Search '"confidential information" clause agreement breach' page 0: 10 results
+2026-04-23 09:39:00,501 [INFO]   Skipping (already scraped): 107841981
+2026-04-23 09:39:00,502 [INFO]   Skipping (already scraped): 1719961
+2026-04-23 09:39:00,503 [INFO]   Skipping (already scraped): 65671346
+2026-04-23 09:39:00,506 [INFO]   Skipping (already scraped): 65868467
+2026-04-23 09:39:00,507 [INFO]   Skipping (already scraped): 17476085
+2026-04-23 09:39:00,509 [INFO]   Skipping (already scraped): 1634545
+2026-04-23 09:39:00,513 [INFO]   Skipping (already scraped): 166352870
+2026-04-23 09:39:00,517 [INFO] 
+Total snippets for confidentiality: 27
+2026-04-23 09:39:00,540 [INFO] Saved 27 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:39:00,540 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:39:10,550 [INFO] 
+==================================================
+2026-04-23 09:39:10,550 [INFO] Scraping clause type: governing_law (target: 25 snippets)
+2026-04-23 09:39:10,550 [INFO] ==================================================
+2026-04-23 09:39:10,550 [INFO] 
+Query: "governing law" clause contract India
+2026-04-23 09:39:19,495 [INFO]   Search '"governing law" clause contract India' page 0: 10 results
+2026-04-23 09:39:19,496 [INFO]   Skipping (already scraped): 185008301
+2026-04-23 09:39:19,499 [INFO]   Fetching: Reliance Industries Limited & Anr vs Union OfIndiaon 23 May,
+2026-04-23 09:39:23,246 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:39:25,749 [INFO]   Fetching: Vedanta Limited vs Shenzhen Shandong Nuclear Power ... on 11
+2026-04-23 09:39:29,481 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:39:31,996 [INFO]   Fetching: Amci Pty. Ltd. vs Steel Authority OfIndiaLtd. & Anr. on 1 Ju
+2026-04-23 09:39:36,035 [INFO]     Extracted 2 snippet(s) from this judgment
+2026-04-23 09:39:38,546 [INFO]   Fetching: Sobha Projects And Trade Private ... vs GammonIndiaLimited o
+2026-04-23 09:39:42,390 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:39:44,900 [INFO]   Fetching: Metal Distributors (Uk) Limited vs Emmsons International Lim
+2026-04-23 09:39:48,963 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:39:51,476 [INFO]   Fetching: Maharashtra State Road Development ... vs Larsen And Toubro 
+2026-04-23 09:39:55,307 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:39:57,814 [INFO]   Fetching: Reliance Industries Ltd. vs U.O.I on 28 May, 2014
+2026-04-23 09:40:01,864 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:40:04,373 [INFO]   Fetching: M/S. Sterlite Technologies Limited, vs M/S. Aster Private Li
+2026-04-23 09:40:08,266 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:40:10,776 [INFO]   Fetching: Hindustan Copper Limited vs Centrotrade Minerals And Metals 
+2026-04-23 09:40:14,632 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:40:17,133 [INFO] 
+Query: "this agreement shall be governed" Indian law
+2026-04-23 09:40:24,784 [INFO]   Search '"this agreement shall be governed" Indian law' page 0: 10 results
+2026-04-23 09:40:24,785 [INFO]   Fetching: V.J. Cranes Private Liomited vs Ajinkya Infra Projects And O
+2026-04-23 09:40:29,835 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:40:32,338 [INFO]   Skipping (already scraped): 156247141
+2026-04-23 09:40:32,340 [INFO]   Fetching: Citibank, N.A vs Tlc Marketing Plc & Anr on 5 October, 2007
+2026-04-23 09:40:36,218 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:40:38,734 [INFO]   Fetching: M/S Orator Marketing Pvt. Ltd. vs M/S Samtex Desinz Pvt. Ltd
+2026-04-23 09:40:42,628 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:40:45,139 [INFO]   Fetching: Globe Congeneration Power Limited vs Sri Hiranyakeshi Sahaka
+2026-04-23 09:40:48,981 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:40:51,495 [INFO]   Fetching: Jabalpur Cable Network Pvt. Ltd. vs E.S.P.N. Software India 
+2026-04-23 09:40:55,769 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:40:58,275 [INFO]   Fetching: Sanjay Kanubhai Patel vs Chief Controlling Revenue Authority
+2026-04-23 09:41:01,951 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:41:04,460 [INFO]   Fetching: Grid Corporation Of Orissa Ltd. vs Aes Corporation And Ors. 
+2026-04-23 09:41:08,329 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:41:10,837 [INFO]   Fetching: Svg Molasses Co. B.V vs Mysore Mercantile Co. Ltd. & Ors on 
+2026-04-23 09:41:14,677 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:41:17,186 [INFO]   Fetching: L& T Finance Limited vs Vardhman Chemtech Ltd & Ors on 7 Jan
+2026-04-23 09:41:20,995 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:41:23,505 [INFO] 
+Query: "applicable law" clause commercial agreement
+2026-04-23 09:41:30,320 [INFO]   Search '"applicable law" clause commercial agreement' page 0: 10 results
+2026-04-23 09:41:30,322 [INFO]   Fetching: Dvb Group Merchant Bank (Asia) Ltd vs M. V. Malaviya Twenty 
+2026-04-23 09:41:34,650 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:41:37,160 [INFO]   Fetching: Raj Shipping Agencies Limited vs Barge Madhwa And Anr And Pu
+2026-04-23 09:41:42,914 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:41:45,428 [INFO]   Fetching: Transtar Offshore Services Pvt. Ltd vs Dlb Nand Gaurav And A
+2026-04-23 09:41:49,960 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:41:52,475 [INFO]   Fetching: Dvb Group Merchant Bank (Asia) Ltd vs M. V. Malaviya Twenty 
+2026-04-23 09:41:56,811 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:41:59,315 [INFO]   Fetching: Transtar Offshore Services Pvt. Ltd vs Dlb Nand Gaurav And A
+2026-04-23 09:42:03,883 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:42:06,398 [INFO]   Fetching: M/S.Supreme Hydro Engineering Pvt Ltd vs M.V.Tag7 [Imo:93790
+2026-04-23 09:42:11,206 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:42:13,721 [INFO]   Fetching: Mars Petrochem Pvt. Ltd vs Sales Proceeds Of M.V. Malaviya 2
+2026-04-23 09:42:18,264 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:42:20,771 [INFO]   Fetching: Solitaire Marine And Offshore Pvt. Ltd vs M.V.Pristine Gv (I
+2026-04-23 09:42:25,094 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:42:27,604 [INFO]   Fetching: Vipu Thazhathupulikkal Purushothaman ... vs Sale Proceeds Of
+2026-04-23 09:42:31,839 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:42:34,341 [INFO]   Fetching: Dvb Group Merchant Bank (Asia) Ltd vs M. V. Malaviya Twenty 
+2026-04-23 09:42:38,818 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:42:41,332 [INFO] 
+Total snippets for governing_law: 10
+2026-04-23 09:42:41,336 [INFO] Saved 10 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:42:41,336 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:42:51,351 [INFO] 
+==================================================
+2026-04-23 09:42:51,351 [INFO] Scraping clause type: renewal (target: 25 snippets)
+2026-04-23 09:42:51,351 [INFO] ==================================================
+2026-04-23 09:42:51,352 [INFO] 
+Query: "renewal clause" contract agreement
+2026-04-23 09:42:57,380 [INFO]   Search '"renewal clause" contract agreement' page 0: 10 results
+2026-04-23 09:42:57,382 [INFO]   Skipping (already scraped): 47808634
+2026-04-23 09:42:57,384 [INFO]   Skipping (already scraped): 157243008
+2026-04-23 09:42:57,386 [INFO]   Skipping (already scraped): 85211312
+2026-04-23 09:42:57,387 [INFO]   Skipping (already scraped): 1977467
+2026-04-23 09:42:57,389 [INFO]   Skipping (already scraped): 704732
+2026-04-23 09:42:57,391 [INFO]   Skipping (already scraped): 315203
+2026-04-23 09:42:57,392 [INFO]   Skipping (already scraped): 1106986
+2026-04-23 09:42:57,394 [INFO]   Skipping (already scraped): 147709827
+2026-04-23 09:42:57,397 [INFO]   Skipping (already scraped): 140472204
+2026-04-23 09:42:57,399 [INFO]   Skipping (already scraped): 166267671
+2026-04-23 09:42:57,400 [INFO] 
+Query: "automatic renewal" commercial agreement
+2026-04-23 09:43:02,329 [INFO]   Search '"automatic renewal" commercial agreement' page 0: 10 results
+2026-04-23 09:43:02,333 [INFO]   Skipping (already scraped): 1533053
+2026-04-23 09:43:02,335 [INFO]   Skipping (already scraped): 97628034
+2026-04-23 09:43:02,337 [INFO]   Skipping (already scraped): 94900608
+2026-04-23 09:43:02,340 [INFO]   Skipping (already scraped): 174972463
+2026-04-23 09:43:02,342 [INFO]   Skipping (already scraped): 45159106
+2026-04-23 09:43:02,344 [INFO]   Skipping (already scraped): 120832867
+2026-04-23 09:43:02,345 [INFO]   Skipping (already scraped): 35596399
+2026-04-23 09:43:02,347 [INFO]   Skipping (already scraped): 145010302
+2026-04-23 09:43:02,350 [INFO]   Skipping (already scraped): 100511484
+2026-04-23 09:43:02,353 [INFO]   Skipping (already scraped): 74753295
+2026-04-23 09:43:02,354 [INFO] 
+Query: "term and renewal" clause contract dispute
+2026-04-23 09:43:08,263 [INFO]   Search '"term and renewal" clause contract dispute' page 0: 10 results
+2026-04-23 09:43:08,266 [INFO]   Skipping (already scraped): 36876179
+2026-04-23 09:43:08,268 [INFO]   Skipping (already scraped): 321019
+2026-04-23 09:43:08,269 [INFO]   Skipping (already scraped): 1433365
+2026-04-23 09:43:08,271 [INFO]   Skipping (already scraped): 1012649
+2026-04-23 09:43:08,272 [INFO]   Skipping (already scraped): 1894467
+2026-04-23 09:43:08,274 [INFO]   Skipping (already scraped): 1737629
+2026-04-23 09:43:08,275 [INFO]   Skipping (already scraped): 1348140
+2026-04-23 09:43:08,277 [INFO]   Skipping (already scraped): 716020
+2026-04-23 09:43:08,278 [INFO]   Skipping (already scraped): 64256
+2026-04-23 09:43:08,280 [INFO]   Fetching: Km. Nisha Srivastava D/O Krishna Nand vs State Of Uttar Prad
+2026-04-23 09:43:12,456 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:43:14,959 [INFO] 
+Total snippets for renewal: 5
+2026-04-23 09:43:14,961 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:43:14,962 [INFO] Pausing 10 seconds between clause types...
+2026-04-23 09:43:24,975 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:43:24,975 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:43:47,634 [INFO] 
+==================================================
+2026-04-23 09:43:47,634 [INFO] Scraping clause type: confidentiality (target: 30 snippets)
+2026-04-23 09:43:47,635 [INFO] ==================================================
+2026-04-23 09:43:47,636 [INFO] 
+Query: "confidentiality clause" NDA agreement
+2026-04-23 09:43:51,345 [INFO]   Search '"confidentiality clause" NDA agreement' page 0: 3 results
+2026-04-23 09:43:51,347 [INFO]   Skipping (already scraped): 64585329
+2026-04-23 09:43:51,348 [INFO]   Skipping (already scraped): 38107070
+2026-04-23 09:43:51,349 [INFO]   Skipping (already scraped): 34079169
+2026-04-23 09:43:51,350 [INFO] 
+Query: "non-disclosure" clause commercial contract
+2026-04-23 09:43:55,175 [INFO]   Search '"non-disclosure" clause commercial contract' page 0: 10 results
+2026-04-23 09:43:55,177 [INFO]   Skipping (already scraped): 180680303
+2026-04-23 09:43:55,180 [INFO]   Skipping (already scraped): 7926018
+2026-04-23 09:43:55,181 [INFO]   Skipping (already scraped): 52973828
+2026-04-23 09:43:55,182 [INFO]   Skipping (already scraped): 183403827
+2026-04-23 09:43:55,183 [INFO]   Skipping (already scraped): 161000801
+2026-04-23 09:43:55,184 [INFO]   Skipping (already scraped): 1547420
+2026-04-23 09:43:55,185 [INFO]   Skipping (already scraped): 106681568
+2026-04-23 09:43:55,186 [INFO]   Skipping (already scraped): 179193081
+2026-04-23 09:43:55,187 [INFO]   Skipping (already scraped): 45310630
+2026-04-23 09:43:55,188 [INFO]   Skipping (already scraped): 16422195
+2026-04-23 09:43:55,188 [INFO] 
+Query: "confidential information" clause agreement breach
+2026-04-23 09:44:00,309 [INFO]   Search '"confidential information" clause agreement breach' page 0: 10 results
+2026-04-23 09:44:00,311 [INFO]   Skipping (already scraped): 107841981
+2026-04-23 09:44:00,312 [INFO]   Skipping (already scraped): 1719961
+2026-04-23 09:44:00,313 [INFO]   Skipping (already scraped): 65671346
+2026-04-23 09:44:00,315 [INFO]   Skipping (already scraped): 65868467
+2026-04-23 09:44:00,316 [INFO]   Skipping (already scraped): 17476085
+2026-04-23 09:44:00,317 [INFO]   Skipping (already scraped): 1634545
+2026-04-23 09:44:00,318 [INFO]   Skipping (already scraped): 166352870
+2026-04-23 09:44:00,323 [INFO]   Fetching: Lily Packers Private Limited vs Vaishnavi Vijay Umak on 11 J
+2026-04-23 09:44:03,362 [ERROR]   Failed to fetch https://indiankanoon.org/doc/85501908/: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+2026-04-23 09:44:03,363 [INFO]   Fetching: Lily Packers Private Limited vs Meetkumar Patel on 11 July, 
+2026-04-23 09:44:07,481 [INFO]     Extracted 3 snippet(s) from this judgment
+2026-04-23 09:44:09,983 [INFO] 
+Total snippets for confidentiality: 30
+2026-04-23 09:44:09,989 [INFO] Saved 30 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:44:09,989 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:44:09,989 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:44:10,817 [INFO] 
+==================================================
+2026-04-23 09:44:10,817 [INFO] Scraping clause type: indemnification (target: 30 snippets)
+2026-04-23 09:44:10,817 [INFO] ==================================================
+2026-04-23 09:44:10,818 [INFO] 
+Query: "service contract" indemnification clause
+2026-04-23 09:44:14,711 [INFO]   Search '"service contract" indemnification clause' page 0: 10 results
+2026-04-23 09:44:14,713 [INFO]   Skipping (already scraped): 150045826
+2026-04-23 09:44:14,714 [INFO]   Skipping (already scraped): 187603279
+2026-04-23 09:44:14,715 [INFO]   Skipping (already scraped): 72815749
+2026-04-23 09:44:14,716 [INFO]   Skipping (already scraped): 750366
+2026-04-23 09:44:14,717 [INFO]   Skipping (already scraped): 185278182
+2026-04-23 09:44:14,718 [INFO]   Skipping (already scraped): 25342349
+2026-04-23 09:44:14,720 [INFO]   Skipping (already scraped): 198510075
+2026-04-23 09:44:14,721 [INFO]   Skipping (already scraped): 57749486
+2026-04-23 09:44:14,722 [INFO]   Skipping (already scraped): 177115876
+2026-04-23 09:44:14,723 [INFO]   Skipping (already scraped): 179430606
+2026-04-23 09:44:14,723 [INFO] 
+Query: "indemnify and hold harmless" contract
+2026-04-23 09:44:18,740 [INFO]   Search '"indemnify and hold harmless" contract' page 0: 10 results
+2026-04-23 09:44:18,742 [INFO]   Skipping (already scraped): 158014472
+2026-04-23 09:44:18,745 [INFO]   Skipping (already scraped): 160852236
+2026-04-23 09:44:18,746 [INFO]   Skipping (already scraped): 144545111
+2026-04-23 09:44:18,748 [INFO]   Skipping (already scraped): 144330981
+2026-04-23 09:44:18,749 [INFO]   Skipping (already scraped): 124661731
+2026-04-23 09:44:18,751 [INFO]   Skipping (already scraped): 509713
+2026-04-23 09:44:18,752 [INFO]   Skipping (already scraped): 117138702
+2026-04-23 09:44:18,753 [INFO]   Skipping (already scraped): 184584358
+2026-04-23 09:44:18,755 [INFO]   Skipping (already scraped): 729412
+2026-04-23 09:44:18,755 [INFO]   Skipping (already scraped): 1701572
+2026-04-23 09:44:18,756 [INFO] 
+Query: "indemnification clause" commercial agreement
+2026-04-23 09:44:22,984 [INFO]   Search '"indemnification clause" commercial agreement' page 0: 10 results
+2026-04-23 09:44:22,985 [INFO]   Skipping (already scraped): 105847234
+2026-04-23 09:44:22,986 [INFO]   Skipping (already scraped): 150744971
+2026-04-23 09:44:22,986 [INFO]   Skipping (already scraped): 46656907
+2026-04-23 09:44:22,987 [INFO]   Skipping (already scraped): 34855595
+2026-04-23 09:44:22,989 [INFO]   Skipping (already scraped): 142546295
+2026-04-23 09:44:22,990 [INFO]   Skipping (already scraped): 22625716
+2026-04-23 09:44:22,991 [INFO]   Skipping (already scraped): 146123811
+2026-04-23 09:44:22,993 [INFO]   Skipping (already scraped): 137558352
+2026-04-23 09:44:22,994 [INFO]   Skipping (already scraped): 73721036
+2026-04-23 09:44:22,995 [INFO]   Skipping (already scraped): 160900140
+2026-04-23 09:44:22,995 [INFO] 
+Total snippets for indemnification: 19
+2026-04-23 09:44:22,999 [INFO] Saved 19 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:44:22,999 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:44:22,999 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:44:23,812 [INFO] 
+==================================================
+2026-04-23 09:44:23,812 [INFO] Scraping clause type: liability_cap (target: 30 snippets)
+2026-04-23 09:44:23,813 [INFO] ==================================================
+2026-04-23 09:44:23,813 [INFO] 
+Query: "limitation of liability" clause contract
+2026-04-23 09:44:27,706 [INFO]   Search '"limitation of liability" clause contract' page 0: 10 results
+2026-04-23 09:44:27,709 [INFO]   Skipping (already scraped): 113728349
+2026-04-23 09:44:27,710 [INFO]   Skipping (already scraped): 6497395
+2026-04-23 09:44:27,712 [INFO]   Skipping (already scraped): 785517
+2026-04-23 09:44:27,713 [INFO]   Skipping (already scraped): 5134095
+2026-04-23 09:44:27,714 [INFO]   Skipping (already scraped): 8843511
+2026-04-23 09:44:27,715 [INFO]   Skipping (already scraped): 168302871
+2026-04-23 09:44:27,716 [INFO]   Skipping (already scraped): 103810119
+2026-04-23 09:44:27,717 [INFO]   Skipping (already scraped): 87586121
+2026-04-23 09:44:27,718 [INFO]   Skipping (already scraped): 26833396
+2026-04-23 09:44:27,718 [INFO]   Skipping (already scraped): 1682809
+2026-04-23 09:44:27,719 [INFO] 
+Query: "liability shall not exceed" agreement
+2026-04-23 09:44:32,156 [INFO]   Search '"liability shall not exceed" agreement' page 0: 10 results
+2026-04-23 09:44:32,157 [INFO]   Skipping (already scraped): 92615501
+2026-04-23 09:44:32,158 [INFO]   Skipping (already scraped): 161766014
+2026-04-23 09:44:32,160 [INFO]   Skipping (already scraped): 138984502
+2026-04-23 09:44:32,161 [INFO]   Skipping (already scraped): 108020655
+2026-04-23 09:44:32,162 [INFO]   Skipping (already scraped): 163061071
+2026-04-23 09:44:32,163 [INFO]   Skipping (already scraped): 147575474
+2026-04-23 09:44:32,165 [INFO]   Skipping (already scraped): 1524612
+2026-04-23 09:44:32,165 [INFO]   Skipping (already scraped): 17422640
+2026-04-23 09:44:32,166 [INFO]   Skipping (already scraped): 48495183
+2026-04-23 09:44:32,167 [INFO]   Skipping (already scraped): 181675525
+2026-04-23 09:44:32,167 [INFO] 
+Query: "cap on liability" commercial contract
+2026-04-23 09:44:35,877 [INFO]   Search '"cap on liability" commercial contract' page 0: 3 results
+2026-04-23 09:44:35,879 [INFO]   Skipping (already scraped): 179144023
+2026-04-23 09:44:35,880 [INFO]   Skipping (already scraped): 64785
+2026-04-23 09:44:35,881 [INFO]   Skipping (already scraped): 192817785
+2026-04-23 09:44:35,883 [INFO] 
+Total snippets for liability_cap: 14
+2026-04-23 09:44:35,905 [INFO] Saved 14 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:44:35,905 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:44:35,905 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:44:36,673 [INFO] 
+==================================================
+2026-04-23 09:44:36,674 [INFO] Scraping clause type: non_compete (target: 30 snippets)
+2026-04-23 09:44:36,674 [INFO] ==================================================
+2026-04-23 09:44:36,675 [INFO] 
+Query: "restraint of trade" section 27 contract
+2026-04-23 09:44:40,451 [INFO]   Search '"restraint of trade" section 27 contract' page 0: 10 results
+2026-04-23 09:44:40,453 [INFO]   Skipping (already scraped): 571375
+2026-04-23 09:44:40,454 [INFO]   Skipping (already scraped): 1186410
+2026-04-23 09:44:40,455 [INFO]   Skipping (already scraped): 647033
+2026-04-23 09:44:40,456 [INFO]   Skipping (already scraped): 793778
+2026-04-23 09:44:40,457 [INFO]   Skipping (already scraped): 1082221
+2026-04-23 09:44:40,458 [INFO]   Skipping (already scraped): 172304086
+2026-04-23 09:44:40,459 [INFO]   Skipping (already scraped): 16422195
+2026-04-23 09:44:40,460 [INFO]   Skipping (already scraped): 197720400
+2026-04-23 09:44:40,462 [INFO]   Skipping (already scraped): 177004493
+2026-04-23 09:44:40,463 [INFO]   Skipping (already scraped): 42876706
+2026-04-23 09:44:40,464 [INFO] 
+Query: "non-compete" clause employment agreement section 27
+2026-04-23 09:44:46,722 [INFO]   Search '"non-compete" clause employment agreement section ' page 0: 10 results
+2026-04-23 09:44:46,725 [INFO]   Skipping (already scraped): 177004493
+2026-04-23 09:44:46,727 [INFO]   Skipping (already scraped): 187332526
+2026-04-23 09:44:46,729 [INFO]   Skipping (already scraped): 42876706
+2026-04-23 09:44:46,732 [INFO]   Skipping (already scraped): 1356541
+2026-04-23 09:44:46,735 [INFO]   Skipping (already scraped): 15712020
+2026-04-23 09:44:46,737 [INFO]   Skipping (already scraped): 190095877
+2026-04-23 09:44:46,738 [INFO]   Skipping (already scraped): 36773708
+2026-04-23 09:44:46,739 [INFO]   Skipping (already scraped): 144895737
+2026-04-23 09:44:46,740 [INFO]   Skipping (already scraped): 716425
+2026-04-23 09:44:46,742 [INFO]   Skipping (already scraped): 141232238
+2026-04-23 09:44:46,743 [INFO] 
+Query: "shall not engage" competing business contract
+2026-04-23 09:44:50,366 [INFO]   Search '"shall not engage" competing business contract' page 0: 10 results
+2026-04-23 09:44:50,368 [INFO]   Skipping (already scraped): 20040289
+2026-04-23 09:44:50,369 [INFO]   Skipping (already scraped): 141719789
+2026-04-23 09:44:50,370 [INFO]   Skipping (already scraped): 452434
+2026-04-23 09:44:50,372 [INFO]   Skipping (already scraped): 549992
+2026-04-23 09:44:50,373 [INFO]   Skipping (already scraped): 771204
+2026-04-23 09:44:50,375 [INFO]   Skipping (already scraped): 867595
+2026-04-23 09:44:50,377 [INFO]   Skipping (already scraped): 139245892
+2026-04-23 09:44:50,377 [INFO]   Skipping (already scraped): 1863228
+2026-04-23 09:44:50,379 [INFO]   Skipping (already scraped): 1006839
+2026-04-23 09:44:50,380 [INFO]   Skipping (already scraped): 155478426
+2026-04-23 09:44:50,382 [INFO] 
+Total snippets for non_compete: 20
+2026-04-23 09:44:50,384 [INFO] Saved 20 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:44:50,385 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:44:50,385 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:44:51,138 [INFO] 
+==================================================
+2026-04-23 09:44:51,139 [INFO] Scraping clause type: payment_terms (target: 30 snippets)
+2026-04-23 09:44:51,139 [INFO] ==================================================
+2026-04-23 09:44:51,140 [INFO] 
+Query: "payment terms" clause contract dispute
+2026-04-23 09:44:55,048 [INFO]   Search '"payment terms" clause contract dispute' page 0: 10 results
+2026-04-23 09:44:55,049 [INFO]   Skipping (already scraped): 174882528
+2026-04-23 09:44:55,050 [INFO]   Skipping (already scraped): 1100416
+2026-04-23 09:44:55,051 [INFO]   Skipping (already scraped): 116972057
+2026-04-23 09:44:55,052 [INFO]   Skipping (already scraped): 171214938
+2026-04-23 09:44:55,053 [INFO]   Skipping (already scraped): 1026511
+2026-04-23 09:44:55,053 [INFO]   Skipping (already scraped): 9109979
+2026-04-23 09:44:55,055 [INFO]   Skipping (already scraped): 147930952
+2026-04-23 09:44:55,057 [INFO]   Skipping (already scraped): 119409580
+2026-04-23 09:44:55,058 [INFO]   Skipping (already scraped): 170281127
+2026-04-23 09:44:55,060 [INFO]   Skipping (already scraped): 28713560
+2026-04-23 09:44:55,060 [INFO] 
+Query: "invoice" "payment within" days contract
+2026-04-23 09:44:59,142 [INFO]   Search '"invoice" "payment within" days contract' page 0: 10 results
+2026-04-23 09:44:59,144 [INFO]   Skipping (already scraped): 155930818
+2026-04-23 09:44:59,145 [INFO]   Skipping (already scraped): 188606102
+2026-04-23 09:44:59,145 [INFO]   Skipping (already scraped): 161112834
+2026-04-23 09:44:59,146 [INFO]   Skipping (already scraped): 157007278
+2026-04-23 09:44:59,147 [INFO]   Skipping (already scraped): 1265580
+2026-04-23 09:44:59,148 [INFO]   Skipping (already scraped): 1200304
+2026-04-23 09:44:59,148 [INFO]   Fetching: Mohanlal Kashinath vs Krishna Premji And Co. on 8 December, 
+2026-04-23 09:45:03,343 [INFO]     Extracted 0 snippet(s) from this judgment
+2026-04-23 09:45:05,849 [INFO]   Skipping (already scraped): 122773175
+2026-04-23 09:45:05,851 [INFO]   Skipping (already scraped): 28757270
+2026-04-23 09:45:05,852 [INFO]   Skipping (already scraped): 152015664
+2026-04-23 09:45:05,853 [INFO] 
+Query: "delayed payment" clause commercial agreement
+2026-04-23 09:45:09,652 [INFO]   Search '"delayed payment" clause commercial agreement' page 0: 10 results
+2026-04-23 09:45:09,654 [INFO]   Skipping (already scraped): 76876207
+2026-04-23 09:45:09,657 [INFO]   Skipping (already scraped): 93686378
+2026-04-23 09:45:09,659 [INFO]   Skipping (already scraped): 157588339
+2026-04-23 09:45:09,660 [INFO]   Skipping (already scraped): 148600424
+2026-04-23 09:45:09,661 [INFO]   Skipping (already scraped): 192957015
+2026-04-23 09:45:09,662 [INFO]   Skipping (already scraped): 155276091
+2026-04-23 09:45:09,663 [INFO]   Skipping (already scraped): 143733403
+2026-04-23 09:45:09,666 [INFO]   Skipping (already scraped): 184599040
+2026-04-23 09:45:09,667 [INFO]   Skipping (already scraped): 42376930
+2026-04-23 09:45:09,668 [INFO]   Skipping (already scraped): 63713839
+2026-04-23 09:45:09,670 [INFO] 
+Total snippets for payment_terms: 8
+2026-04-23 09:45:09,698 [INFO] Saved 8 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:45:09,699 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:45:09,699 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:45:10,589 [INFO] 
+==================================================
+2026-04-23 09:45:10,589 [INFO] Scraping clause type: force_majeure (target: 30 snippets)
+2026-04-23 09:45:10,591 [INFO] ==================================================
+2026-04-23 09:45:10,592 [INFO] 
+Query: "force majeure" clause contract
+2026-04-23 09:45:14,413 [INFO]   Search '"force majeure" clause contract' page 0: 10 results
+2026-04-23 09:45:14,417 [INFO]   Skipping (already scraped): 89643153
+2026-04-23 09:45:14,419 [INFO]   Skipping (already scraped): 108252203
+2026-04-23 09:45:14,423 [INFO]   Skipping (already scraped): 46026360
+2026-04-23 09:45:14,425 [INFO]   Skipping (already scraped): 30298412
+2026-04-23 09:45:14,428 [INFO]   Skipping (already scraped): 143733805
+2026-04-23 09:45:14,431 [INFO]   Skipping (already scraped): 29719380
+2026-04-23 09:45:14,433 [INFO]   Skipping (already scraped): 1699016
+2026-04-23 09:45:14,435 [INFO]   Skipping (already scraped): 108276358
+2026-04-23 09:45:14,437 [INFO]   Skipping (already scraped): 123403504
+2026-04-23 09:45:14,440 [INFO]   Skipping (already scraped): 130579261
+2026-04-23 09:45:14,443 [INFO] 
+Query: "beyond reasonable control" clause agreement
+2026-04-23 09:45:18,213 [INFO]   Search '"beyond reasonable control" clause agreement' page 0: 10 results
+2026-04-23 09:45:18,217 [INFO]   Skipping (already scraped): 788690
+2026-04-23 09:45:18,219 [INFO]   Skipping (already scraped): 123677365
+2026-04-23 09:45:18,221 [INFO]   Skipping (already scraped): 49047465
+2026-04-23 09:45:18,225 [INFO]   Skipping (already scraped): 328250
+2026-04-23 09:45:18,227 [INFO]   Skipping (already scraped): 1430369
+2026-04-23 09:45:18,229 [INFO]   Skipping (already scraped): 142927623
+2026-04-23 09:45:18,231 [INFO]   Skipping (already scraped): 127312055
+2026-04-23 09:45:18,233 [INFO]   Skipping (already scraped): 16194858
+2026-04-23 09:45:18,236 [INFO]   Skipping (already scraped): 165627262
+2026-04-23 09:45:18,238 [INFO]   Skipping (already scraped): 66312982
+2026-04-23 09:45:18,240 [INFO] 
+Query: "force majeure" means contract dispute
+2026-04-23 09:45:21,937 [INFO]   Search '"force majeure" means contract dispute' page 0: 10 results
+2026-04-23 09:45:21,938 [INFO]   Skipping (already scraped): 194387635
+2026-04-23 09:45:21,939 [INFO]   Skipping (already scraped): 29719380
+2026-04-23 09:45:21,940 [INFO]   Skipping (already scraped): 123403504
+2026-04-23 09:45:21,942 [INFO]   Skipping (already scraped): 130994567
+2026-04-23 09:45:21,943 [INFO]   Skipping (already scraped): 110784505
+2026-04-23 09:45:21,944 [INFO]   Skipping (already scraped): 98841411
+2026-04-23 09:45:21,945 [INFO]   Skipping (already scraped): 177997466
+2026-04-23 09:45:21,946 [INFO]   Skipping (already scraped): 1449191
+2026-04-23 09:45:21,947 [INFO]   Skipping (already scraped): 70378726
+2026-04-23 09:45:21,948 [INFO]   Skipping (already scraped): 174950930
+2026-04-23 09:45:21,949 [INFO] 
+Total snippets for force_majeure: 23
+2026-04-23 09:45:21,973 [INFO] Saved 23 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:45:21,974 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:45:21,974 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:45:22,711 [INFO] 
+==================================================
+2026-04-23 09:45:22,711 [INFO] Scraping clause type: renewal (target: 30 snippets)
+2026-04-23 09:45:22,711 [INFO] ==================================================
+2026-04-23 09:45:22,712 [INFO] 
+Query: "renewal clause" contract agreement
+2026-04-23 09:45:26,497 [INFO]   Search '"renewal clause" contract agreement' page 0: 10 results
+2026-04-23 09:45:26,499 [INFO]   Skipping (already scraped): 47808634
+2026-04-23 09:45:26,500 [INFO]   Skipping (already scraped): 157243008
+2026-04-23 09:45:26,502 [INFO]   Skipping (already scraped): 85211312
+2026-04-23 09:45:26,503 [INFO]   Skipping (already scraped): 1977467
+2026-04-23 09:45:26,505 [INFO]   Skipping (already scraped): 704732
+2026-04-23 09:45:26,506 [INFO]   Skipping (already scraped): 315203
+2026-04-23 09:45:26,507 [INFO]   Skipping (already scraped): 1106986
+2026-04-23 09:45:26,509 [INFO]   Skipping (already scraped): 147709827
+2026-04-23 09:45:26,510 [INFO]   Skipping (already scraped): 140472204
+2026-04-23 09:45:26,511 [INFO]   Skipping (already scraped): 166267671
+2026-04-23 09:45:26,512 [INFO] 
+Query: "automatic renewal" commercial agreement
+2026-04-23 09:45:30,282 [INFO]   Search '"automatic renewal" commercial agreement' page 0: 10 results
+2026-04-23 09:45:30,283 [INFO]   Skipping (already scraped): 1533053
+2026-04-23 09:45:30,285 [INFO]   Skipping (already scraped): 97628034
+2026-04-23 09:45:30,286 [INFO]   Skipping (already scraped): 94900608
+2026-04-23 09:45:30,287 [INFO]   Skipping (already scraped): 174972463
+2026-04-23 09:45:30,288 [INFO]   Skipping (already scraped): 45159106
+2026-04-23 09:45:30,289 [INFO]   Skipping (already scraped): 120832867
+2026-04-23 09:45:30,290 [INFO]   Skipping (already scraped): 35596399
+2026-04-23 09:45:30,291 [INFO]   Skipping (already scraped): 145010302
+2026-04-23 09:45:30,291 [INFO]   Skipping (already scraped): 100511484
+2026-04-23 09:45:30,293 [INFO]   Skipping (already scraped): 74753295
+2026-04-23 09:45:30,293 [INFO] 
+Query: "term and renewal" clause contract dispute
+2026-04-23 09:45:34,457 [INFO]   Search '"term and renewal" clause contract dispute' page 0: 10 results
+2026-04-23 09:45:34,459 [INFO]   Skipping (already scraped): 36876179
+2026-04-23 09:45:34,460 [INFO]   Skipping (already scraped): 321019
+2026-04-23 09:45:34,461 [INFO]   Skipping (already scraped): 1433365
+2026-04-23 09:45:34,463 [INFO]   Skipping (already scraped): 1012649
+2026-04-23 09:45:34,464 [INFO]   Skipping (already scraped): 1894467
+2026-04-23 09:45:34,465 [INFO]   Skipping (already scraped): 1737629
+2026-04-23 09:45:34,466 [INFO]   Skipping (already scraped): 1348140
+2026-04-23 09:45:34,466 [INFO]   Skipping (already scraped): 716020
+2026-04-23 09:45:34,467 [INFO]   Skipping (already scraped): 64256
+2026-04-23 09:45:34,468 [INFO]   Skipping (already scraped): 136418
+2026-04-23 09:45:34,475 [INFO] 
+Total snippets for renewal: 5
+2026-04-23 09:45:34,500 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:45:34,500 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:45:34,500 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:45:35,245 [INFO] 
+==================================================
+2026-04-23 09:45:35,245 [INFO] Scraping clause type: termination (target: 30 snippets)
+2026-04-23 09:45:35,245 [INFO] ==================================================
+2026-04-23 09:45:35,246 [INFO] 
+Query: "vendor agreement" termination clause
+2026-04-23 09:45:40,637 [INFO]   Search '"vendor agreement" termination clause' page 0: 10 results
+2026-04-23 09:45:40,640 [INFO]   Skipping (already scraped): 91244874
+2026-04-23 09:45:40,642 [INFO]   Skipping (already scraped): 47162063
+2026-04-23 09:45:40,643 [INFO]   Skipping (already scraped): 192445422
+2026-04-23 09:45:40,645 [INFO]   Skipping (already scraped): 148538793
+2026-04-23 09:45:40,646 [INFO]   Skipping (already scraped): 531624
+2026-04-23 09:45:40,648 [INFO]   Skipping (already scraped): 119169594
+2026-04-23 09:45:40,648 [INFO]   Skipping (already scraped): 43010427
+2026-04-23 09:45:40,650 [INFO]   Skipping (already scraped): 180676484
+2026-04-23 09:45:40,650 [INFO]   Skipping (already scraped): 131085843
+2026-04-23 09:45:40,651 [INFO]   Skipping (already scraped): 124810137
+2026-04-23 09:45:40,652 [INFO] 
+Query: "termination clause" vendor agreement dispute
+2026-04-23 09:45:45,283 [INFO]   Search '"termination clause" vendor agreement dispute' page 0: 10 results
+2026-04-23 09:45:45,285 [INFO]   Skipping (already scraped): 1440065
+2026-04-23 09:45:45,286 [INFO]   Skipping (already scraped): 290167
+2026-04-23 09:45:45,288 [INFO]   Skipping (already scraped): 36463772
+2026-04-23 09:45:45,289 [INFO]   Skipping (already scraped): 69091955
+2026-04-23 09:45:45,292 [INFO]   Skipping (already scraped): 158000957
+2026-04-23 09:45:45,295 [INFO]   Skipping (already scraped): 164631584
+2026-04-23 09:45:45,296 [INFO]   Skipping (already scraped): 164119093
+2026-04-23 09:45:45,298 [INFO]   Skipping (already scraped): 173011540
+2026-04-23 09:45:45,299 [INFO]   Skipping (already scraped): 89253637
+2026-04-23 09:45:45,300 [INFO]   Skipping (already scraped): 98261856
+2026-04-23 09:45:45,302 [INFO] 
+Query: "service agreement" termination notice breach
+2026-04-23 09:45:50,246 [INFO]   Search '"service agreement" termination notice breach' page 0: 10 results
+2026-04-23 09:45:50,249 [INFO]   Skipping (already scraped): 144321398
+2026-04-23 09:45:50,251 [INFO]   Skipping (already scraped): 112795891
+2026-04-23 09:45:50,253 [INFO]   Skipping (already scraped): 20035444
+2026-04-23 09:45:50,256 [INFO]   Skipping (already scraped): 192427143
+2026-04-23 09:45:50,257 [INFO]   Skipping (already scraped): 166988522
+2026-04-23 09:45:50,259 [INFO]   Skipping (already scraped): 149924687
+2026-04-23 09:45:50,260 [INFO]   Skipping (already scraped): 489993
+2026-04-23 09:45:50,262 [INFO]   Skipping (already scraped): 1792777
+2026-04-23 09:45:50,264 [INFO]   Skipping (already scraped): 154201434
+2026-04-23 09:45:50,265 [INFO]   Skipping (already scraped): 99663806
+2026-04-23 09:45:50,266 [INFO] 
+Total snippets for termination: 5
+2026-04-23 09:45:50,306 [INFO] Saved 5 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:45:50,306 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:45:50,307 [INFO] Manual review is important — regex extraction is not perfect.
+2026-04-23 09:45:51,245 [INFO] 
+==================================================
+2026-04-23 09:45:51,245 [INFO] Scraping clause type: governing_law (target: 30 snippets)
+2026-04-23 09:45:51,246 [INFO] ==================================================
+2026-04-23 09:45:51,246 [INFO] 
+Query: "governing law" clause contract India
+2026-04-23 09:45:55,090 [INFO]   Search '"governing law" clause contract India' page 0: 10 results
+2026-04-23 09:45:55,094 [INFO]   Skipping (already scraped): 185008301
+2026-04-23 09:45:55,095 [INFO]   Skipping (already scraped): 156247141
+2026-04-23 09:45:55,107 [INFO]   Skipping (already scraped): 57887874
+2026-04-23 09:45:55,115 [INFO]   Skipping (already scraped): 64261312
+2026-04-23 09:45:55,130 [INFO]   Skipping (already scraped): 94843855
+2026-04-23 09:45:55,141 [INFO]   Skipping (already scraped): 47824259
+2026-04-23 09:45:55,151 [INFO]   Skipping (already scraped): 778639
+2026-04-23 09:45:55,159 [INFO]   Skipping (already scraped): 108927343
+2026-04-23 09:45:55,173 [INFO]   Skipping (already scraped): 199348278
+2026-04-23 09:45:55,184 [INFO]   Skipping (already scraped): 1878098
+2026-04-23 09:45:55,194 [INFO] 
+Query: "this agreement shall be governed" Indian law
+2026-04-23 09:45:59,429 [INFO]   Search '"this agreement shall be governed" Indian law' page 0: 10 results
+2026-04-23 09:45:59,431 [INFO]   Skipping (already scraped): 1332596
+2026-04-23 09:45:59,438 [INFO]   Skipping (already scraped): 156247141
+2026-04-23 09:45:59,439 [INFO]   Skipping (already scraped): 1375804
+2026-04-23 09:45:59,446 [INFO]   Skipping (already scraped): 179103560
+2026-04-23 09:45:59,452 [INFO]   Skipping (already scraped): 574519
+2026-04-23 09:45:59,460 [INFO]   Skipping (already scraped): 1358284
+2026-04-23 09:45:59,470 [INFO]   Skipping (already scraped): 985004
+2026-04-23 09:45:59,475 [INFO]   Skipping (already scraped): 806787
+2026-04-23 09:45:59,480 [INFO]   Skipping (already scraped): 1630883
+2026-04-23 09:45:59,485 [INFO]   Skipping (already scraped): 82136168
+2026-04-23 09:45:59,489 [INFO] 
+Query: "applicable law" clause commercial agreement
+2026-04-23 09:46:03,560 [INFO]   Search '"applicable law" clause commercial agreement' page 0: 10 results
+2026-04-23 09:46:03,563 [INFO]   Skipping (already scraped): 31462135
+2026-04-23 09:46:03,590 [INFO]   Skipping (already scraped): 182465363
+2026-04-23 09:46:03,626 [INFO]   Skipping (already scraped): 173150163
+2026-04-23 09:46:03,664 [INFO]   Skipping (already scraped): 138700339
+2026-04-23 09:46:03,695 [INFO]   Skipping (already scraped): 65153028
+2026-04-23 09:46:03,726 [INFO]   Skipping (already scraped): 152794018
+2026-04-23 09:46:03,757 [INFO]   Skipping (already scraped): 40294921
+2026-04-23 09:46:03,797 [INFO]   Skipping (already scraped): 19400758
+2026-04-23 09:46:03,840 [INFO]   Skipping (already scraped): 39406461
+2026-04-23 09:46:03,871 [INFO]   Skipping (already scraped): 38515748
+2026-04-23 09:46:03,901 [INFO] 
+Total snippets for governing_law: 10
+2026-04-23 09:46:03,942 [INFO] Saved 10 snippets -> data\processed\clauses.jsonl
+2026-04-23 09:46:03,943 [INFO] 
+Done. Review data/processed/clauses.jsonl before loading into Label Studio.
+2026-04-23 09:46:03,943 [INFO] Manual review is important — regex extraction is not perfect.
