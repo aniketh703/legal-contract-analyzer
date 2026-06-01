@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Legal Contract Analyzer (Flask App)",
+      "runtimeExecutable": "rag-legal-contract-analyzer/venv/Scripts/python",
+      "runtimeArgs": ["rag-legal-contract-analyzer/app/main.py"],
+      "port": 5000
+    },
+    {
+      "name": "Label Studio (Annotation)",
+      "runtimeExecutable": "rag-legal-contract-analyzer/venv/Scripts/label-studio.exe",
+      "runtimeArgs": ["start", "--host", "127.0.0.1", "--port", "8080"],
+      "port": 8080
+    }
+  ]
+}
