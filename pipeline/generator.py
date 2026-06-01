@@ -23,6 +23,8 @@ from __future__ import annotations
 from pathlib import Path
 from datetime import datetime
 
+from pipeline.disclaimer import LEGAL_DISCLAIMER_HTML
+
 # ---------------------------------------------------------------------------
 # Risk colour scheme
 # ---------------------------------------------------------------------------
@@ -80,8 +82,9 @@ _EXPLANATIONS: dict[str, str] = {
     "Arbitration": (
         "This clause routes disputes to private arbitration rather than courts. "
         "{statute_line}"
-        "Confirm the seat of arbitration, governing rules, number of arbitrators, "
-        "and whether interim relief from courts is preserved."
+        "This is standard for Indian commercial agreements, though parties may still negotiate "
+        "the appointment mechanics, seat, governing rules, number of arbitrators, and whether "
+        "interim relief from courts is preserved."
     ),
     "IPAssignment": (
         "This clause transfers intellectual property rights from one party to another. "
@@ -113,6 +116,99 @@ _EXPLANATIONS: dict[str, str] = {
         "Auto-renewal clauses with short opt-out windows are a common source of "
         "unintended commitment — ensure notice periods are calendar-marked."
     ),
+    # --- Types sourced from CSV training data ---
+    "LicenseGrant": (
+        "This clause grants permission to use intellectual property or software under specified conditions. "
+        "{statute_line}"
+        "Review scope (field of use, territory, sublicensing rights), exclusivity, and whether "
+        "the grant survives termination."
+    ),
+    "AuditRights": (
+        "This clause grants one party the right to inspect the other's books, records, or systems. "
+        "{statute_line}"
+        "Negotiate reasonable notice periods, limited scope, and cost allocation for audit findings."
+    ),
+    "AntiAssignment": (
+        "This clause restricts transferring rights or obligations under the agreement to a third party. "
+        "{statute_line}"
+        "Verify whether change-of-control events trigger the restriction and whether consent "
+        "cannot be unreasonably withheld."
+    ),
+    "Insurance": (
+        "This clause requires one or both parties to maintain specified insurance coverage. "
+        "{statute_line}"
+        "Confirm coverage types, minimum limits, and the obligation to name the other party "
+        "as an additional insured."
+    ),
+    "Exclusivity": (
+        "This clause restricts one or both parties from dealing with competitors during the agreement. "
+        "{statute_line}"
+        "Assess scope, duration, and whether exclusivity is reciprocal or one-sided."
+    ),
+    "ChangeOfControl": (
+        "This clause defines rights triggered by a change in ownership or control of a party. "
+        "{statute_line}"
+        "Common triggers include acquisition, merger, or sale of substantially all assets. "
+        "Verify whether the other party gains termination rights on a change of control."
+    ),
+    "UncappedLiability": (
+        "This clause explicitly removes limits on financial exposure for certain categories of loss. "
+        "{statute_line}"
+        "Uncapped liability for IP infringement or fraud is market-standard, but broad uncapped "
+        "exposure should be carefully negotiated."
+    ),
+    "RenewalTerm": (
+        "This clause governs automatic or optional extension of the agreement term. "
+        "{statute_line}"
+        "Auto-renewal with short opt-out windows is a common source of unintended commitment — "
+        "ensure notice periods are calendar-marked."
+    ),
+    "ExpirationDate": (
+        "This clause sets the fixed end date of the agreement. "
+        "{statute_line}"
+        "Confirm the date is correctly calculated and that obligations surviving expiration "
+        "are explicitly listed."
+    ),
+    "MinimumCommitment": (
+        "This clause requires a party to purchase or use a minimum volume or value. "
+        "{statute_line}"
+        "Verify the consequences of a shortfall and whether the commitment resets annually "
+        "or is cumulative over the term."
+    ),
+    "LiquidatedDamages": (
+        "This clause pre-agrees the compensation payable for a specific breach. "
+        "{statute_line}"
+        "Under ICA Section 74, courts may reduce penalties that are disproportionate — "
+        "ensure the amount is a genuine pre-estimate of loss."
+    ),
+    "CovenantNotToSue": (
+        "This clause is a promise not to initiate legal proceedings against the other party. "
+        "{statute_line}"
+        "Distinguish from a release of claims — a covenant not to sue preserves underlying "
+        "rights but restricts enforcement."
+    ),
+    "RofrRofoRofn": (
+        "This clause grants a party priority rights to purchase, offer, or negotiate before "
+        "a deal is offered to others. "
+        "{statute_line}"
+        "Confirm trigger events, exercise periods, and pricing mechanics."
+    ),
+    "PostTerminationServices": (
+        "This clause requires services to continue for a defined period after the agreement ends. "
+        "{statute_line}"
+        "Ensure the scope, duration, and pricing of post-termination obligations are clearly defined."
+    ),
+    "Parties": (
+        "This clause identifies the legal entities entering into the agreement. "
+        "{statute_line}"
+        "Verify full legal names, jurisdiction of incorporation, and authorised signatories."
+    ),
+    "EffectiveDate": (
+        "This clause specifies when the agreement comes into force. "
+        "{statute_line}"
+        "Confirm the effective date aligns with any conditions precedent and the intended "
+        "commencement of obligations."
+    ),
     "Unknown": (
         "This clause could not be automatically classified. "
         "Manual review is recommended to determine its type, risk level, and applicable statute."
@@ -133,6 +229,23 @@ _ACTIONS: dict[str, str] = {
     "Jurisdiction":    "Verify the chosen forum is accessible. Consider adding an alternative for urgent interim relief.",
     "Renewal":         "Set a calendar reminder before the opt-out deadline to avoid automatic renewal.",
     "Unknown":         "Have a qualified legal professional review this clause before signing.",
+    # --- Types sourced from CSV training data ---
+    "LicenseGrant":            "Review exclusivity, sublicensing rights, and field-of-use restrictions carefully.",
+    "AuditRights":             "Negotiate notice periods (10–30 days), limit scope to relevant records, cap audit frequency.",
+    "AntiAssignment":          "Confirm change-of-control is addressed and that consent cannot be unreasonably withheld.",
+    "Insurance":               "Verify required coverage types, minimum limits, and additional-insured obligations.",
+    "Exclusivity":             "Assess whether exclusivity is reciprocal and negotiate carve-outs for existing relationships.",
+    "ChangeOfControl":         "Confirm trigger definition and whether termination rights on change of control are mutual.",
+    "UncappedLiability":       "Negotiate to limit uncapped exposure to fraud, wilful misconduct, and IP infringement only.",
+    "RenewalTerm":             "Set a calendar reminder before the opt-out deadline to avoid automatic renewal.",
+    "ExpirationDate":          "List all surviving obligations and confirm the expiry date is correctly calculated.",
+    "MinimumCommitment":       "Model downside scenarios and confirm remedies for shortfall are proportionate.",
+    "LiquidatedDamages":       "Verify the amount is a genuine loss pre-estimate; disproportionate penalties may be reduced by courts.",
+    "CovenantNotToSue":        "Clarify whether this is a full release or covenant only, and confirm the scope of claims covered.",
+    "RofrRofoRofn":            "Define trigger events, matching periods, and pricing mechanics precisely.",
+    "PostTerminationServices": "Fix scope, duration, and pricing of wind-down services in writing before signing.",
+    "Parties":                 "Verify full legal names, jurisdiction of incorporation, and signatory authority.",
+    "EffectiveDate":           "Confirm alignment with conditions precedent and the intended start of obligations.",
 }
 
 # ---------------------------------------------------------------------------
@@ -151,6 +264,9 @@ _STATUTE_LINES: dict[str, str] = {
     "ICA_S74":  "Under <strong>ICA Section 74</strong>, liquidated damages and penalty clauses are subject to court scrutiny on reasonableness. ",
     "ICA_S124": "Under <strong>ICA Section 124</strong>, a contract of indemnity is defined as a promise to save the other party from loss. ",
     "ICA_S125": "Under <strong>ICA Section 125</strong>, the indemnified party may recover all damages, costs, and sums paid in a suit. ",
+    "ICA_S23":  "Under <strong>ICA Section 23</strong>, contracts with unlawful consideration or objects are void. ",
+    "ICA_S37":  "Under <strong>ICA Section 37</strong>, assignment of a contract requires the other party's consent unless usage permits otherwise. ",
+    "ICA_S39":  "Under <strong>ICA Section 39</strong>, refusal to perform a contract may amount to a breach entitling the other party to remedies. ",
     "ICA_S215": "Under <strong>ICA Section 215</strong>, a principal's rights when an agent acts on their own account are prescribed. ",
     "ICA_S222": "Under <strong>ICA Section 222</strong>, agents are entitled to indemnification for consequences of lawful acts. ",
 }
@@ -279,6 +395,40 @@ h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.25rem; }
 .verdict.high   { background: #7f1d1d; color: #fecaca; }
 .verdict.medium { background: #713f12; color: #fef9c3; }
 .verdict.low    { background: #14532d; color: #dcfce7; }
+.legal-disclaimer {
+    background: #fff7ed;
+    border: 1px solid #fdba74;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.82rem;
+    color: #9a3412;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+.report-exports {
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+}
+.report-exports a {
+    color: #93c5fd;
+    margin-right: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+.report-exports a:hover { text-decoration: underline; }
+
+/* Print styling for PDF export */
+@media print {
+    body { background: #fff; color: #000; padding: 0; }
+    .clause-card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+    .summary-card { background: #fff; color: #000; border: 1px solid #ccc; page-break-inside: avoid; }
+    .report-exports, .action-box { display: none !important; }
+    .verdict.high { background: #fff; color: #7f1d1d; border: 2px solid #7f1d1d; }
+    .verdict.medium { background: #fff; color: #713f12; border: 2px solid #713f12; }
+    .verdict.low { background: #fff; color: #14532d; border: 2px solid #14532d; }
+    .pill { border: 1px solid #0369a1; }
+    .pill.guaranteed { border: 1px solid #1d4ed8; font-weight: bold; }
+}
 """
 
 
@@ -341,32 +491,55 @@ def _summary_html(clauses: list[dict], contract_name: str) -> str:
     low    = sum(1 for c in clauses if c.get("risk_level") == "LOW")
     total  = len(clauses)
 
-    if high >= 2:
+def _summary_html(clauses: list[dict], contract_name: str, use_llm_summary: bool = False) -> str:
+    counts = {"high": 0, "medium": 0, "low": 0}
+    for c in clauses:
+        level = c.get("risk_level", "MEDIUM").lower()
+        counts[level] = counts.get(level, 0) + 1
+    
+    total = len(clauses)
+    high_risk_score = counts["high"] * 3 + counts["medium"] * 1
+
+    if high_risk_score >= 6:
         verdict_cls = "high"
-        verdict_text = (
-            f"This contract contains <strong>{high} HIGH-risk clause(s)</strong>. "
-            "Legal review is strongly recommended before signing."
-        )
-    elif high == 1 or medium >= 3:
+        verdict_text = f"This contract contains significant risk areas (Score: {high_risk_score}). Some HIGH risk items are materially important financial or operational terms, not necessarily unfair or unusual. Legal review is strongly recommended before signing."
+    elif high_risk_score >= 3:
         verdict_cls = "medium"
-        verdict_text = (
-            "This contract has notable risk areas. "
-            "Consider negotiating flagged clauses before signing."
-        )
+        verdict_text = "This contract has moderate risk areas. Consider negotiating flagged clauses before signing, especially where they affect financial exposure, exit rights, or operational control."
     else:
         verdict_cls = "low"
-        verdict_text = (
-            "This contract appears relatively low-risk based on automated analysis. "
-            "A final legal review is still advisable."
-        )
+        verdict_text = "This contract appears relatively low-risk. A final legal review is still advisable."
+
+    lease_watchlist_html = ""
+    lease_indicators = {"Lease", "Termination", "Renewal", "PaymentTerms", "GoverningLaw", "Jurisdiction"}
+    clause_types = {c.get("clause_type", "Unknown") for c in clauses}
+    if "Lease" in contract_name or len(lease_indicators.intersection(clause_types)) >= 3:
+        lease_watchlist_html = """
+  <div style="margin-top: 0.9rem; padding: 0.9rem 1rem; background: #0f172a; border: 1px solid #334155; border-radius: 8px; color: #cbd5e1; font-size: 0.88rem;">
+    <strong style="color:#e2e8f0;">Commercial lease watchlist:</strong> confirm fit-out restoration obligations, who bears structural compliance upgrades, whether CAM escalations are capped, and whether force majeure affects rent suspension or only performance timelines.
+  </div>"""
+
+    # Optional LLM Narrative Summary
+    llm_summary_html = ""
+    if use_llm_summary and clauses:
+        try:
+            from transformers import pipeline  # type: ignore[import-not-found]
+            import warnings
+            warnings.filterwarnings("ignore")
+            summary_text = " ".join([c["clause_text"] for c in clauses if c.get("risk_level", "low") in ["HIGH", "MEDIUM"]])
+            if len(summary_text.split()) > 50:
+                summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6", device=-1)
+                truncated_text = " ".join(summary_text.split()[:700])
+                res = summarizer(truncated_text, max_length=130, min_length=30, do_sample=False)
+                summary_val = res[0]["summary_text"]
+                llm_summary_html = f"<div style='margin-top: 1rem; padding: 1rem; background: #f8fafc; border-left: 4px solid #3b82f6; color:#1e293b;'><strong>AI Narrative Summary:</strong> {summary_val}</div>"
+        except Exception as e:
+            llm_summary_html = f"<div style='margin-top: 1rem; color: #ef4444;'><em>Failed to generate LLM summary: {e}</em></div>"
 
     # Clause type breakdown
     from collections import Counter
     type_counts = Counter(c.get("clause_type", "Unknown") for c in clauses)
-    type_rows = "".join(
-        f"<tr><td>{t}</td><td>{n}</td></tr>"
-        for t, n in type_counts.most_common()
-    )
+    type_rows = "".join(f"<tr><td>{t}</td><td>{n}</td></tr>" for t, n in type_counts.most_common())
 
     return f"""
 <div class="summary-card">
@@ -377,19 +550,20 @@ def _summary_html(clauses: list[dict], contract_name: str) -> str:
       <div class="label">Total Clauses</div>
     </div>
     <div class="summary-stat">
-      <div class="number high-num">{high}</div>
+      <div class="number high-num">{counts['high']}</div>
       <div class="label">High Risk</div>
     </div>
     <div class="summary-stat">
-      <div class="number medium-num">{medium}</div>
+      <div class="number medium-num">{counts['medium']}</div>
       <div class="label">Medium Risk</div>
     </div>
     <div class="summary-stat">
-      <div class="number low-num">{low}</div>
+      <div class="number low-num">{counts['low']}</div>
       <div class="label">Low Risk</div>
     </div>
   </div>
-  <table style="border-collapse:collapse;font-size:0.85rem;width:100%;margin-bottom:0.75rem">
+  {llm_summary_html}
+  <table style="border-collapse:collapse;font-size:0.85rem;width:100%;margin-top:1rem;margin-bottom:0.75rem">
     <thead>
       <tr style="color:#94a3b8">
         <th style="text-align:left;padding:0.2rem 0.5rem">Clause Type</th>
@@ -401,6 +575,31 @@ def _summary_html(clauses: list[dict], contract_name: str) -> str:
     </tbody>
   </table>
   <div class="verdict {verdict_cls}">{verdict_text}</div>
+    {lease_watchlist_html}
+    <div style="margin-top:0.75rem;font-size:0.8rem;color:#94a3b8;line-height:1.5">
+        This assessment is commercial and structural, not formal legal advice.
+    </div>
+  <div class="report-exports">
+        <a data-app-path="/export/json" href="/export/json" download>Download JSON analysis</a>
+        <a data-app-path="/report" href="/report" target="_blank" rel="noopener">Open HTML report</a>
+        <a href="#" onclick="window.print(); return false;">Save as PDF</a>
+  </div>
+    <script>
+        (function () {{
+            var openerOrigin = window.opener && window.opener.location && window.opener.location.origin;
+            var currentOrigin = window.location && window.location.origin;
+            var origin = (openerOrigin && openerOrigin !== "null")
+                ? openerOrigin
+                : ((currentOrigin && currentOrigin !== "null") ? currentOrigin : "");
+
+            if (!origin) return;
+
+            document.querySelectorAll(".report-exports a[data-app-path]").forEach(function (link) {{
+                var path = link.getAttribute("data-app-path");
+                if (path) link.href = origin + path;
+            }});
+        }})();
+    </script>
   <div style="margin-top:0.75rem;font-size:0.75rem;color:#64748b">
     Generated by Legal Contract Analyzer &middot; {datetime.now().strftime('%d %b %Y, %H:%M')} &middot; Statutes: Indian Contract Act 1872
   </div>
@@ -415,6 +614,7 @@ def generate_report(
     clauses: list[dict],
     contract_name: str = "Contract",
     output_path: str | Path | None = None,
+    use_llm_summary: bool = False
 ) -> str:
     """
     Generate an HTML analysis report for a list of enriched clause dicts.
@@ -423,6 +623,7 @@ def generate_report(
         clauses:       Output from retriever.retrieve_statutes().
         contract_name: Display name shown in the report header.
         output_path:   If provided, writes the HTML to this file path.
+        use_llm_summary: If True, uses transformers to generate a summary.
 
     Returns:
         HTML string.
@@ -448,6 +649,8 @@ def generate_report(
     {contract_name} &nbsp;&middot;&nbsp; {total} clauses analysed
     &nbsp;&middot;&nbsp; {high} high-risk &nbsp;&middot;&nbsp; {date_str}
   </div>
+
+  {LEGAL_DISCLAIMER_HTML}
 
   {cards_html}
   {summary}

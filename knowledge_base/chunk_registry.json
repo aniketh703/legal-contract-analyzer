@@ -1293,5 +1293,33 @@
     "title": "Effect, on agreement, of misrepresentation or fraud by agent",
     "text": "Section 238. Effect, on agreement, of misrepresentation or fraud by agent. CHAPTER XI\nOF PARTNERSHIP\n239. [Repealed.].\n240. [Repealed.].\n241. [Repealed.].\n242. [Repealed.].\n243. [Repealed.].\n244. [Repealed.].\n245. [Repealed.].\n246. [Repealed.].\n247. [Repealed.].\n248. [Repealed.].\n249. [Repealed.].\n250. [Repealed.].\n251. [Repealed.].\n252. [Repealed.].\n253. [Repealed.].\n254. [Repealed.].\n255. [Repealed.].\n256. [Repealed.].\n257. [Repealed.].\n258. [Repealed.].\n259. [Repealed.].\n260. [Repealed.].\n261. [Repealed.].\n262. [Repealed.].\n263. [Repealed.].\n264. [Repealed.].\n265. [Repealed.].\n266. [Repealed.].\nSCHEDULE—[Repealed.]\nACT NO. 9 OF 18721\n[25th April, 1872.]\nPreamble—WHEREAS it is expedient to define and amend certain parts of the law relating to\ncontracts;\nIt is hereby enacted as follows:—\nPRELIMINARY\n\nmade, or\nfrauds committed, by agents acting in the course of their business for their principals, have the same\neffect on agreements made by such agents as if such misrepresentations or frauds had been made or\ncommitted by the principals; but misrepresentations made, or frauds committed, by agents, in matters\nwhich do not fall within their authority, do not affect their principals.\nIllustrations\n(a) A, being B’s agent for the sale of goods, induces C to buy them by a misrepresentation, which he was not authorized by\nB to make. The contract is voidable, as between B and C, at the option of C.\n(b) A, the captain of B’s ship, signs bills of lading without having received on board the goods mentioned therein. The bills\nof lading are void as between B and the pretended cosignor.\nCHAPTER XI.—[OF PARTNERSHIP.]Rep. by the Indian Partnership Act, 1932 (9 of 1932), s. 73\nand the Second Schedule.\n239. [‘Partnership’ defined.] Rep. by s. 73 and the Second Schedule, ibid.\n240. [Lender not a partner by advancing money for share of profits.] Rep. by s. 73 and the Second\nSchedule, ibid.\n241. [Property left in business by retiring partner, or decreased partner’s preventative.] Rep. by s. 73\nand the Second Schedule, ibid.\n242. [Servant or agent remunerated by share of profits, not a partner.] Rep. by s. 73 and the Second\nSchedule, ibid.\n243. [Widow or child of deceased partner receiving annuity out of profits, not a partner.] Rep. by s.\n73 and the Second Schedule, ibid.\n244. [Person receiving portion of profits for sale of good-will, no a partner.] Rep. by s. 73 and the\nSecond Schedule, ibid.\n245. [Responsibility of person leading another to believe him a partner.] Rep. by s. 73 and the Second\nSchedule, ibid.\n246. [Liability of person permitting him self to be represented as a partner.] Rep. by s. 73 and the\nSecond Schedule, ibid.\n247. [Minor partner not personally liable, but his share is.] Rep. by s. 73 and the Second Schedule,\nibid.\n248. [Liability of minor partner on attaining majority.] Rep. by s. 73 and the Second Schedule, ibid\n249. [Partner’s liability for debts of partnership.] Rep. bys. 73 and the Second Schedule, ibid.\n250. [Partner’s liability to third person for neglect or fraud of co-partner.] Rep. by s. 73 and the\nSecond Sche...",
     "source": "Indian Contract Act 1872"
+  },
+  "ARB_S8": {
+    "id": "ARB_S8",
+    "section_number": "8",
+    "title": "Power to refer parties to arbitration where there is an arbitration agreement",
+    "text": "Section 8. Power to refer parties to arbitration where there is an arbitration agreement. A judicial authority before which an action is brought in a matter which is the subject of an arbitration agreement shall, if a party so applies, refer the parties to arbitration.",
+    "source": "Arbitration and Conciliation Act 1996"
+  },
+  "ARB_S11": {
+    "id": "ARB_S11",
+    "section_number": "11",
+    "title": "Appointment of arbitrators",
+    "text": "Section 11. Appointment of arbitrators. A person of any nationality may be an arbitrator. The parties are free to agree on a procedure for appointing the arbitrator.",
+    "source": "Arbitration and Conciliation Act 1996"
+  },
+  "IT_S43A": {
+    "id": "IT_S43A",
+    "section_number": "43A",
+    "title": "Compensation for failure to protect data",
+    "text": "Section 43A. Compensation for failure to protect data. Where a body corporate, possessing, dealing or handling any sensitive personal data or information in a computer resource which it owns, controls or operates, is negligent in implementing and maintaining reasonable security practices and procedures and thereby causes wrongful loss or wrongful gain to any person, such body corporate shall be liable to pay damages by way of compensation to the person so affected.",
+    "source": "Information Technology Act 2000"
+  },
+  "IT_S79": {
+    "id": "IT_S79",
+    "section_number": "79",
+    "title": "Exemption from liability of intermediary in certain cases",
+    "text": "Section 79. Exemption from liability of intermediary in certain cases. An intermediary shall not be liable for any third party information, data, or communication link made available or hosted by him.",
+    "source": "Information Technology Act 2000"
   }
 }

@@ -11,6 +11,8 @@ from pipeline.retriever import (
     _tokenise,
     _rrf_merge,
     _STATUTE_MAP,
+    load_kb_artifacts,
+    retrieve_statutes,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -166,3 +168,46 @@ class TestStatuteMap:
         for ctype, sids in _STATUTE_MAP.items():
             for sid in sids:
                 assert sid in reg, f"Statute {sid} (for {ctype}) missing from KB"
+
+    def test_extended_types_have_guaranteed_sections(self):
+        for ctype in ("AntiAssignment", "Exclusivity", "LiquidatedDamages", "RenewalTerm"):
+            assert ctype in _STATUTE_MAP
+            assert len(_STATUTE_MAP[ctype]) >= 1
+
+
+# ---------------------------------------------------------------------------
+# Cached artifacts + graceful degradation (no FAISS required)
+# ---------------------------------------------------------------------------
+
+class TestKbCacheAndFallback:
+    def test_load_kb_artifacts_without_faiss(self):
+        cache: dict = {}
+        artifacts = load_kb_artifacts(kb_dir=KB_DIR, cache=cache)
+        assert artifacts["registry"]
+        assert artifacts["bm25_fn"] is not None
+        # FAISS index may be absent in CI; BM25 + statute map must still work
+        assert "bm25_corpus" in artifacts
+
+    def test_load_kb_artifacts_uses_cache(self):
+        cache: dict = {}
+        first = load_kb_artifacts(kb_dir=KB_DIR, cache=cache)
+        second = load_kb_artifacts(kb_dir=KB_DIR, cache=cache)
+        assert first is second
+        assert len(cache) == 1
+
+    def test_retrieve_statutes_without_embeddings(self):
+        clauses = [{
+            "clause_id": "t1",
+            "clause_text": (
+                "The employee shall not engage in any competing business "
+                "activities for two years after termination."
+            ),
+            "clause_type": "NonCompete",
+            "risk_level": "HIGH",
+        }]
+        cache: dict = {}
+        enriched = retrieve_statutes(clauses, kb_dir=KB_DIR, cache=cache)
+        assert len(enriched) == 1
+        sections = enriched[0]["retrieved_sections"]
+        assert len(sections) >= 1
+        assert any(s["section_id"] == "ICA_S27" for s in sections)

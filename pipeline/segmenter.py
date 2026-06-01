@@ -52,12 +52,16 @@ _HEADING_PAT = re.compile(
 _MIN_CHARS = 80
 _MAX_CHARS = 2000
 
+# Below this char count from native PDF text, try OCR (scanned PDFs)
+_MIN_NATIVE_PDF_CHARS = 200
+
 
 # ---------------------------------------------------------------------------
 # PDF extraction
 # ---------------------------------------------------------------------------
 
-def _extract_text_from_pdf(pdf_path: str) -> str:
+def _extract_text_from_pdf_native(pdf_path: str) -> str:
+    """Extract embedded text via pdfplumber, then PyMuPDF."""
     path = str(pdf_path)
     try:
         import pdfplumber
@@ -67,13 +71,52 @@ def _extract_text_from_pdf(pdf_path: str) -> str:
                 t = page.extract_text()
                 if t:
                     pages.append(t)
-        return "\n".join(pages)
+        text = "\n".join(pages)
+        if text.strip():
+            return text
     except Exception:
         pass
 
     import fitz  # PyMuPDF fallback
     doc = fitz.open(path)
     return "\n".join(page.get_text() for page in doc)
+
+
+def _extract_text_from_pdf_ocr(pdf_path: str) -> str:
+    """
+    OCR fallback for scanned PDFs. Requires Tesseract on PATH and:
+      pip install pytesseract Pillow
+    """
+    try:
+        import io
+
+        import fitz
+        import pytesseract
+        from PIL import Image
+    except ImportError:
+        return ""
+
+    pages: list[str] = []
+    try:
+        doc = fitz.open(str(pdf_path))
+        for page in doc:
+            pix = page.get_pixmap(dpi=200)
+            img = Image.open(io.BytesIO(pix.tobytes("png")))
+            pages.append(pytesseract.image_to_string(img))
+        return "\n".join(pages)
+    except Exception:
+        return ""
+
+
+def _extract_text_from_pdf(pdf_path: str) -> str:
+    native = _extract_text_from_pdf_native(pdf_path)
+    if len(native.strip()) >= _MIN_NATIVE_PDF_CHARS:
+        return native
+
+    ocr = _extract_text_from_pdf_ocr(pdf_path)
+    if len(ocr.strip()) > len(native.strip()):
+        return ocr
+    return native
 
 
 # ---------------------------------------------------------------------------
@@ -158,6 +201,21 @@ def _filter_and_label(segments: list[dict], doc_id: str) -> list[dict]:
 # Public API
 # ---------------------------------------------------------------------------
 
+def load_contract_text(
+    path: str | Path | None = None,
+    text: str | None = None,
+) -> str:
+    """Load raw contract text from a file path or in-memory string."""
+    if path is None and text is None:
+        raise ValueError("Provide either 'path' or 'text'.")
+    if path is not None:
+        path = Path(path)
+        if path.suffix.lower() == ".pdf":
+            return _extract_text_from_pdf(path)
+        return path.read_text(encoding="utf-8")
+    return text or ""
+
+
 def segment_contract(
     path: str | Path | None = None,
     text: str | None = None,
@@ -175,17 +233,7 @@ def segment_contract(
         List of clause dicts with keys:
             clause_id, clause_text, heading, char_start, char_end
     """
-    if path is None and text is None:
-        raise ValueError("Provide either 'path' or 'text'.")
-
-    if path is not None:
-        path = Path(path)
-        if path.suffix.lower() == ".pdf":
-            raw = _extract_text_from_pdf(path)
-        else:
-            raw = path.read_text(encoding="utf-8")
-    else:
-        raw = text
+    raw = load_contract_text(path=path, text=text)
 
     if doc_id is None:
         doc_id = path.stem if path is not None else uuid.uuid4().hex[:8]

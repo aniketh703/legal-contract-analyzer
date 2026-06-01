@@ -3,10 +3,12 @@ pipeline/classifier.py
 ======================
 Labels each clause segment with clause_type and risk_level.
 
-Strategy (two-stage):
-  1. Keyword rules  — fast, interpretable, handles common patterns well
-  2. Embedding similarity fallback — cosine sim against curated clauses.jsonl
-     using InLegalBERT when keyword rules are uncertain
+Strategy (three-stage):
+  1. ML classifier   — TF-IDF + Logistic Regression trained on labeled CSV data.
+                       Used when models/clause_classifier.pkl exists and
+                       confidence >= ML_THRESHOLD.
+  2. Keyword rules   — fast fallback when ML model is absent or uncertain.
+  3. Embedding sim   — cosine sim against curated clauses.jsonl using InLegalBERT.
 
 Output adds to each clause dict:
     {
@@ -14,7 +16,7 @@ Output adds to each clause dict:
         "clause_type":  "Termination",
         "risk_level":   "MEDIUM",
         "confidence":   0.87,
-        "method":       "keyword" | "embedding",
+        "method":       "ml" | "keyword" | "embedding",
     }
 
 Usage:
@@ -41,7 +43,7 @@ _RISK = {
     "Jurisdiction":    "MEDIUM",
     "Indemnification": "HIGH",
     "LiabilityCap":    "HIGH",
-    "IPAssignment":    "HIGH",
+    "IPAssignment":    "MEDIUM",
     "NonCompete":      "HIGH",
     "PaymentTerms":    "LOW",
     "GoverningLaw":    "LOW",
@@ -50,6 +52,64 @@ _RISK = {
 
 _UNKNOWN_TYPE = "Unknown"
 _UNKNOWN_RISK = "MEDIUM"
+
+# Minimum ML predict_proba score to trust the ML result over keyword rules
+_ML_THRESHOLD = 0.30
+
+# ---------------------------------------------------------------------------
+# ML classifier (Stage 1) — lazy-loaded
+# ---------------------------------------------------------------------------
+
+_MODELS_DIR = Path(__file__).resolve().parent.parent / "models"
+_ml_cache: dict = {}
+
+
+def _load_ml_model() -> dict | None:
+    """Lazy-load the trained TF-IDF + LR model. Returns None if not found."""
+    if "loaded" in _ml_cache:
+        return _ml_cache if _ml_cache.get("ok") else None
+
+    _ml_cache["loaded"] = True
+    vec_path = _MODELS_DIR / "tfidf_vectorizer.pkl"
+    clf_path = _MODELS_DIR / "clause_classifier.pkl"
+    risk_path = _MODELS_DIR / "risk_map.json"
+
+    if not (vec_path.exists() and clf_path.exists()):
+        _ml_cache["ok"] = False
+        return None
+
+    try:
+        import joblib  # type: ignore[import-not-found]
+        _ml_cache["vectorizer"] = joblib.load(vec_path)
+        _ml_cache["clf"] = joblib.load(clf_path)
+        _ml_cache["risk_map"] = json.loads(risk_path.read_text(encoding="utf-8")) if risk_path.exists() else {}
+        _ml_cache["ok"] = True
+    except Exception:
+        _ml_cache["ok"] = False
+        return None
+
+    return _ml_cache
+
+
+def _ml_classify(text: str) -> tuple[str, float] | None:
+    """Return (clause_type, confidence) from the ML model, or None if unavailable."""
+    cache = _load_ml_model()
+    if cache is None:
+        return None
+    vec = cache["vectorizer"].transform([text])
+    proba = cache["clf"].predict_proba(vec)[0]
+    best_idx = int(proba.argmax())
+    confidence = float(proba[best_idx])
+    if confidence < _ML_THRESHOLD:
+        return None
+    return cache["clf"].classes_[best_idx], confidence
+
+
+def _ml_risk(clause_type: str) -> str:
+    cache = _load_ml_model()
+    if cache:
+        return cache["risk_map"].get(clause_type, _UNKNOWN_RISK)
+    return _RISK.get(clause_type, _UNKNOWN_RISK)
 
 # ---------------------------------------------------------------------------
 # Keyword rules
@@ -115,6 +175,18 @@ _RULES: list[tuple[str, list[str], list[str], list[str]]] = [
             r"\bin no event.*liab\w*\b",
             r"\bmaximum.*liabilit\w*\b",
             r"\baggregate.*liabilit\w*\b",
+            # additional patterns
+            r"\bshall not exceed\b",
+            r"\btotal.*liabilit\w*\b",
+            r"\bliabilit\w*.*shall not exceed\b",
+            r"\bmaximum exposure\b",
+            r"\bexclud.*liabilit\w*\b",
+            r"\bno event.*shall.*liab\w*\b",
+            r"\bconsequential\s+damages?\b",
+            r"\bindirect\s+damages?\b",
+            r"\bincidental\s+damages?\b",
+            r"\bspecial\s+damages?\b",
+            r"\bnot.*liable.*(?:indirect|consequential|incidental|special)\b",
         ],
         [],
         [],
@@ -133,13 +205,36 @@ _RULES: list[tuple[str, list[str], list[str], list[str]]] = [
     ),
     (
         "PaymentTerms",
-        [r"\bpayment\b", r"\binvoice\b", r"\bfee[s]?\b", r"\bremittance\b"],
-        [r"\b(shall pay|payment due|payment terms|within \d+ days)\b"],
+        [
+            r"\bpayment\b",
+            r"\binvoice\b",
+            r"\bfee[s]?\b",
+            r"\bremittance\b",
+            # additional patterns — relaxed, no required_all
+            r"\bpayable\b",
+            r"\bdue date\b",
+            r"\bshall be paid\b",
+            r"\blate.*payment\b",
+            r"\bpayment.*due\b",
+            r"\bnet\s*\d+\b",
+            r"\bwithin.*\d+.*days?\b",
+            r"\binterest.*per annum\b",
+            r"\bper annum\b",
+            r"\boverdue\b",
+            r"\bshall pay\b",
+            r"\bpayment terms?\b",
+        ],
+        [],   # removed required_all — was too strict
         [],
     ),
     (
         "GoverningLaw",
-        [r"\bgoverning law\b", r"\bgoverned by.*laws? of\b", r"\bconstrued in accordance with\b"],
+        [
+            r"\bgoverning law\b",
+            r"\bgoverned by.*laws? of\b",
+            r"\bconstrued in accordance with\b",
+            r"\bchoice of law\b",
+        ],
         [],
         [],
     ),
@@ -160,6 +255,35 @@ _RULES: list[tuple[str, list[str], list[str], list[str]]] = [
         [],
         [],
     ),
+]
+
+_STRICT_EVIDENCE: dict[str, list[str]] = {
+    "Confidentiality": [r"\bconfidential\w*\b", r"\bnon.?disclosure\b", r"\bproprietary information\b"],
+    "Indemnification": [r"\bindemnif\w*\b", r"\bhold harmless\b", r"\bdefend\b"],
+    "IPAssignment": [
+        r"\bintellectual property\b",
+        r"\bip\s+assign\w*\b",
+        r"\bassign.*(?:patent|copyright|trademark|invention)\b",
+        r"\bwork.?for.?hire\b",
+        r"\bbackground ip\b",
+        r"\bowned by.*(?:company|employer|licensor)\b",
+    ],
+    "NonCompete": [
+        r"\bnon.?compet\w*\b",
+        r"\brestraint of trade\b",
+        r"\bcompeting business\b",
+        r"\bnot.*engag\w*.*compet\w*\b",
+    ],
+}
+
+_STRUCTURAL_HEADING_PATTERNS = [
+    r"\brecitals?\b",
+    r"\bparties\b",
+    r"\bsignature(?:s| block)?\b",
+    r"\bexecution\b",
+    r"\bgeneral\b",
+    r"\bmiscellaneous\b",
+    r"\bpreamble\b",
 ]
 
 
@@ -197,6 +321,32 @@ def _keyword_classify(text: str) -> tuple[str, float] | None:
     return best_type, confidence
 
 
+def _is_structural_clause(text: str, heading: str = "") -> bool:
+    """Return True for boilerplate sections that should not be forced into a substantive risk label."""
+    haystack = f"{heading} {text}".lower()
+    return any(re.search(pattern, haystack) for pattern in _STRUCTURAL_HEADING_PATTERNS)
+
+
+def _supports_clause_type(clause_type: str, text: str, heading: str = "") -> bool:
+    """Guard against high-confidence but implausible labels from ML or embeddings."""
+    if _is_structural_clause(text, heading):
+        return False
+
+    evidence_patterns = _STRICT_EVIDENCE.get(clause_type)
+    if evidence_patterns is None:
+        return True
+
+    haystack = f"{heading} {text}".lower()
+    return any(re.search(pattern, haystack) for pattern in evidence_patterns)
+
+
+def _accept_prediction(clause_type: str, confidence: float, text: str, heading: str = "") -> tuple[str, float] | None:
+    """Keep a prediction only when the clause text supports the label."""
+    if not _supports_clause_type(clause_type, text, heading):
+        return None
+    return clause_type, confidence
+
+
 # ---------------------------------------------------------------------------
 # Embedding fallback
 # ---------------------------------------------------------------------------
@@ -208,8 +358,8 @@ def _load_embedding_model(model_name: str = "law-ai/InLegalBERT"):
     if "model" in _emb_cache:
         return _emb_cache["tokenizer"], _emb_cache["model"], _emb_cache["device"]
 
-    import torch
-    from transformers import AutoTokenizer, AutoModel
+    import torch  # type: ignore[import-not-found]
+    from transformers import AutoTokenizer, AutoModel  # type: ignore[import-not-found]
 
     warnings.filterwarnings("ignore")
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -223,8 +373,8 @@ def _load_embedding_model(model_name: str = "law-ai/InLegalBERT"):
     return tokenizer, model, device
 
 
-def _embed(text: str, tokenizer, model, device) -> "np.ndarray":
-    import torch
+def _embed(text: str, tokenizer, model, device) -> object:
+    import torch  # type: ignore[import-not-found]
     import numpy as np
 
     inputs = tokenizer(
@@ -310,35 +460,64 @@ def classify_clauses(
     results = []
     for clause in clauses:
         text = clause.get("clause_text", "")
+        heading = clause.get("heading", "")
         result = dict(clause)
 
-        # Stage 1: keyword rules
-        keyword_result = _keyword_classify(text)
-        if keyword_result is not None:
-            ctype, conf = keyword_result
-            result["clause_type"] = ctype
-            result["risk_level"] = _RISK.get(ctype, _UNKNOWN_RISK)
-            result["confidence"] = round(conf, 3)
-            result["method"] = "keyword"
-
-        # Stage 2: embedding fallback if keyword uncertain or failed
-        elif use_embeddings and clauses_jsonl.exists():
-            try:
-                ctype, conf = _embedding_classify(text, clauses_jsonl, model_name)
-                result["clause_type"] = ctype
-                result["risk_level"] = _RISK.get(ctype, _UNKNOWN_RISK)
-                result["confidence"] = round(conf, 3)
-                result["method"] = "embedding"
-            except Exception as e:
-                result["clause_type"] = _UNKNOWN_TYPE
-                result["risk_level"] = _UNKNOWN_RISK
-                result["confidence"] = 0.0
-                result["method"] = f"failed:{e}"
-        else:
+        if _is_structural_clause(text, heading):
             result["clause_type"] = _UNKNOWN_TYPE
             result["risk_level"] = _UNKNOWN_RISK
             result["confidence"] = 0.0
-            result["method"] = "none"
+            result["method"] = "structural"
+            results.append(result)
+            continue
+
+        # Stage 1: ML classifier
+        ml_result = _ml_classify(text)
+        accepted = _accept_prediction(ml_result[0], ml_result[1], text, heading) if ml_result is not None else None
+        if accepted is not None:
+            ctype, conf = accepted
+            result["clause_type"] = ctype
+            result["risk_level"] = _ml_risk(ctype)
+            result["confidence"] = round(conf, 3)
+            result["method"] = "ml"
+
+        else:
+            # Stage 2: keyword rules
+            keyword_result = _keyword_classify(text)
+            accepted = _accept_prediction(keyword_result[0], keyword_result[1], text, heading) if keyword_result is not None else None
+            if accepted is not None:
+                ctype, conf = accepted
+                result["clause_type"] = ctype
+                result["risk_level"] = _RISK.get(ctype, _UNKNOWN_RISK)
+                result["confidence"] = round(conf, 3)
+                result["method"] = "keyword"
+
+            # Stage 3: embedding fallback
+            elif use_embeddings and clauses_jsonl.exists():
+                try:
+                    ctype, conf = _embedding_classify(text, clauses_jsonl, model_name)
+                    accepted = _accept_prediction(ctype, conf, text, heading)
+                    if accepted is not None:
+                        ctype, conf = accepted
+                        result["clause_type"] = ctype
+                        result["risk_level"] = _RISK.get(ctype, _UNKNOWN_RISK)
+                        result["confidence"] = round(conf, 3)
+                        result["method"] = "embedding"
+                    else:
+                        result["clause_type"] = _UNKNOWN_TYPE
+                        result["risk_level"] = _UNKNOWN_RISK
+                        result["confidence"] = 0.0
+                        result["method"] = "none"
+                except Exception as e:
+                    result["clause_type"] = _UNKNOWN_TYPE
+                    result["risk_level"] = _UNKNOWN_RISK
+                    result["confidence"] = 0.0
+                    result["method"] = f"failed:{e}"
+            else:
+                result["clause_type"] = _UNKNOWN_TYPE
+                result["risk_level"] = _UNKNOWN_RISK
+                result["confidence"] = 0.0
+                result["method"] = "none"
 
         results.append(result)
 

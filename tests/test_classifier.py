@@ -5,6 +5,7 @@ Unit tests for pipeline/classifier.py
 """
 import pytest
 from pipeline.segmenter import segment_contract
+import pipeline.classifier as classifier
 from pipeline.classifier import classify_clauses, _keyword_classify, _RISK
 
 
@@ -115,6 +116,61 @@ class TestClassifyClauses:
         nc = [c for c in result if c["clause_type"] == "NonCompete"]
         assert len(nc) >= 1
         assert all(c["risk_level"] == "HIGH" for c in nc)
+
+    def test_structural_headings_are_not_forced_into_substantive_labels(self, monkeypatch):
+        clauses = [
+            {
+                "clause_id": "x1",
+                "clause_text": "Recitals A. The parties record the background to this lease and the commercial intent behind it.",
+                "heading": "Recitals",
+                "char_start": 0,
+                "char_end": 99,
+            }
+        ]
+
+        monkeypatch.setattr(classifier, "_ml_classify", lambda text: ("IPAssignment", 0.99))
+        monkeypatch.setattr(classifier, "_keyword_classify", lambda text: ("IPAssignment", 0.95))
+
+        result = classify_clauses(clauses, use_embeddings=False)
+        assert result[0]["clause_type"] == "Unknown"
+        assert result[0]["risk_level"] == "MEDIUM"
+        assert result[0]["method"] == "structural"
+
+    def test_license_approvals_are_not_misread_as_noncompete(self, monkeypatch):
+        clauses = [
+            {
+                "clause_id": "x2",
+                "clause_text": "The tenant shall obtain all required licenses, permits and approvals for operating the premises.",
+                "heading": "Compliance Obligations",
+                "char_start": 0,
+                "char_end": 98,
+            }
+        ]
+
+        monkeypatch.setattr(classifier, "_ml_classify", lambda text: ("NonCompete", 0.98))
+        monkeypatch.setattr(classifier, "_keyword_classify", lambda text: None)
+
+        result = classify_clauses(clauses, use_embeddings=False)
+        assert result[0]["clause_type"] == "Unknown"
+        assert result[0]["method"] == "none"
+
+    def test_rent_escalation_is_not_misread_as_confidentiality(self, monkeypatch):
+        clauses = [
+            {
+                "clause_id": "x3",
+                "clause_text": "The monthly rent shall escalate by 7% every twelve months during the lease term.",
+                "heading": "Rent Escalation",
+                "char_start": 0,
+                "char_end": 80,
+            }
+        ]
+
+        monkeypatch.setattr(classifier, "_ml_classify", lambda text: ("Confidentiality", 0.98))
+        monkeypatch.setattr(classifier, "_keyword_classify", lambda text: None)
+
+        result = classify_clauses(clauses, use_embeddings=False)
+        assert result[0]["clause_type"] == "Unknown"
+        assert result[0]["method"] == "none"
 
     def test_governing_law_is_low_risk(self, simple_contract):
         clauses = segment_contract(text=simple_contract, doc_id="test")

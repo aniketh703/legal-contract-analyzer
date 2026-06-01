@@ -2,9 +2,9 @@
   "mode": "all",
   "per_type": {
     "Arbitration": {
-      "precision": 0.659,
-      "recall": 0.879,
-      "f1": 0.753,
+      "precision": 0.682,
+      "recall": 0.909,
+      "f1": 0.779,
       "support": 33
     },
     "Confidentiality": {
@@ -15,8 +15,8 @@
     },
     "ForceMajeure": {
       "precision": 1.0,
-      "recall": 0.714,
-      "f1": 0.833,
+      "recall": 0.5,
+      "f1": 0.667,
       "support": 14
     },
     "GoverningLaw": {
@@ -27,14 +27,14 @@
     },
     "IPAssignment": {
       "precision": 1.0,
-      "recall": 0.4,
-      "f1": 0.571,
+      "recall": 0.9,
+      "f1": 0.947,
       "support": 30
     },
     "Indemnification": {
-      "precision": 0.8,
-      "recall": 1.0,
-      "f1": 0.889,
+      "precision": 0.75,
+      "recall": 0.75,
+      "f1": 0.75,
       "support": 4
     },
     "Jurisdiction": {
@@ -45,8 +45,8 @@
     },
     "LiabilityCap": {
       "precision": 1.0,
-      "recall": 0.333,
-      "f1": 0.5,
+      "recall": 0.778,
+      "f1": 0.875,
       "support": 9
     },
     "NonCompete": {
@@ -56,15 +56,15 @@
       "support": 17
     },
     "PaymentTerms": {
-      "precision": 1.0,
-      "recall": 0.125,
-      "f1": 0.222,
+      "precision": 0.64,
+      "recall": 1.0,
+      "f1": 0.78,
       "support": 16
     },
     "Renewal": {
       "precision": 1.0,
-      "recall": 0.842,
-      "f1": 0.914,
+      "recall": 0.737,
+      "f1": 0.848,
       "support": 19
     },
     "Termination": {
@@ -72,26 +72,19 @@
       "recall": 1.0,
       "f1": 0.739,
       "support": 17
-    },
-    "Unknown": {
-      "precision": 0.0,
-      "recall": 0.0,
-      "f1": 0.0,
-      "support": 0
     }
   },
   "macro": {
-    "precision": 0.794,
-    "recall": 0.593,
-    "f1": 0.626
+    "precision": 0.828,
+    "recall": 0.749,
+    "f1": 0.758
   },
-  "weighted_f1": 0.687,
-  "accuracy": 0.656,
+  "weighted_f1": 0.783,
+  "accuracy": 0.788,
   "confusion": {
     "Arbitration": {
-      "Arbitration": 29,
+      "Arbitration": 30,
       "Jurisdiction": 2,
-      "Unknown": 1,
       "GoverningLaw": 1,
       "Confidentiality": 0,
       "ForceMajeure": 0,
@@ -115,13 +108,11 @@
       "LiabilityCap": 0,
       "NonCompete": 0,
       "PaymentTerms": 0,
-      "Renewal": 0,
-      "Unknown": 0
+      "Renewal": 0
     },
     "PaymentTerms": {
-      "Unknown": 13,
-      "Arbitration": 1,
-      "PaymentTerms": 2,
+      "PaymentTerms": 16,
+      "Arbitration": 0,
       "Confidentiality": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
@@ -134,8 +125,8 @@
       "Termination": 0
     },
     "IPAssignment": {
-      "Unknown": 17,
-      "IPAssignment": 12,
+      "IPAssignment": 27,
+      "PaymentTerms": 2,
       "Termination": 1,
       "Arbitration": 0,
       "Confidentiality": 0,
@@ -145,7 +136,6 @@
       "Jurisdiction": 0,
       "LiabilityCap": 0,
       "NonCompete": 0,
-      "PaymentTerms": 0,
       "Renewal": 0
     },
     "NonCompete": {
@@ -160,8 +150,7 @@
       "Jurisdiction": 0,
       "LiabilityCap": 0,
       "PaymentTerms": 0,
-      "Renewal": 0,
-      "Unknown": 0
+      "Renewal": 0
     },
     "Confidentiality": {
       "Confidentiality": 7,
@@ -175,11 +164,11 @@
       "Jurisdiction": 0,
       "LiabilityCap": 0,
       "PaymentTerms": 0,
-      "Renewal": 0,
-      "Unknown": 0
+      "Renewal": 0
     },
     "ForceMajeure": {
-      "ForceMajeure": 10,
+      "ForceMajeure": 7,
+      "PaymentTerms": 3,
       "Termination": 4,
       "Arbitration": 0,
       "Confidentiality": 0,
@@ -189,9 +178,7 @@
       "Jurisdiction": 0,
       "LiabilityCap": 0,
       "NonCompete": 0,
-      "PaymentTerms": 0,
-      "Renewal": 0,
-      "Unknown": 0
+      "Renewal": 0
     },
     "GoverningLaw": {
       "Arbitration": 6,
@@ -205,11 +192,11 @@
       "LiabilityCap": 0,
       "NonCompete": 0,
       "PaymentTerms": 0,
-      "Renewal": 0,
-      "Unknown": 0
+      "Renewal": 0
     },
     "Indemnification": {
-      "Indemnification": 4,
+      "PaymentTerms": 1,
+      "Indemnification": 3,
       "Arbitration": 0,
       "Confidentiality": 0,
       "ForceMajeure": 0,
@@ -218,10 +205,8 @@
       "Jurisdiction": 0,
       "LiabilityCap": 0,
       "NonCompete": 0,
-      "PaymentTerms": 0,
       "Renewal": 0,
-      "Termination": 0,
-      "Unknown": 0
+      "Termination": 0
     },
     "Jurisdiction": {
       "Arbitration": 8,
@@ -235,11 +220,11 @@
       "NonCompete": 0,
       "PaymentTerms": 0,
       "Renewal": 0,
-      "Termination": 0,
-      "Unknown": 0
+      "Termination": 0
     },
     "Renewal": {
-      "Renewal": 16,
+      "PaymentTerms": 2,
+      "Renewal": 14,
       "Jurisdiction": 2,
       "Termination": 1,
       "Arbitration": 0,
@@ -249,14 +234,12 @@
       "IPAssignment": 0,
       "Indemnification": 0,
       "LiabilityCap": 0,
-      "NonCompete": 0,
-      "PaymentTerms": 0,
-      "Unknown": 0
+      "NonCompete": 0
     },
     "LiabilityCap": {
-      "LiabilityCap": 3,
+      "LiabilityCap": 7,
       "Indemnification": 1,
-      "Unknown": 5,
+      "PaymentTerms": 1,
       "Arbitration": 0,
       "Confidentiality": 0,
       "ForceMajeure": 0,
@@ -264,24 +247,8 @@
       "IPAssignment": 0,
       "Jurisdiction": 0,
       "NonCompete": 0,
-      "PaymentTerms": 0,
       "Renewal": 0,
       "Termination": 0
-    },
-    "Unknown": {
-      "Arbitration": 0,
-      "Confidentiality": 0,
-      "ForceMajeure": 0,
-      "GoverningLaw": 0,
-      "IPAssignment": 0,
-      "Indemnification": 0,
-      "Jurisdiction": 0,
-      "LiabilityCap": 0,
-      "NonCompete": 0,
-      "PaymentTerms": 0,
-      "Renewal": 0,
-      "Termination": 0,
-      "Unknown": 0
     }
   },
   "n_samples": 212

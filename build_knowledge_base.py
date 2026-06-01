@@ -374,6 +374,41 @@ def main():
         print("   Then edit the SECTION_PATTERN regex in segment_into_sections()")
         print("   Common issue: indiacode PDFs sometimes have non-standard formatting")
 
+    # Inject stubs for Multi-statute KB (Arbitration Act 1996 & IT Act 2000)
+    print("\n[3.5/5] Injecting Arbitration Act & IT Act stubs...")
+    stubs = [
+        {
+            "id": "ARB_S8",
+            "section_number": "8",
+            "title": "Power to refer parties to arbitration where there is an arbitration agreement",
+            "text": "Section 8. Power to refer parties to arbitration where there is an arbitration agreement. A judicial authority before which an action is brought in a matter which is the subject of an arbitration agreement shall, if a party so applies, refer the parties to arbitration.",
+            "source": "Arbitration and Conciliation Act 1996"
+        },
+        {
+            "id": "ARB_S11",
+            "section_number": "11",
+            "title": "Appointment of arbitrators",
+            "text": "Section 11. Appointment of arbitrators. A person of any nationality may be an arbitrator. The parties are free to agree on a procedure for appointing the arbitrator.",
+            "source": "Arbitration and Conciliation Act 1996"
+        },
+        {
+            "id": "IT_S43A",
+            "section_number": "43A",
+            "title": "Compensation for failure to protect data",
+            "text": "Section 43A. Compensation for failure to protect data. Where a body corporate, possessing, dealing or handling any sensitive personal data or information in a computer resource which it owns, controls or operates, is negligent in implementing and maintaining reasonable security practices and procedures and thereby causes wrongful loss or wrongful gain to any person, such body corporate shall be liable to pay damages by way of compensation to the person so affected.",
+            "source": "Information Technology Act 2000"
+        },
+        {
+            "id": "IT_S79",
+            "section_number": "79",
+            "title": "Exemption from liability of intermediary in certain cases",
+            "text": "Section 79. Exemption from liability of intermediary in certain cases. An intermediary shall not be liable for any third party information, data, or communication link made available or hosted by him.",
+            "source": "Information Technology Act 2000"
+        }
+    ]
+    sections.extend(stubs)
+    print(f"      Added {len(stubs)} multi-statute stubs.")
+
     if args.skip_embed:
         print("\nSkipping embedding (--skip-embed flag set)")
         return

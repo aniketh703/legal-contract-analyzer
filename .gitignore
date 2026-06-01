@@ -26,8 +26,28 @@ dist/
 # Label Studio (local DB/media)
 label-studio/
 
+# Secrets / local config
+.env
+.env.*
+!.env.example
+
+# Test / tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Generated analysis artifacts (recreated on each run)
+report.html
+analysis.json
+
 # Data artifacts (keep small samples only)
 data/raw/
 data/interim/
 data/external/
+
+# Local uploads (runtime only)
+app/uploads/*
+!app/uploads/.gitkeep
 

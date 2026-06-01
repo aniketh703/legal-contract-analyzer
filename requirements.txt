@@ -1,4 +1,33 @@
-# Keep this minimal; pin only if needed for reproducibility.
+# Core web app
+flask>=3.0.0,<4
+
+# Document parsing
+pdfplumber>=0.11.0
+pymupdf>=1.24.0
+
+# Retrieval & ML
+faiss-cpu>=1.7.4
+transformers>=4.40.0
+torch>=2.0.0
+scikit-learn>=1.3.0
+joblib>=1.3.0
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Scraping & utilities
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+tqdm>=4.66.0
+
+# Optional lexical index (custom BM25 also implemented in retriever)
+rank-bm25>=0.2.2
+
+# Tests
+pytest>=8.0.0
+
+# OCR for scanned PDFs (optional — also install Tesseract on the system)
+pytesseract>=0.3.10
+Pillow>=10.0.0
+
 # Labeling tool (optional)
 label-studio>=1.23.0
-

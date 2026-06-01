@@ -5,12 +5,20 @@ Flask web app for the Legal Contract Analyzer.
 
 Routes:
     GET  /           — Upload page
+    GET  /health     — Liveness check (JSON)
     POST /analyse    — Run pipeline, return HTML report
+    GET  /report     — Last report.html
+    GET  /export/json — Last analysis.json download
+    GET  /demo       — Built-in sample contract
 
 Run:
     python app/main.py
     # or from project root:
     flask --app app.main run --port 5000
+
+Production (set FLASK_DEBUG=0 or unset; use a WSGI server):
+    pip install gunicorn
+    gunicorn -w 2 -b 127.0.0.1:5000 "app.main:app"
 """
 
 from __future__ import annotations
@@ -18,20 +26,26 @@ from __future__ import annotations
 import os
 import sys
 import tempfile
+import uuid
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 
-from flask import Flask, render_template, request, Response, send_file
+from flask import Flask, jsonify, render_template, request, Response, send_file
 
 # Allow imports from project root
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from pipeline.pipeline import run_pipeline
+from pipeline.document_gate import CONTRACT_GATE_MESSAGE
 
 app = Flask(__name__, template_folder="templates")
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024  # 10 MB limit
 
 ALLOWED_EXTENSIONS = {".pdf", ".txt"}
+
+_EXECUTOR = ThreadPoolExecutor(max_workers=4)
+_TASKS: dict[str, dict] = {}
 
 
 def _allowed(filename: str) -> bool:
@@ -41,6 +55,12 @@ def _allowed(filename: str) -> bool:
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+@app.route("/health")
+def health():
+    """Liveness probe for deployments and smoke checks."""
+    return jsonify({"status": "ok"}), 200
 
 
 @app.route("/analyse", methods=["POST"])
@@ -65,8 +85,13 @@ def analyse():
             path=tmp_path,
             contract_name=file.filename,
             use_embeddings=True,
+            artifact_dir=ROOT,
         )
         if not clauses:
+            if html == CONTRACT_GATE_MESSAGE or (
+                html and "does not appear to be a legal contract" in html
+            ):
+                return Response(html, status=422)
             return Response(
                 "No clauses could be extracted. Check that the file contains readable contract text.",
                 status=422,
@@ -77,6 +102,67 @@ def analyse():
         return Response(f"Analysis failed: {e}", status=500)
     finally:
         os.unlink(tmp_path)
+
+
+def _run_pipeline_async(task_id: str, file_path: str, filename: str):
+    try:
+        html, clauses = run_pipeline(
+            path=file_path,
+            contract_name=filename,
+            use_embeddings=True,
+            artifact_dir=ROOT,
+            use_llm_summary=True,  # Optional P2 feature enabled here
+        )
+        if not clauses:
+            _TASKS[task_id] = {"status": "error", "message": "No clauses extracted. Check that the file contains readable contract text."}
+        else:
+            _TASKS[task_id] = {"status": "done", "html": html}
+    except Exception as e:
+        app.logger.error(f"Async Pipeline error: {e}", exc_info=True)
+        _TASKS[task_id] = {"status": "error", "message": str(e)}
+    finally:
+        if os.path.exists(file_path):
+            os.unlink(file_path)
+
+@app.route("/analyse/async", methods=["POST"])
+def analyse_async():
+    file = request.files.get("contract")
+
+    if not file or not file.filename:
+        return jsonify({"error": "No file uploaded."}), 400
+
+    if not _allowed(file.filename):
+        return jsonify({"error": "Only PDF and TXT files are supported."}), 400
+
+    suffix = Path(file.filename).suffix.lower()
+
+    # Save to a temp file so the pipeline can read it
+    with tempfile.NamedTemporaryFile(suffix=suffix, delete=False) as tmp:
+        file.save(tmp.name)
+        tmp_path = tmp.name
+
+    task_id = str(uuid.uuid4())
+    _TASKS[task_id] = {"status": "running"}
+    _EXECUTOR.submit(_run_pipeline_async, task_id, tmp_path, file.filename)
+    
+    return jsonify({"task_id": task_id, "status": "running"}), 202
+
+
+@app.route("/status/<task_id>")
+def status(task_id: str):
+    task = _TASKS.get(task_id)
+    if not task:
+        return jsonify({"error": "Task not found."}), 404
+        
+    if task["status"] == "running":
+        return jsonify({"status": "running"})
+    elif task["status"] == "error":
+        return jsonify({"status": "error", "message": task["message"]})
+    elif task["status"] == "done":
+        # Usually, a real queue would return a URL to the report.
+        # We can just indicate it is done, or return the HTML.
+        return jsonify({"status": "done", "message": "Analysis complete. View /report or /export/json."})
+
 
 
 DEMO_CONTRACT = """
@@ -115,7 +201,24 @@ DEMO_CONTRACT = """
 @app.route("/report")
 def report():
     """Serve the last generated report.html from project root."""
-    return send_file(ROOT / "report.html", mimetype="text/html")
+    path = ROOT / "report.html"
+    if not path.exists():
+        return Response("No report available yet. Run an analysis first.", status=404)
+    return send_file(path, mimetype="text/html")
+
+
+@app.route("/export/json")
+def export_json():
+    """Download the last analysis as JSON."""
+    path = ROOT / "analysis.json"
+    if not path.exists():
+        return Response("No analysis available yet. Run an analysis first.", status=404)
+    return send_file(
+        path,
+        mimetype="application/json",
+        as_attachment=True,
+        download_name="contract_analysis.json",
+    )
 
 
 @app.route("/demo")
@@ -125,9 +228,14 @@ def demo():
         text=DEMO_CONTRACT,
         contract_name="Master Service Agreement (Demo)",
         use_embeddings=True,
+        artifact_dir=ROOT,
     )
     return Response(html, mimetype="text/html")
 
 
+def _flask_debug() -> bool:
+    return os.environ.get("FLASK_DEBUG", "0").strip().lower() in ("1", "true", "yes")
+
+
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    app.run(host="127.0.0.1", port=5000, debug=_flask_debug())

@@ -46,11 +46,12 @@ from typing import Any
 # ---------------------------------------------------------------------------
 
 _STATUTE_MAP: dict[str, list[str]] = {
+    # Core Indian commercial types (original set)
     "NonCompete":      ["ICA_S27"],
     "ForceMajeure":    ["ICA_S56"],
     "Termination":     ["ICA_S73", "ICA_S74"],
     "Indemnification": ["ICA_S124", "ICA_S125"],
-    "Arbitration":     ["ICA_S28"],
+    "Arbitration":     ["ICA_S28", "ARB_S8", "ARB_S11"],
     "Confidentiality": ["ICA_S27"],
     "LiabilityCap":    ["ICA_S73", "ICA_S74"],
     "IPAssignment":    ["ICA_S10", "ICA_S11"],
@@ -58,16 +59,53 @@ _STATUTE_MAP: dict[str, list[str]] = {
     "GoverningLaw":    [],
     "Jurisdiction":    [],
     "Renewal":         ["ICA_S62"],
+    "DPDP":            ["IT_S43A", "IT_S79"],
+    "GST":             ["ICA_S10"],
+    "SpecificPerformance": ["ICA_S73"],
+    "StampDuty":       ["ICA_S10"],
+    # Extended CUAD / ML types — ICA sections verified in chunk_registry.json
+    "AntiAssignment":                  ["ICA_S37", "ICA_S62"],
+    "AuditRights":                     ["ICA_S73"],
+    "Insurance":                       ["ICA_S124", "ICA_S125"],
+    "LicenseGrant":                    ["ICA_S10", "ICA_S11"],
+    "ChangeOfControl":                 ["ICA_S62", "ICA_S23"],
+    "Exclusivity":                     ["ICA_S27"],
+    "UncappedLiability":               ["ICA_S73", "ICA_S74"],
+    "LiquidatedDamages":               ["ICA_S74"],
+    "WarrantyDuration":                ["ICA_S73", "ICA_S74"],
+    "RenewalTerm":                     ["ICA_S62"],
+    "ExpirationDate":                  ["ICA_S62"],
+    "NoSolicitOfEmployees":            ["ICA_S27"],
+    "NoSolicitOfCustomers":            ["ICA_S27"],
+    "CovenantNotToSue":                ["ICA_S28"],
+    "MinimumCommitment":               ["ICA_S55"],
+    "RevenueProfitSharing":            ["ICA_S55"],
+    "CompetitiveRestrictionException": ["ICA_S27"],
+    "PostTerminationServices":         ["ICA_S73", "ICA_S62"],
+    "PriceRestrictions":               ["ICA_S27"],
+    "VolumeRestriction":               ["ICA_S55"],
+    "IrrevocableOrPerpetualLicense":   ["ICA_S10", "ICA_S27"],
+    "NonDisparagement":                ["ICA_S27"],
+    "NonTransferableLicense":          ["ICA_S10", "ICA_S11"],
+    "SourceCodeEscrow":                ["ICA_S62", "ICA_S73"],
+    "RofrRofoRofn":                    ["ICA_S62"],
 }
 
 # RRF constant — balances rank vs. score contributions
 _RRF_K = 60
 _TOP_K = 5  # sections returned per clause
 
+# Process-wide cache: registry, BM25, optional FAISS + embedding model (lazy-loaded once)
+ARTIFACT_CACHE: dict = {}
+
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
+def _faiss_index_path(kb_dir: Path) -> Path:
+    return kb_dir / "faiss_index" / "ica_1872.index"
+
 
 def _load_registry(kb_dir: Path) -> dict[str, dict]:
     path = kb_dir / "chunk_registry.json"
@@ -76,7 +114,7 @@ def _load_registry(kb_dir: Path) -> dict[str, dict]:
 
 def _load_faiss(kb_dir: Path):
     import faiss
-    return faiss.read_index(str(kb_dir / "faiss_index" / "ica_1872.index"))
+    return faiss.read_index(str(_faiss_index_path(kb_dir)))
 
 
 def _load_model(model_name: str):
@@ -186,22 +224,23 @@ def _retrieve_for_clause(
         for sid in guaranteed:
             source_map[sid] = "statute_map"
 
-    # Layer 2: FAISS semantic search
-    try:
-        query_emb = _embed_query(clause_text, tok, mdl, device)
-        k_faiss = min(top_k + len(guaranteed), faiss_index.ntotal)
-        scores, indices = faiss_index.search(query_emb, k_faiss)
-        faiss_ranked = []
-        for score, idx in zip(scores[0], indices[0]):
-            if 0 <= idx < len(section_ids):
-                sid = section_ids[idx]
-                faiss_ranked.append(sid)
-                if sid not in source_map:
-                    source_map[sid] = "faiss"
-        if faiss_ranked:
-            ranked_lists.append(faiss_ranked)
-    except Exception:
-        pass
+    # Layer 2: FAISS semantic search (skipped when index or model unavailable)
+    if faiss_index is not None and tok is not None and mdl is not None:
+        try:
+            query_emb = _embed_query(clause_text, tok, mdl, device)
+            k_faiss = min(top_k + len(guaranteed), faiss_index.ntotal)
+            scores, indices = faiss_index.search(query_emb, k_faiss)
+            faiss_ranked = []
+            for score, idx in zip(scores[0], indices[0]):
+                if 0 <= idx < len(section_ids):
+                    sid = section_ids[idx]
+                    faiss_ranked.append(sid)
+                    if sid not in source_map:
+                        source_map[sid] = "faiss"
+            if faiss_ranked:
+                ranked_lists.append(faiss_ranked)
+        except Exception:
+            pass
 
     # Layer 3: BM25 lexical search
     try:
@@ -240,6 +279,74 @@ def _retrieve_for_clause(
 
 
 # ---------------------------------------------------------------------------
+# KB artifact cache (lazy-loaded once per process)
+# ---------------------------------------------------------------------------
+
+def load_kb_artifacts(
+    kb_dir: str | Path | None = None,
+    model_name: str = "law-ai/InLegalBERT",
+    cache: dict | None = None,
+) -> dict:
+    """
+    Load (or return cached) knowledge-base artifacts for retrieval.
+
+    If the FAISS index is missing or fails to load, falls back to statute map + BM25
+    only (no embedding model loaded).
+    """
+    if kb_dir is None:
+        kb_dir = Path(__file__).resolve().parent.parent / "knowledge_base"
+    kb_dir = Path(kb_dir)
+
+    if cache is None:
+        cache = ARTIFACT_CACHE
+
+    cache_key = (str(kb_dir.resolve()), model_name)
+    if cache_key in cache:
+        return cache[cache_key]
+
+    print("[retriever] Loading knowledge base artifacts...")
+    registry = _load_registry(kb_dir)
+    section_ids = list(registry.keys())
+
+    print("[retriever] Building BM25 index...")
+    _, bm25_corpus, bm25_fn = _build_bm25(registry)
+
+    faiss_index = None
+    tok = mdl = device = None
+    faiss_path = _faiss_index_path(kb_dir)
+    if faiss_path.exists():
+        try:
+            faiss_index = _load_faiss(kb_dir)
+            print(f"[retriever] FAISS index: {faiss_index.ntotal} vectors")
+            print(f"[retriever] Loading model: {model_name}")
+            tok, mdl, device = _load_model(model_name)
+        except Exception as exc:
+            warnings.warn(
+                f"[retriever] FAISS/model unavailable ({exc}); using statute map + BM25 only.",
+                stacklevel=2,
+            )
+    else:
+        warnings.warn(
+            f"[retriever] FAISS index not found at {faiss_path}; "
+            "using statute map + BM25 only.",
+            stacklevel=2,
+        )
+
+    artifacts = {
+        "registry": registry,
+        "section_ids": section_ids,
+        "faiss_index": faiss_index,
+        "tok": tok,
+        "mdl": mdl,
+        "device": device,
+        "bm25_fn": bm25_fn,
+        "bm25_corpus": bm25_corpus,
+    }
+    cache[cache_key] = artifacts
+    return artifacts
+
+
+# ---------------------------------------------------------------------------
 # Public API
 # ---------------------------------------------------------------------------
 
@@ -248,6 +355,7 @@ def retrieve_statutes(
     kb_dir: str | Path | None = None,
     model_name: str = "law-ai/InLegalBERT",
     top_k: int = _TOP_K,
+    cache: dict | None = None,
 ) -> list[dict]:
     """
     Enrich each classified clause with retrieved ICA 1872 statute sections.
@@ -257,26 +365,12 @@ def retrieve_statutes(
         kb_dir:     Path to knowledge_base/ directory. Auto-detected if omitted.
         model_name: HuggingFace model name for FAISS query embedding.
         top_k:      Max statute sections to return per clause.
+        cache:      Shared artifact cache (defaults to ARTIFACT_CACHE).
 
     Returns:
         Same list with added key: retrieved_sections (list of section dicts).
     """
-    if kb_dir is None:
-        kb_dir = Path(__file__).resolve().parent.parent / "knowledge_base"
-    kb_dir = Path(kb_dir)
-
-    print("[retriever] Loading knowledge base artifacts...")
-    registry = _load_registry(kb_dir)
-    section_ids = list(registry.keys())
-
-    faiss_index = _load_faiss(kb_dir)
-    print(f"[retriever] FAISS index: {faiss_index.ntotal} vectors")
-
-    print(f"[retriever] Loading model: {model_name}")
-    tok, mdl, device = _load_model(model_name)
-
-    print("[retriever] Building BM25 index...")
-    bm25_section_ids, bm25_corpus, bm25_fn = _build_bm25(registry)
+    artifacts = load_kb_artifacts(kb_dir=kb_dir, model_name=model_name, cache=cache)
 
     results = []
     for clause in clauses:
@@ -286,14 +380,14 @@ def retrieve_statutes(
         sections = _retrieve_for_clause(
             clause_text=text,
             clause_type=ctype,
-            registry=registry,
-            section_ids=section_ids,
-            faiss_index=faiss_index,
-            bm25_fn=bm25_fn,
-            bm25_corpus=bm25_corpus,
-            tok=tok,
-            mdl=mdl,
-            device=device,
+            registry=artifacts["registry"],
+            section_ids=artifacts["section_ids"],
+            faiss_index=artifacts["faiss_index"],
+            bm25_fn=artifacts["bm25_fn"],
+            bm25_corpus=artifacts["bm25_corpus"],
+            tok=artifacts["tok"],
+            mdl=artifacts["mdl"],
+            device=artifacts["device"],
             top_k=top_k,
         )
 

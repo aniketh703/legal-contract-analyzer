@@ -57,20 +57,11 @@
       width: 100%;
       height: 100%;
     }
-    .drop-icon {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-    }
-    .drop-text {
-      font-size: 0.92rem;
-      color: #475569;
-    }
+    .drop-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .drop-text { font-size: 0.92rem; color: #475569; }
     .drop-text strong { color: #6366f1; }
-    .drop-hint {
-      font-size: 0.78rem;
-      color: #94a3b8;
-      margin-top: 0.3rem;
-    }
+    .drop-hint { font-size: 0.78rem; color: #94a3b8; margin-top: 0.3rem; }
+
     .file-chosen {
       display: none;
       align-items: center;
@@ -84,6 +75,7 @@
       margin-bottom: 1.25rem;
     }
     .file-chosen.visible { display: flex; }
+
     .btn {
       width: 100%;
       padding: 0.75rem;
@@ -98,22 +90,76 @@
     }
     .btn:hover { background: #4f46e5; }
     .btn:disabled { background: #a5b4fc; cursor: not-allowed; }
+
+    .btn-demo {
+      width: 100%;
+      margin-top: 0.75rem;
+      padding: 0.65rem;
+      background: transparent;
+      color: #6366f1;
+      border: 1.5px solid #6366f1;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-demo:hover { background: #eef2ff; }
+    .btn-demo:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* --- Step-list progress --- */
     .progress {
       display: none;
-      margin-top: 1.25rem;
-      text-align: center;
+      margin-top: 1.5rem;
     }
     .progress.visible { display: block; }
-    .spinner {
-      width: 36px; height: 36px;
-      border: 4px solid #e2e8f0;
+    .progress-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+    }
+    .step-list { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.875rem;
+      color: #94a3b8;
+      transition: color 0.3s;
+    }
+    .step-item.active { color: #1e293b; font-weight: 600; }
+    .step-item.done  { color: #16a34a; }
+    .step-icon {
+      flex-shrink: 0;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      background: #f1f5f9;
+      border: 1.5px solid #e2e8f0;
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .step-item.active .step-icon {
+      background: #eef2ff;
+      border-color: #6366f1;
+    }
+    .step-item.done .step-icon {
+      background: #f0fdf4;
+      border-color: #86efac;
+    }
+    .step-spinner {
+      width: 12px; height: 12px;
+      border: 2px solid #c7d2fe;
       border-top-color: #6366f1;
       border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin: 0 auto 0.75rem;
+      animation: spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .progress-text { font-size: 0.88rem; color: #64748b; }
+
+    /* --- Error box --- */
     .error-box {
       display: none;
       background: #fee2e2;
@@ -125,13 +171,29 @@
       margin-top: 1rem;
     }
     .error-box.visible { display: block; }
-    .divider {
-      border: none;
-      border-top: 1px solid #e2e8f0;
-      margin: 1.5rem 0;
-    }
+    .error-box .error-title { font-weight: 700; margin-bottom: 0.3rem; }
+    .error-box .error-tip  { font-size: 0.8rem; color: #b91c1c; margin-top: 0.4rem; }
+
+    .divider { border: none; border-top: 1px solid #e2e8f0; margin: 1.5rem 0; }
     .how-it-works { font-size: 0.78rem; color: #94a3b8; }
     .how-it-works ol { padding-left: 1.2rem; margin-top: 0.4rem; line-height: 1.8; }
+    .disclaimer {
+      margin-top: 1rem;
+      padding: 0.65rem 0.85rem;
+      background: #fff7ed;
+      border: 1px solid #fdba74;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      color: #9a3412;
+      line-height: 1.45;
+    }
+    .export-links {
+      margin-top: 0.75rem;
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+    .export-links a { color: #6366f1; text-decoration: none; margin-right: 0.75rem; }
+    .export-links a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
@@ -143,8 +205,8 @@
     <div class="drop-zone" id="drop-zone">
       <input type="file" name="contract" id="file-input" accept=".pdf,.txt" />
       <div class="drop-icon">📄</div>
-      <div class="drop-text"><strong>Click to upload</strong> or drag & drop</div>
-      <div class="drop-hint">PDF or TXT · max 10 MB</div>
+      <div class="drop-text"><strong>Click to upload</strong> or drag &amp; drop</div>
+      <div class="drop-hint">Commercial contracts only (not resumes or profiles) · PDF or TXT · max 10 MB</div>
     </div>
 
     <div class="file-chosen" id="file-chosen">
@@ -154,12 +216,36 @@
     <button class="btn" id="submit-btn" type="submit" disabled>Analyse Contract</button>
   </form>
 
+  <button class="btn-demo" id="demo-btn" type="button">Try a sample contract →</button>
+
+  <!-- Step-list progress panel (shown while pipeline runs) -->
   <div class="progress" id="progress">
-    <div class="spinner"></div>
-    <div class="progress-text" id="progress-text">Segmenting clauses…</div>
+    <div class="progress-label">Analysing…</div>
+    <ul class="step-list" id="step-list">
+      <li class="step-item" data-step="0">
+        <span class="step-icon"><span class="step-dot">·</span></span>
+        Segmenting clauses
+      </li>
+      <li class="step-item" data-step="1">
+        <span class="step-icon"><span class="step-dot">·</span></span>
+        Classifying clause types
+      </li>
+      <li class="step-item" data-step="2">
+        <span class="step-icon"><span class="step-dot">·</span></span>
+        Retrieving ICA 1872 statutes
+      </li>
+      <li class="step-item" data-step="3">
+        <span class="step-icon"><span class="step-dot">·</span></span>
+        Generating risk report
+      </li>
+    </ul>
   </div>
 
-  <div class="error-box" id="error-box"></div>
+  <div class="error-box" id="error-box">
+    <div class="error-title" id="error-title">Something went wrong.</div>
+    <div id="error-msg"></div>
+    <div class="error-tip" id="error-tip"></div>
+  </div>
 
   <hr class="divider"/>
   <div class="how-it-works">
@@ -171,26 +257,100 @@
       <li>A full risk report is generated instantly</li>
     </ol>
   </div>
+
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> This tool provides automated, informational contract analysis only.
+    It is not legal advice and does not create an attorney-client relationship.
+    Always consult a qualified lawyer before signing or relying on any contract.
+  </div>
+
+  <div class="export-links">
+    After an analysis: <a href="/report" target="_blank">Last HTML report</a>
+    · <a href="/export/json">Download JSON</a>
+  </div>
 </div>
 
 <script>
-  const dropZone  = document.getElementById('drop-zone');
-  const fileInput = document.getElementById('file-input');
+  const dropZone   = document.getElementById('drop-zone');
+  const fileInput  = document.getElementById('file-input');
   const fileChosen = document.getElementById('file-chosen');
-  const fileName  = document.getElementById('file-name');
-  const submitBtn = document.getElementById('submit-btn');
-  const progress  = document.getElementById('progress');
-  const progressText = document.getElementById('progress-text');
-  const errorBox  = document.getElementById('error-box');
-  const form      = document.getElementById('upload-form');
+  const fileName   = document.getElementById('file-name');
+  const submitBtn  = document.getElementById('submit-btn');
+  const demoBtn    = document.getElementById('demo-btn');
+  const progress   = document.getElementById('progress');
+  const stepItems  = document.querySelectorAll('.step-item');
+  const errorBox   = document.getElementById('error-box');
+  const errorTitle = document.getElementById('error-title');
+  const errorMsg   = document.getElementById('error-msg');
+  const errorTip   = document.getElementById('error-tip');
+  const form       = document.getElementById('upload-form');
 
-  const STEPS = [
-    'Segmenting clauses…',
-    'Classifying clause types…',
-    'Retrieving ICA 1872 statutes…',
-    'Generating risk report…',
-  ];
+  const STEP_MS = 2400; // ms per step while waiting
 
+  function setStepActive(idx) {
+    stepItems.forEach((item, i) => {
+      item.classList.remove('active', 'done');
+      const icon = item.querySelector('.step-icon');
+      if (i < idx) {
+        item.classList.add('done');
+        icon.innerHTML = '✓';
+      } else if (i === idx) {
+        item.classList.add('active');
+        icon.innerHTML = '<span class="step-spinner"></span>';
+      } else {
+        icon.innerHTML = '<span class="step-dot">·</span>';
+      }
+    });
+  }
+
+  function resetSteps() {
+    stepItems.forEach(item => {
+      item.classList.remove('active', 'done');
+      item.querySelector('.step-icon').innerHTML = '<span class="step-dot">·</span>';
+    });
+  }
+
+  function showProgress() {
+    resetSteps();
+    progress.classList.add('visible');
+    setStepActive(0);
+    let step = 0;
+    const ticker = setInterval(() => {
+      step = Math.min(step + 1, stepItems.length - 1);
+      setStepActive(step);
+    }, STEP_MS);
+    return ticker;
+  }
+
+  function hideProgress(ticker) {
+    clearInterval(ticker);
+    progress.classList.remove('visible');
+    resetSteps();
+  }
+
+  function showError(title, msg, tip) {
+    errorTitle.textContent = title;
+    errorMsg.textContent   = msg || '';
+    errorTip.textContent   = tip || '';
+    errorBox.classList.add('visible');
+  }
+
+  function clearError() {
+    errorBox.classList.remove('visible');
+  }
+
+  function openReport(html) {
+    const reportUrl = new URL('/report', window.location.origin).toString();
+    const win = window.open(reportUrl, '_blank', 'noopener');
+
+    // Fallback for popup blockers or if /report is temporarily unavailable.
+    if (!win) {
+      const blob = new Blob([html], { type: 'text/html' });
+      window.open(URL.createObjectURL(blob), '_blank');
+    }
+  }
+
+  // File picker
   fileInput.addEventListener('change', () => {
     if (fileInput.files.length) {
       fileName.textContent = fileInput.files[0].name;
@@ -199,8 +359,9 @@
     }
   });
 
-  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  // Drag & drop
+  dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('drag-over'));
   dropZone.addEventListener('drop', e => {
     e.preventDefault();
     dropZone.classList.remove('drag-over');
@@ -212,48 +373,66 @@
     }
   });
 
+  // Upload & analyse
   form.addEventListener('submit', async e => {
     e.preventDefault();
-    errorBox.classList.remove('visible');
+    clearError();
     submitBtn.disabled = true;
-    progress.classList.add('visible');
-
-    // Cycle through step labels while waiting
-    let step = 0;
-    progressText.textContent = STEPS[step];
-    const ticker = setInterval(() => {
-      step = (step + 1) % STEPS.length;
-      progressText.textContent = STEPS[step];
-    }, 2500);
+    demoBtn.disabled   = true;
+    const ticker = showProgress();
 
     try {
-      const data = new FormData(form);
-      const resp = await fetch('/analyse', { method: 'POST', body: data });
+      const resp = await fetch('/analyse', { method: 'POST', body: new FormData(form) });
+      hideProgress(ticker);
 
-      clearInterval(ticker);
-      progress.classList.remove('visible');
+      if (resp.status === 422) {
+        const msg = (await resp.text()).trim();
+        const isGate = msg.includes('does not appear to be a legal contract');
+        showError(
+          isGate ? 'Not a contract' : 'No clauses found',
+          msg || 'The file was processed but no contract clauses could be extracted.',
+          isGate
+            ? 'Upload a commercial agreement (MSA, NDA, employment contract, etc.). Resumes and LinkedIn profiles are not supported.'
+            : 'Check that the file contains readable contract text (not a scanned image). Try the sample contract to confirm the pipeline is working.'
+        );
+      } else if (!resp.ok) {
+        const msg = await resp.text();
+        showError('Analysis failed', msg || 'An unexpected error occurred.', 'Try re-uploading the file or use the sample contract.');
+      } else {
+        openReport(await resp.text());
+      }
+    } catch (err) {
+      hideProgress(ticker);
+      showError('Network error', err.message, 'Make sure the server is running on port 5000.');
+    } finally {
+      submitBtn.disabled = false;
+      demoBtn.disabled   = false;
+    }
+  });
+
+  // Demo button
+  demoBtn.addEventListener('click', async () => {
+    clearError();
+    submitBtn.disabled = true;
+    demoBtn.disabled   = true;
+    const ticker = showProgress();
+
+    try {
+      const resp = await fetch('/demo');
+      hideProgress(ticker);
 
       if (!resp.ok) {
         const msg = await resp.text();
-        errorBox.textContent = msg || 'Something went wrong. Please try again.';
-        errorBox.classList.add('visible');
-        submitBtn.disabled = false;
-        return;
+        showError('Demo failed', msg || 'Could not run the sample contract.', '');
+      } else {
+        openReport(await resp.text());
       }
-
-      // Report comes back as HTML — open in new tab
-      const html = await resp.text();
-      const blob = new Blob([html], { type: 'text/html' });
-      const url  = URL.createObjectURL(blob);
-      window.open(url, '_blank');
-      submitBtn.disabled = false;
-
     } catch (err) {
-      clearInterval(ticker);
-      progress.classList.remove('visible');
-      errorBox.textContent = 'Network error: ' + err.message;
-      errorBox.classList.add('visible');
+      hideProgress(ticker);
+      showError('Network error', err.message, '');
+    } finally {
       submitBtn.disabled = false;
+      demoBtn.disabled   = false;
     }
   });
 </script>

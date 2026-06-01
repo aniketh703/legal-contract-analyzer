@@ -5,6 +5,8 @@ Integration test — runs the full pipeline end-to-end on a sample contract.
 """
 import pytest
 from pipeline.pipeline import run_pipeline
+from pipeline.document_gate import CONTRACT_GATE_MESSAGE
+from tests.test_document_gate import SAMPLE_RESUME, ANIKETH_CV_SNIPPET
 
 
 SAMPLE = """
@@ -114,6 +116,36 @@ class TestRunPipeline:
         html, clauses = run_pipeline(text="   ", use_embeddings=False)
         assert clauses == []
 
+    def test_resume_blocked_before_enrichment(self):
+        html, clauses = run_pipeline(
+            text=SAMPLE_RESUME,
+            contract_name="Profile.pdf",
+            use_embeddings=False,
+        )
+        assert clauses == []
+        assert html == CONTRACT_GATE_MESSAGE
+
+    def test_aniketh_cv_blocked_not_classified(self):
+        """Full CV text must not produce classified clause segments."""
+        html, clauses = run_pipeline(
+            text=ANIKETH_CV_SNIPPET,
+            contract_name="Aniketh_Vustepalle_CV.pdf",
+            use_embeddings=False,
+        )
+        assert clauses == []
+        assert html == CONTRACT_GATE_MESSAGE
+
     def test_no_path_no_text_raises(self):
         with pytest.raises((ValueError, TypeError)):
             run_pipeline()
+
+    def test_artifact_dir_writes_report_and_json(self, tmp_path):
+        html, clauses = run_pipeline(
+            text=SAMPLE,
+            contract_name="Artifact Test",
+            use_embeddings=False,
+            artifact_dir=tmp_path,
+        )
+        assert (tmp_path / "report.html").exists()
+        assert (tmp_path / "analysis.json").exists()
+        assert "Artifact Test" in (tmp_path / "analysis.json").read_text(encoding="utf-8")

@@ -4,7 +4,13 @@ tests/test_segmenter.py
 Unit tests for pipeline/segmenter.py
 """
 import pytest
-from pipeline.segmenter import segment_contract, _clean, _split_into_segments
+from pipeline.segmenter import (
+    segment_contract,
+    _clean,
+    _split_into_segments,
+    _extract_text_from_pdf,
+    _MIN_NATIVE_PDF_CHARS,
+)
 
 
 # ---------------------------------------------------------------------------
@@ -31,6 +37,32 @@ class TestClean:
 # ---------------------------------------------------------------------------
 # segment_contract — basic behaviour
 # ---------------------------------------------------------------------------
+
+class TestPdfOcrFallback:
+    def test_uses_ocr_when_native_text_is_short(self, monkeypatch):
+        monkeypatch.setattr(
+            "pipeline.segmenter._extract_text_from_pdf_native",
+            lambda _path: "short",
+        )
+        monkeypatch.setattr(
+            "pipeline.segmenter._extract_text_from_pdf_ocr",
+            lambda _path: "x" * (_MIN_NATIVE_PDF_CHARS + 50),
+        )
+        result = _extract_text_from_pdf("dummy.pdf")
+        assert len(result) > _MIN_NATIVE_PDF_CHARS
+
+    def test_keeps_native_when_sufficient(self, monkeypatch):
+        native = "a" * (_MIN_NATIVE_PDF_CHARS + 10)
+        monkeypatch.setattr(
+            "pipeline.segmenter._extract_text_from_pdf_native",
+            lambda _path: native,
+        )
+        monkeypatch.setattr(
+            "pipeline.segmenter._extract_text_from_pdf_ocr",
+            lambda _path: "should not win",
+        )
+        assert _extract_text_from_pdf("dummy.pdf") == native
+
 
 class TestSegmentContract:
     def test_raises_without_path_or_text(self):

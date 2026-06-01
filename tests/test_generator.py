@@ -186,6 +186,14 @@ class TestGenerateReport:
         result = generate_report(SAMPLE_CLAUSES, contract_name="Test")
         assert "Contract Summary" in result
 
+    def test_contains_legal_disclaimer(self):
+        result = generate_report(SAMPLE_CLAUSES, contract_name="Test")
+        assert "not legal advice" in result.lower()
+
+    def test_contains_export_links(self):
+        result = generate_report(SAMPLE_CLAUSES, contract_name="Test")
+        assert "/export/json" in result
+
     def test_contract_name_in_title(self):
         result = generate_report(SAMPLE_CLAUSES, contract_name="MyDeal.pdf")
         assert "MyDeal.pdf" in result
