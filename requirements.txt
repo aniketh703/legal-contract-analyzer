@@ -8,6 +8,7 @@ pymupdf>=1.24.0
 # Retrieval & ML
 faiss-cpu>=1.7.4
 transformers>=4.40.0
+accelerate>=0.26.0
 torch>=2.0.0
 scikit-learn>=1.3.0
 joblib>=1.3.0
