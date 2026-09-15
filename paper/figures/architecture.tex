@@ -1,0 +1,35 @@
+% Pipeline architecture diagram, included via \input in main.tex Fig. 1.
+\begin{tikzpicture}[
+  node distance=6pt,
+  box/.style={
+    rectangle, draw=black, thick, rounded corners=1.5pt,
+    fill=blue!8, minimum width=0.78\linewidth, minimum height=15pt,
+    align=center, font=\footnotesize, inner sep=3pt
+  },
+  sub/.style={
+    font=\scriptsize\itshape, align=center, text width=0.78\linewidth
+  },
+  arr/.style={-{Stealth[length=5pt]}, thick}
+]
+
+\node[box] (input) {Input: Contract (PDF / TXT)};
+
+\node[box, below=of input] (seg) {Segmenter};
+\draw[arr] (input) -- (seg);
+
+\node[box, below=18pt of seg] (cls) {Classifier};
+\draw[arr] (seg) -- (cls);
+\node[sub, below=1pt of cls] (clssub) {TF-IDF+LR $\rightarrow$ keyword rules $\rightarrow$ InLegalBERT embedding};
+
+\node[box, below=18pt of clssub] (ret) {Retriever};
+\draw[arr] (cls) -- (ret);
+\node[sub, below=1pt of ret] (retsub) {Statute map $\rightarrow$ FAISS $\rightarrow$ BM25 $\rightarrow$ RRF fusion};
+
+\node[box, below=18pt of retsub] (gen) {Generator};
+\draw[arr] (ret) -- (gen);
+\node[sub, below=1pt of gen] (gensub) {Template-based, statute-aware};
+
+\node[box, below=18pt of gensub] (out) {Output: HTML risk report};
+\draw[arr] (gen) -- (out);
+
+\end{tikzpicture}
