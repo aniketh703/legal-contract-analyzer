@@ -51,6 +51,8 @@ User uploads contract (PDF / TXT)
 
 > **Note on training data:** The CUAD dataset originates from US commercial contracts. It is used solely for *clause type detection* — identifying what kind of clause a piece of text is. This task is largely language-pattern-based and transfers well across jurisdictions. The Indian-law risk analysis (ICA statute mapping, risk explanations, recommended actions) is handled entirely by `retriever.py` and `generator.py`, which are built specifically for the Indian Contract Act 1872.
 
+> **Two separate uses of InLegalBERT, not to be confused:** Stage 3 above uses a pretrained (not fine-tuned) InLegalBERT purely for embedding similarity against curated examples, inside the live pipeline. Separately, `pipeline/train_classifier_bert.py` *fine-tunes* InLegalBERT as a standalone sequence classifier to evaluate against the TF-IDF+LR baseline (see "Key findings" below) — this fine-tuned model is an evaluation/research result, not yet wired into `classify_clauses()`.
+
 ---
 
 ## Repository layout
@@ -216,31 +218,45 @@ CI runs the same suite on push/PR (see `.github/workflows/ci.yml`). Offline env 
 
 The statute map layer (a hardcoded clause-type → ICA section mapping) guarantees the most relevant section is always retrieved, removing dependence on embedding similarity for known clause types.
 
-### Classifier (TF-IDF + Logistic Regression, with keyword fallback)
+### Classifier — three separate evaluations, each measuring something different
 
-Overall accuracy: **83.2%** | Weighted F1: **0.83** | Clause types covered: **42**
+There are three distinct numbers below because they answer three different questions. Conflating them (as an earlier version of this README did) overstates the model.
 
-Training data: 9,598 labeled clauses (9,447 CUAD + 151 Indian supplemental), 80/20 train/test split.
+#### 1. Clean 47-class held-out benchmark (ML model only)
 
-| Clause type | F1 | Notes |
+The primary, most trustworthy number: `models/clause_classifier.pkl` (TF-IDF + Logistic Regression) scored against a held-out 20% split of its own training data (CUAD + Indian supplemental), across **all 47 clause types**, with no keyword/embedding fallback involved. Run via `evaluation/evaluate_classifier_full47.py`.
+
+| Metric | Score |
+|---|---|
+| Accuracy | **82.5%** |
+| Macro F1 | **0.740** |
+| Weighted F1 | **0.824** |
+| Test set | 1,940 held-out clauses, 47 classes |
+
+This is the number the InLegalBERT fine-tune (see below) is being compared against — same held-out split, same task.
+
+#### 2. Real-world spot check (full production cascade: ML → keyword → embedding)
+
+`evaluation/evaluate_classifier.py` scores the *entire* production cascade against real, messy scraped Indian-judgment text (`data/processed/clauses.jsonl`) — but only for the 12 clause types that scraping actually covers.
+
+| Metric | Score |
+|---|---|
+| Accuracy | **42.9%** |
+| Weighted F1 | **0.54** |
+| Macro F1 | **0.352** |
+| Test set | 212 real-world examples, 12 classes |
+
+> **Why this dropped from the old "78.8%" figure:** the embedding fallback stage had a self-match leak — its reference pool included the very row being classified, so a clause could match itself at confidence 1.0. Fixed by switching to leave-one-out reference pooling (`--embeddings loo`, now the default). The 42.9% above is the honest number; the old 78.8%/83.2% figures were inflated by that leak. This is expected: real, messy production text is a genuinely harder task than a clean CUAD-style held-out split.
+
+#### 3. InLegalBERT fine-tune (in progress)
+
+`pipeline/train_classifier_bert.py` fine-tunes [`law-ai/InLegalBERT`](https://huggingface.co/law-ai/InLegalBERT) — a legal-domain pretrained transformer — on the identical held-out split as benchmark #1, to test whether domain pretraining beats a TF-IDF+LR baseline on this task.
+
+| Metric | TF-IDF + LR | InLegalBERT |
 |---|---|---|
-| GoverningLaw | 0.99 | |
-| Arbitration | 0.95 | boosted by Indian supplemental data |
-| Confidentiality | 0.95 | boosted by Indian supplemental data |
-| Indemnification | 0.95 | boosted by Indian supplemental data |
-| AuditRights | 0.96 | |
-| Insurance | 0.96 | |
-| Parties | 0.96 | |
-| LiabilityCap | 0.87 | |
-| RenewalTerm | 0.89 | |
-| RevenueProfitSharing | 0.89 | |
-| CovenantNotToSue | 0.90 | |
-| Termination | 0.84 | |
-| AntiAssignment | 0.86 | |
-| IPAssignment | 0.85 | |
-
-> **Previous baseline (keyword rules only):** 78.8% accuracy, 12 clause types.  
-> **Current (ML + Indian supplemental):** 83.2% accuracy, 42 clause types.
+| Accuracy | 82.5% | _pending Colab run_ |
+| Macro F1 | 0.740 | _pending Colab run_ |
+| Weighted F1 | 0.824 | _pending Colab run_ |
 
 ---
 
@@ -249,6 +265,7 @@ Training data: 9,598 labeled clauses (9,447 CUAD + 151 Indian supplemental), 80/
 - **No LLM in the pipeline** — the generator is template-based, keeping the project fully offline and reproducible.
 - **3-layer hybrid retriever** — statute map (guaranteed lookup) → FAISS (semantic) → BM25 (lexical), fused with Reciprocal Rank Fusion.
 - **Label Studio annotation skipped** — 212 import tasks are prepared (`label_studio/import_tasks.json`) but annotation was not completed; classifier validation uses scraped labels.
+- **Evaluation kept honest over impressive** — when the embedding-fallback self-match leak was found, the real-world spot-check number was left at its lower, correct value (42.9%) rather than kept at the inflated 78.8%. A clean 47-class held-out benchmark (82.5%) was added specifically so the upcoming InLegalBERT comparison has a fair, leak-free baseline.
 
 
 ---
@@ -256,7 +273,7 @@ Training data: 9,598 labeled clauses (9,447 CUAD + 151 Indian supplemental), 80/
 ## 2. Status & Next Steps (from HANDOFF.md)
 
 # HANDOFF.md
-> Last updated: 20 May 2026 | Deadline: 24 May 2026
+> Last updated: 15 Sep 2026 | Next milestone: ECD502 Mid Evaluation-1, 19 Sep 2026
 
 ---
 
@@ -282,7 +299,8 @@ Build an end-to-end **Legal Contract Analyzer** that:
 | Generator | `pipeline/generator.py` | Done |
 | Pipeline glue | `pipeline/pipeline.py` | Done |
 | Flask web app | `app/main.py` + `app/templates/index.html` | Done, tested in browser |
-| Evaluation | `evaluation/evaluate_classifier.py` + `evaluate_retriever.py` | Done |
+| Evaluation | `evaluation/evaluate_classifier.py` + `evaluate_retriever.py` + `evaluate_classifier_full47.py` | Done |
+| InLegalBERT fine-tune | `pipeline/train_classifier_bert.py` | Written, self-verifying, **not yet run** — needs GPU (see Next Steps #7) |
 | Tests | `tests/` (7 files) | **116/116 passing** (pytest + CI) |
 
 ### Data
@@ -293,29 +311,27 @@ Build an end-to-end **Legal Contract Analyzer** that:
 | Verified (human-labeled) | **0** | Label Studio annotation skipped |
 | ICA 1872 sections indexed | 185 | FAISS + BM25 in `knowledge_base/` |
 
-### Evaluation Results
+### Evaluation Results (revised — see README "Key findings" for full explanation)
 | Metric | Score |
 |--------|-------|
-| Classifier accuracy (unverified labels) | **78.8%** |
-| Classifier weighted F1 | **0.783** |
+| Classifier — clean 47-class held-out (ML only) | **82.5% acc / macro-F1 0.740** |
+| Classifier — real-world spot check (full cascade, 12 classes) | **42.9% acc** *(was 78.8% — leak fixed, see below)* |
+| Classifier — InLegalBERT fine-tune vs. same 47-class held-out | *pending Colab run* |
 | Retriever Hit@5 — BM25 only | 23.0% |
 | Retriever Hit@5 — statute map + BM25 | **100%** |
 
-### Classifier per-type F1 (latest)
+> The old 78.8%/83.2% headline numbers were inflated by a self-match leak in the embedding fallback (its reference pool included the row being scored). Fixed via leave-one-out pooling — 42.9% is the honest real-world number for the 12-class scraped-text spot check. A separate, clean 47-class held-out benchmark (82.5%) was added as the fair baseline for the InLegalBERT comparison, since the two evaluations measure different things (see `evaluation/evaluate_classifier.py` vs `evaluation/evaluate_classifier_full47.py`).
+
+### Classifier per-type F1 (real-world spot check, 12 classes, post leak-fix)
 | Type | F1 |
 |------|----|
 | Termination | 0.739 |
-| Arbitration | 0.779 |
-| Confidentiality | 0.667 |
-| Indemnification | 0.750 |
-| NonCompete | 0.875 |
+| Arbitration | 0.653 |
+| Confidentiality | 0.444 |
 | ForceMajeure | 0.667 |
-| IPAssignment | 0.947 |
-| LiabilityCap | **0.875** *(was 0.500)* |
-| Jurisdiction | 0.772 |
-| PaymentTerms | **0.780** *(was 0.222)* |
-| GoverningLaw | 0.400 *(held)* |
-| Renewal | 0.848 |
+| GoverningLaw | 0.400 |
+
+Full per-type numbers (47-class held-out) live in `evaluation/results/tfidf_lr_baseline_47class.json`.
 
 ---
 
@@ -367,7 +383,7 @@ Build an end-to-end **Legal Contract Analyzer** that:
 ## Next Steps (in order)
 
 ### 1. ~~Fix classifier weak points~~ — **DONE** ✅
-PaymentTerms F1: 0.222 → 0.780 | LiabilityCap F1: 0.500 → 0.875 | Overall accuracy: 65.6% → 78.8%
+PaymentTerms F1: 0.222 → 0.780 | LiabilityCap F1: 0.500 → 0.875 | Overall accuracy: 65.6% → 78.8% (superseded — see #6)
 See `pipeline/classifier.py` — removed `required_all` for PaymentTerms, added `shall not exceed` / `consequential damages` patterns for LiabilityCap.
 
 ### 2. ~~Write README.md~~ — **DONE** ✅
@@ -385,6 +401,18 @@ Tested on both demo text contract and `app/uploads/test_contract.txt` (a real MS
 - ICA section references verified in report (S73, S36, S130, S74, S48, etc.)
 - All pipeline checks PASS: `<html>` present, risk labels present, ICA refs present
 - `report.html` updated in project root
+
+### 5. ~~Fix embedding-fallback self-match leak~~ — **DONE** ✅ (25 Jul 2026)
+Found the real-world spot-check number was inflated because the embedding fallback's reference pool included the row being classified. Fixed via leave-one-out pooling (`evaluation/evaluate_classifier.py --embeddings loo`, now default). Honest number: 42.9% (was 78.8%). See README "Key findings" for the full explanation of why three different classifier numbers now exist.
+
+### 6. ~~Add a clean 47-class held-out benchmark~~ — **DONE** ✅ (25 Jul 2026)
+`evaluation/evaluate_classifier_full47.py` scores the ML model alone (no fallback) across all 47 classes on a proper held-out split, persisted to `evaluation/results/held_out_test_47class.jsonl` for reproducibility. Result: 82.5% acc / macro-F1 0.740 / weighted-F1 0.824 — this is the baseline the InLegalBERT fine-tune (below) is measured against.
+
+### 7. Fine-tune InLegalBERT and compare — **IN PROGRESS** (targeting 19 Sep 2026 Mid Eval-1)
+`pipeline/train_classifier_bert.py` is written and self-verifying (asserts its train/test split matches the persisted 47-class held-out file before training) but was never run — no GPU available, ~12+ hrs estimated on CPU. Packaged as `notebooks/finetune_inlegalbert_colab.ipynb` to run on a free Colab T4 GPU instead (~15-40 min). Once `evaluation/results/inlegalbert_47class.json` comes back: update README/this file with final numbers, decide whether to wire the fine-tuned model into `pipeline/classifier.py` as a new stage (stretch goal, not required for Mid Eval-1's "actual work done, partial results" bar).
+
+### 8. Merge `finetune-inlegalbert` into `master` — **IN PROGRESS**
+This branch (`claude/kind-newton-jsmo1r`, fast-forwarded onto `finetune-inlegalbert`) will be opened as a PR into `master` once InLegalBERT results land, so `master` reflects the true current state before the review.
 
 ---
 
@@ -463,23 +491,42 @@ User uploads contract (PDF / TXT)
 ## 3. Latest Model Evaluation (classifier_report.json)
 
 **Mode:** all
-**Accuracy:** 78.8%
+**Accuracy:** 42.9%
 
 ```json
 {
+  "scope": "SCOPE: real-world scraped-text spot check on 12 of the 47 clause types the trained classifier supports (see pipeline/curate_clauses.py's scrape taxonomy). NOT a full-taxonomy evaluation -- run evaluate_classifier_full47.py for that.",
   "mode": "all",
   "per_type": {
+    "AntiAssignment": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
+    },
     "Arbitration": {
-      "precision": 0.682,
-      "recall": 0.909,
-      "f1": 0.779,
+      "precision": 1.0,
+      "recall": 0.485,
+      "f1": 0.653,
       "support": 33
     },
+    "ChangeOfControl": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
+    },
     "Confidentiality": {
-      "precision": 0.778,
-      "recall": 0.583,
-      "f1": 0.667,
+      "precision": 0.667,
+      "recall": 0.333,
+      "f1": 0.444,
       "support": 12
+    },
+    "ExpirationDate": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
     },
     "ForceMajeure": {
       "precision": 1.0,
@@ -488,15 +535,15 @@ User uploads contract (PDF / TXT)
       "support": 14
     },
     "GoverningLaw": {
-      "precision": 0.75,
-      "recall": 0.273,
-      "f1": 0.4,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
       "support": 11
     },
     "IPAssignment": {
       "precision": 1.0,
-      "recall": 0.9,
-      "f1": 0.947,
+      "recall": 0.367,
+      "f1": 0.537,
       "support": 30
     },
     "Indemnification": {
@@ -506,67 +553,95 @@ User uploads contract (PDF / TXT)
       "support": 4
     },
     "Jurisdiction": {
-      "precision": 0.815,
-      "recall": 0.733,
-      "f1": 0.772,
+      "precision": 0.727,
+      "recall": 0.267,
+      "f1": 0.39,
       "support": 30
     },
     "LiabilityCap": {
       "precision": 1.0,
-      "recall": 0.778,
-      "f1": 0.875,
+      "recall": 0.222,
+      "f1": 0.364,
       "support": 9
     },
+    "MinimumCommitment": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
+    },
+    "NoSolicitOfEmployees": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
+    },
     "NonCompete": {
-      "precision": 0.933,
-      "recall": 0.824,
-      "f1": 0.875,
+      "precision": 1.0,
+      "recall": 0.294,
+      "f1": 0.455,
       "support": 17
     },
     "PaymentTerms": {
-      "precision": 0.64,
-      "recall": 1.0,
-      "f1": 0.78,
+      "precision": 0.588,
+      "recall": 0.625,
+      "f1": 0.606,
       "support": 16
     },
     "Renewal": {
       "precision": 1.0,
-      "recall": 0.737,
-      "f1": 0.848,
+      "recall": 0.632,
+      "f1": 0.774,
       "support": 19
     },
     "Termination": {
-      "precision": 0.586,
-      "recall": 1.0,
-      "f1": 0.739,
+      "precision": 0.65,
+      "recall": 0.765,
+      "f1": 0.703,
       "support": 17
+    },
+    "Unknown": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "support": 0
     }
   },
   "macro": {
-    "precision": 0.828,
-    "recall": 0.749,
-    "f1": 0.758
+    "precision": 0.521,
+    "recall": 0.291,
+    "f1": 0.352
   },
-  "weighted_f1": 0.783,
-  "accuracy": 0.788,
+  "weighted_f1": 0.54,
+  "accuracy": 0.429,
   "confusion": {
     "Arbitration": {
-      "Arbitration": 30,
-      "Jurisdiction": 2,
+      "Arbitration": 16,
+      "Unknown": 16,
       "GoverningLaw": 1,
+      "AntiAssignment": 0,
+      "ChangeOfControl": 0,
       "Confidentiality": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
       "IPAssignment": 0,
       "Indemnification": 0,
+      "Jurisdiction": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0,
       "PaymentTerms": 0,
       "Renewal": 0,
       "Termination": 0
     },
     "Termination": {
-      "Termination": 17,
+      "Termination": 13,
+      "Unknown": 3,
+      "ExpirationDate": 1,
+      "AntiAssignment": 0,
       "Arbitration": 0,
+      "ChangeOfControl": 0,
       "Confidentiality": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
@@ -574,117 +649,167 @@ User uploads contract (PDF / TXT)
       "Indemnification": 0,
       "Jurisdiction": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0,
       "PaymentTerms": 0,
       "Renewal": 0
     },
     "PaymentTerms": {
-      "PaymentTerms": 16,
+      "PaymentTerms": 10,
+      "Unknown": 5,
+      "ChangeOfControl": 1,
+      "AntiAssignment": 0,
       "Arbitration": 0,
       "Confidentiality": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
       "IPAssignment": 0,
       "Indemnification": 0,
       "Jurisdiction": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0,
       "Renewal": 0,
       "Termination": 0
     },
     "IPAssignment": {
-      "IPAssignment": 27,
-      "PaymentTerms": 2,
-      "Termination": 1,
+      "Unknown": 16,
+      "IPAssignment": 11,
+      "AntiAssignment": 1,
+      "PaymentTerms": 1,
+      "MinimumCommitment": 1,
       "Arbitration": 0,
+      "ChangeOfControl": 0,
       "Confidentiality": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
       "Indemnification": 0,
       "Jurisdiction": 0,
       "LiabilityCap": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0,
-      "Renewal": 0
+      "Renewal": 0,
+      "Termination": 0
     },
     "NonCompete": {
-      "NonCompete": 14,
-      "Termination": 1,
+      "Unknown": 10,
+      "NonCompete": 5,
       "Confidentiality": 2,
+      "AntiAssignment": 0,
       "Arbitration": 0,
+      "ChangeOfControl": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
       "IPAssignment": 0,
       "Indemnification": 0,
       "Jurisdiction": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "PaymentTerms": 0,
-      "Renewal": 0
+      "Renewal": 0,
+      "Termination": 0
     },
     "Confidentiality": {
-      "Confidentiality": 7,
-      "Termination": 4,
-      "NonCompete": 1,
+      "Unknown": 4,
+      "Termination": 3,
+      "Confidentiality": 4,
+      "NoSolicitOfEmployees": 1,
+      "AntiAssignment": 0,
       "Arbitration": 0,
+      "ChangeOfControl": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
       "IPAssignment": 0,
       "Indemnification": 0,
       "Jurisdiction": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NonCompete": 0,
       "PaymentTerms": 0,
       "Renewal": 0
     },
     "ForceMajeure": {
       "ForceMajeure": 7,
-      "PaymentTerms": 3,
-      "Termination": 4,
+      "Unknown": 2,
+      "PaymentTerms": 2,
+      "Termination": 3,
+      "AntiAssignment": 0,
       "Arbitration": 0,
+      "ChangeOfControl": 0,
       "Confidentiality": 0,
+      "ExpirationDate": 0,
       "GoverningLaw": 0,
       "IPAssignment": 0,
       "Indemnification": 0,
       "Jurisdiction": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0,
       "Renewal": 0
     },
     "GoverningLaw": {
-      "Arbitration": 6,
-      "GoverningLaw": 3,
-      "Termination": 1,
+      "Unknown": 10,
       "Jurisdiction": 1,
+      "AntiAssignment": 0,
+      "Arbitration": 0,
+      "ChangeOfControl": 0,
       "Confidentiality": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
+      "GoverningLaw": 0,
       "IPAssignment": 0,
       "Indemnification": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0,
       "PaymentTerms": 0,
-      "Renewal": 0
+      "Renewal": 0,
+      "Termination": 0
     },
     "Indemnification": {
       "PaymentTerms": 1,
       "Indemnification": 3,
+      "AntiAssignment": 0,
       "Arbitration": 0,
+      "ChangeOfControl": 0,
       "Confidentiality": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
       "IPAssignment": 0,
       "Jurisdiction": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0,
       "Renewal": 0,
-      "Termination": 0
+      "Termination": 0,
+      "Unknown": 0
     },
     "Jurisdiction": {
-      "Arbitration": 8,
-      "Jurisdiction": 22,
+      "Unknown": 22,
+      "Jurisdiction": 8,
+      "AntiAssignment": 0,
+      "Arbitration": 0,
+      "ChangeOfControl": 0,
       "Confidentiality": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
       "IPAssignment": 0,
       "Indemnification": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0,
       "PaymentTerms": 0,
       "Renewal": 0,
@@ -692,33 +817,166 @@ User uploads contract (PDF / TXT)
     },
     "Renewal": {
       "PaymentTerms": 2,
-      "Renewal": 14,
+      "Renewal": 12,
       "Jurisdiction": 2,
       "Termination": 1,
+      "Unknown": 2,
+      "AntiAssignment": 0,
       "Arbitration": 0,
+      "ChangeOfControl": 0,
       "Confidentiality": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
       "IPAssignment": 0,
       "Indemnification": 0,
       "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0
     },
     "LiabilityCap": {
-      "LiabilityCap": 7,
+      "Unknown": 5,
       "Indemnification": 1,
       "PaymentTerms": 1,
+      "LiabilityCap": 2,
+      "AntiAssignment": 0,
       "Arbitration": 0,
+      "ChangeOfControl": 0,
       "Confidentiality": 0,
+      "ExpirationDate": 0,
       "ForceMajeure": 0,
       "GoverningLaw": 0,
       "IPAssignment": 0,
       "Jurisdiction": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
       "NonCompete": 0,
       "Renewal": 0,
       "Termination": 0
+    },
+    "AntiAssignment": {
+      "AntiAssignment": 0,
+      "Arbitration": 0,
+      "ChangeOfControl": 0,
+      "Confidentiality": 0,
+      "ExpirationDate": 0,
+      "ForceMajeure": 0,
+      "GoverningLaw": 0,
+      "IPAssignment": 0,
+      "Indemnification": 0,
+      "Jurisdiction": 0,
+      "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
+      "NonCompete": 0,
+      "PaymentTerms": 0,
+      "Renewal": 0,
+      "Termination": 0,
+      "Unknown": 0
+    },
+    "ChangeOfControl": {
+      "AntiAssignment": 0,
+      "Arbitration": 0,
+      "ChangeOfControl": 0,
+      "Confidentiality": 0,
+      "ExpirationDate": 0,
+      "ForceMajeure": 0,
+      "GoverningLaw": 0,
+      "IPAssignment": 0,
+      "Indemnification": 0,
+      "Jurisdiction": 0,
+      "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
+      "NonCompete": 0,
+      "PaymentTerms": 0,
+      "Renewal": 0,
+      "Termination": 0,
+      "Unknown": 0
+    },
+    "ExpirationDate": {
+      "AntiAssignment": 0,
+      "Arbitration": 0,
+      "ChangeOfControl": 0,
+      "Confidentiality": 0,
+      "ExpirationDate": 0,
+      "ForceMajeure": 0,
+      "GoverningLaw": 0,
+      "IPAssignment": 0,
+      "Indemnification": 0,
+      "Jurisdiction": 0,
+      "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
+      "NonCompete": 0,
+      "PaymentTerms": 0,
+      "Renewal": 0,
+      "Termination": 0,
+      "Unknown": 0
+    },
+    "MinimumCommitment": {
+      "AntiAssignment": 0,
+      "Arbitration": 0,
+      "ChangeOfControl": 0,
+      "Confidentiality": 0,
+      "ExpirationDate": 0,
+      "ForceMajeure": 0,
+      "GoverningLaw": 0,
+      "IPAssignment": 0,
+      "Indemnification": 0,
+      "Jurisdiction": 0,
+      "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
+      "NonCompete": 0,
+      "PaymentTerms": 0,
+      "Renewal": 0,
+      "Termination": 0,
+      "Unknown": 0
+    },
+    "NoSolicitOfEmployees": {
+      "AntiAssignment": 0,
+      "Arbitration": 0,
+      "ChangeOfControl": 0,
+      "Confidentiality": 0,
+      "ExpirationDate": 0,
+      "ForceMajeure": 0,
+      "GoverningLaw": 0,
+      "IPAssignment": 0,
+      "Indemnification": 0,
+      "Jurisdiction": 0,
+      "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
+      "NonCompete": 0,
+      "PaymentTerms": 0,
+      "Renewal": 0,
+      "Termination": 0,
+      "Unknown": 0
+    },
+    "Unknown": {
+      "AntiAssignment": 0,
+      "Arbitration": 0,
+      "ChangeOfControl": 0,
+      "Confidentiality": 0,
+      "ExpirationDate": 0,
+      "ForceMajeure": 0,
+      "GoverningLaw": 0,
+      "IPAssignment": 0,
+      "Indemnification": 0,
+      "Jurisdiction": 0,
+      "LiabilityCap": 0,
+      "MinimumCommitment": 0,
+      "NoSolicitOfEmployees": 0,
+      "NonCompete": 0,
+      "PaymentTerms": 0,
+      "Renewal": 0,
+      "Termination": 0,
+      "Unknown": 0
     }
   },
-  "n_samples": 212
+  "n_samples": 212,
+  "embeddings_mode": "off"
 }
 ```

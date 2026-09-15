@@ -1,5 +1,5 @@
 # HANDOFF.md
-> Last updated: 20 May 2026 | Deadline: 24 May 2026
+> Last updated: 15 Sep 2026 | Next milestone: ECD502 Mid Evaluation-1, 19 Sep 2026
 
 ---
 
@@ -25,7 +25,8 @@ Build an end-to-end **Legal Contract Analyzer** that:
 | Generator | `pipeline/generator.py` | Done |
 | Pipeline glue | `pipeline/pipeline.py` | Done |
 | Flask web app | `app/main.py` + `app/templates/index.html` | Done, tested in browser |
-| Evaluation | `evaluation/evaluate_classifier.py` + `evaluate_retriever.py` | Done |
+| Evaluation | `evaluation/evaluate_classifier.py` + `evaluate_retriever.py` + `evaluate_classifier_full47.py` | Done |
+| InLegalBERT fine-tune | `pipeline/train_classifier_bert.py` | Written, self-verifying, **not yet run** — needs GPU (see Next Steps #7) |
 | Tests | `tests/` (7 files) | **116/116 passing** (pytest + CI) |
 
 ### Data
@@ -36,29 +37,27 @@ Build an end-to-end **Legal Contract Analyzer** that:
 | Verified (human-labeled) | **0** | Label Studio annotation skipped |
 | ICA 1872 sections indexed | 185 | FAISS + BM25 in `knowledge_base/` |
 
-### Evaluation Results
+### Evaluation Results (revised — see README "Key findings" for full explanation)
 | Metric | Score |
 |--------|-------|
-| Classifier accuracy (unverified labels) | **78.8%** |
-| Classifier weighted F1 | **0.783** |
+| Classifier — clean 47-class held-out (ML only) | **82.5% acc / macro-F1 0.740** |
+| Classifier — real-world spot check (full cascade, 12 classes) | **42.9% acc** *(was 78.8% — leak fixed, see below)* |
+| Classifier — InLegalBERT fine-tune vs. same 47-class held-out | *pending Colab run* |
 | Retriever Hit@5 — BM25 only | 23.0% |
 | Retriever Hit@5 — statute map + BM25 | **100%** |
 
-### Classifier per-type F1 (latest)
+> The old 78.8%/83.2% headline numbers were inflated by a self-match leak in the embedding fallback (its reference pool included the row being scored). Fixed via leave-one-out pooling — 42.9% is the honest real-world number for the 12-class scraped-text spot check. A separate, clean 47-class held-out benchmark (82.5%) was added as the fair baseline for the InLegalBERT comparison, since the two evaluations measure different things (see `evaluation/evaluate_classifier.py` vs `evaluation/evaluate_classifier_full47.py`).
+
+### Classifier per-type F1 (real-world spot check, 12 classes, post leak-fix)
 | Type | F1 |
 |------|----|
 | Termination | 0.739 |
-| Arbitration | 0.779 |
-| Confidentiality | 0.667 |
-| Indemnification | 0.750 |
-| NonCompete | 0.875 |
+| Arbitration | 0.653 |
+| Confidentiality | 0.444 |
 | ForceMajeure | 0.667 |
-| IPAssignment | 0.947 |
-| LiabilityCap | **0.875** *(was 0.500)* |
-| Jurisdiction | 0.772 |
-| PaymentTerms | **0.780** *(was 0.222)* |
-| GoverningLaw | 0.400 *(held)* |
-| Renewal | 0.848 |
+| GoverningLaw | 0.400 |
+
+Full per-type numbers (47-class held-out) live in `evaluation/results/tfidf_lr_baseline_47class.json`.
 
 ---
 
@@ -110,7 +109,7 @@ Build an end-to-end **Legal Contract Analyzer** that:
 ## Next Steps (in order)
 
 ### 1. ~~Fix classifier weak points~~ — **DONE** ✅
-PaymentTerms F1: 0.222 → 0.780 | LiabilityCap F1: 0.500 → 0.875 | Overall accuracy: 65.6% → 78.8%
+PaymentTerms F1: 0.222 → 0.780 | LiabilityCap F1: 0.500 → 0.875 | Overall accuracy: 65.6% → 78.8% (superseded — see #6)
 See `pipeline/classifier.py` — removed `required_all` for PaymentTerms, added `shall not exceed` / `consequential damages` patterns for LiabilityCap.
 
 ### 2. ~~Write README.md~~ — **DONE** ✅
@@ -128,6 +127,18 @@ Tested on both demo text contract and `app/uploads/test_contract.txt` (a real MS
 - ICA section references verified in report (S73, S36, S130, S74, S48, etc.)
 - All pipeline checks PASS: `<html>` present, risk labels present, ICA refs present
 - `report.html` updated in project root
+
+### 5. ~~Fix embedding-fallback self-match leak~~ — **DONE** ✅ (25 Jul 2026)
+Found the real-world spot-check number was inflated because the embedding fallback's reference pool included the row being classified. Fixed via leave-one-out pooling (`evaluation/evaluate_classifier.py --embeddings loo`, now default). Honest number: 42.9% (was 78.8%). See README "Key findings" for the full explanation of why three different classifier numbers now exist.
+
+### 6. ~~Add a clean 47-class held-out benchmark~~ — **DONE** ✅ (25 Jul 2026)
+`evaluation/evaluate_classifier_full47.py` scores the ML model alone (no fallback) across all 47 classes on a proper held-out split, persisted to `evaluation/results/held_out_test_47class.jsonl` for reproducibility. Result: 82.5% acc / macro-F1 0.740 / weighted-F1 0.824 — this is the baseline the InLegalBERT fine-tune (below) is measured against.
+
+### 7. Fine-tune InLegalBERT and compare — **IN PROGRESS** (targeting 19 Sep 2026 Mid Eval-1)
+`pipeline/train_classifier_bert.py` is written and self-verifying (asserts its train/test split matches the persisted 47-class held-out file before training) but was never run — no GPU available, ~12+ hrs estimated on CPU. Packaged as `notebooks/finetune_inlegalbert_colab.ipynb` to run on a free Colab T4 GPU instead (~15-40 min). Once `evaluation/results/inlegalbert_47class.json` comes back: update README/this file with final numbers, decide whether to wire the fine-tuned model into `pipeline/classifier.py` as a new stage (stretch goal, not required for Mid Eval-1's "actual work done, partial results" bar).
+
+### 8. Merge `finetune-inlegalbert` into `master` — **IN PROGRESS**
+This branch (`claude/kind-newton-jsmo1r`, fast-forwarded onto `finetune-inlegalbert`) will be opened as a PR into `master` once InLegalBERT results land, so `master` reflects the true current state before the review.
 
 ---
 
