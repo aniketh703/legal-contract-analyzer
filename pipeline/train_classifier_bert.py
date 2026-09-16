@@ -45,7 +45,6 @@ import sys
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 import torch
 from sklearn.metrics import accuracy_score, classification_report, f1_score
 from sklearn.model_selection import train_test_split
@@ -59,7 +58,7 @@ from transformers import (
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from pipeline.train_classifier import normalize_type, CSV_PATH, INDIAN_CSV_PATH
+from pipeline.train_classifier import load_combined_source
 
 MODEL_NAME = "law-ai/InLegalBERT"
 MAX_LENGTH = 256
@@ -92,29 +91,6 @@ def load_label_maps() -> tuple[dict[str, int], dict[int, str]]:
 # Data -- reconstruct the exact train/test split from pipeline/train_classifier.py
 # ---------------------------------------------------------------------------
 
-def _load_combined_source() -> pd.DataFrame:
-    """Identical loading + normalize_type logic to pipeline/train_classifier.py."""
-    if not CSV_PATH.exists():
-        sys.exit(f"[bert] CUAD CSV not found: {CSV_PATH}")
-
-    df_cuad = pd.read_csv(CSV_PATH)
-    df_cuad = df_cuad.dropna(subset=["clause_text", "clause_type", "risk_level"])
-    df_cuad["clause_text"] = df_cuad["clause_text"].astype(str).str.strip()
-    df_cuad = df_cuad[df_cuad["clause_text"].str.len() > 10]
-
-    if INDIAN_CSV_PATH.exists():
-        df_indian = pd.read_csv(INDIAN_CSV_PATH)
-        df_indian = df_indian.dropna(subset=["clause_text", "clause_type", "risk_level"])
-        df_indian["clause_text"] = df_indian["clause_text"].astype(str).str.strip()
-        df_indian = df_indian[df_indian["clause_text"].str.len() > 10]
-        df = pd.concat([df_cuad, df_indian], ignore_index=True)
-    else:
-        df = df_cuad
-
-    df["type_norm"] = df["clause_type"].apply(normalize_type)
-    return df
-
-
 def _load_persisted_test_set() -> tuple[list[str], list[str]]:
     if not HELD_OUT_TEST_PATH.exists():
         sys.exit(
@@ -134,7 +110,7 @@ def build_train_test_split() -> tuple[list[str], list[str], list[str], list[str]
     """
     X_test, y_test = _load_persisted_test_set()
 
-    df = _load_combined_source()
+    df = load_combined_source(log_prefix="[bert]")
     X = df["clause_text"]
     y = df["type_norm"]
 

@@ -31,14 +31,13 @@ import sys
 from pathlib import Path
 
 import joblib
-import pandas as pd
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from pipeline.train_classifier import normalize_type, CSV_PATH, INDIAN_CSV_PATH
+from pipeline.train_classifier import load_combined_source
 
 MODELS_DIR = ROOT / "models"
 RESULTS_DIR = ROOT / "evaluation" / "results"
@@ -48,24 +47,7 @@ REPORT_PATH = RESULTS_DIR / "tfidf_lr_baseline_47class.json"
 
 def _load_and_split() -> tuple[list[str], list[str]]:
     """Reproduce train_classifier.py's exact loading + split to recover its X_test/y_test."""
-    if not CSV_PATH.exists():
-        sys.exit(f"[eval47] CUAD CSV not found: {CSV_PATH}")
-
-    df_cuad = pd.read_csv(CSV_PATH)
-    df_cuad = df_cuad.dropna(subset=["clause_text", "clause_type", "risk_level"])
-    df_cuad["clause_text"] = df_cuad["clause_text"].astype(str).str.strip()
-    df_cuad = df_cuad[df_cuad["clause_text"].str.len() > 10]
-
-    if INDIAN_CSV_PATH.exists():
-        df_indian = pd.read_csv(INDIAN_CSV_PATH)
-        df_indian = df_indian.dropna(subset=["clause_text", "clause_type", "risk_level"])
-        df_indian["clause_text"] = df_indian["clause_text"].astype(str).str.strip()
-        df_indian = df_indian[df_indian["clause_text"].str.len() > 10]
-        df = pd.concat([df_cuad, df_indian], ignore_index=True)
-    else:
-        df = df_cuad
-
-    df["type_norm"] = df["clause_type"].apply(normalize_type)
+    df = load_combined_source(log_prefix="[eval47]")
 
     X = df["clause_text"]
     y = df["type_norm"]

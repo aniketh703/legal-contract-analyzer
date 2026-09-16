@@ -25,3 +25,17 @@ summary: {'total_clauses': 5, 'high_risk': 3, 'medium_risk': 2, 'low_risk': 0}
 ======================================================================
 ALL THREE TOOLS CALLED SUCCESSFULLY
 ======================================================================
+
+--- re-verification after fixing the thread-safety + error-message bugs ---
+
+=== Finding 1: concurrent analyze_contract calls ===
+All 3 concurrent calls succeeded, no JSON-RPC corruption.
+
+=== Finding 2: non-contract text (resume) rejection message ===
+{
+  "error": "This file does not appear to be a legal contract. Please upload a commercial agreement (MSA, NDA, employment contract, etc.). LinkedIn profiles and resumes are not supported.",
+  "contract_name": "Resume"
+}
+Specific gate-rejection message correctly surfaced (not the generic fallback).
+
+=== ALL CHECKS PASSED ===

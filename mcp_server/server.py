@@ -23,7 +23,6 @@ Run:
 
 from __future__ import annotations
 
-import contextlib
 import json
 import sys
 from pathlib import Path
@@ -33,6 +32,7 @@ sys.path.insert(0, str(ROOT))
 
 from mcp.server.mcpserver import MCPServer  # noqa: E402
 
+from pipeline.document_gate import CONTRACT_GATE_MESSAGE  # noqa: E402
 from pipeline.export_analysis import build_analysis_payload  # noqa: E402
 from pipeline.pipeline import run_pipeline  # noqa: E402
 
@@ -68,26 +68,6 @@ def _load_risk_map() -> dict:
     return _risk_map_cache
 
 
-@contextlib.contextmanager
-def _stdout_to_stderr():
-    """
-    MCP's stdio transport uses stdout as an exclusive JSON-RPC channel --
-    any stray print() corrupts it. pipeline/retriever.py logs progress
-    (KB loading, BM25 index build, etc.) via bare print() rather than the
-    logging module, which is fine for its CLI/Flask callers but breaks an
-    MCP tool call outright ("Failed to parse JSONRPC message from server",
-    confirmed while testing this server). Redirect stdout to stderr for
-    the duration of any call into the pipeline, rather than editing
-    retriever.py's logging behavior for every other caller.
-    """
-    original_stdout = sys.stdout
-    sys.stdout = sys.stderr
-    try:
-        yield
-    finally:
-        sys.stdout = original_stdout
-
-
 @mcp.tool()
 def analyze_contract(text: str, contract_name: str = "Contract") -> dict:
     """
@@ -102,11 +82,14 @@ def analyze_contract(text: str, contract_name: str = "Contract") -> dict:
         text: The full contract text (plain text, not a file path).
         contract_name: Optional display name for the contract.
     """
-    with _stdout_to_stderr():
-        html, clauses = run_pipeline(
-            text=text, contract_name=contract_name, use_embeddings=True
-        )
+    html, clauses = run_pipeline(
+        text=text, contract_name=contract_name, use_embeddings=True
+    )
     if not clauses:
+        if html == CONTRACT_GATE_MESSAGE or (
+            html and "does not appear to be a legal contract" in html
+        ):
+            return {"error": html, "contract_name": contract_name}
         return {
             "error": "No clauses could be extracted from this text.",
             "contract_name": contract_name,
