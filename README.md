@@ -240,15 +240,17 @@ This is the number the InLegalBERT fine-tune (see below) is being compared again
 
 > **Why this dropped from the old "78.8%" figure:** the embedding fallback stage had a self-match leak — its reference pool included the very row being classified, so a clause could match itself at confidence 1.0. Fixed by switching to leave-one-out reference pooling (`--embeddings loo`, now the default). The 42.9% above is the honest number; the old 78.8%/83.2% figures were inflated by that leak. This is expected: real, messy production text is a genuinely harder task than a clean CUAD-style held-out split.
 
-#### 3. InLegalBERT fine-tune (in progress)
+#### 3. InLegalBERT fine-tune — completed
 
-`pipeline/train_classifier_bert.py` fine-tunes [`law-ai/InLegalBERT`](https://huggingface.co/law-ai/InLegalBERT) — a legal-domain pretrained transformer — on the identical held-out split as benchmark #1, to test whether domain pretraining beats a TF-IDF+LR baseline on this task.
+`pipeline/train_classifier_bert.py` fine-tunes [`law-ai/InLegalBERT`](https://huggingface.co/law-ai/InLegalBERT) — a legal-domain pretrained transformer — on the identical held-out split as benchmark #1, to test whether domain pretraining beats a TF-IDF+LR baseline on this task. Fine-tuned for 4 epochs (lr 2e-5, batch 16, max_length 256) on a free Colab T4 GPU — 28 minutes, vs. the 12+ hour CPU-only estimate.
 
-| Metric | TF-IDF + LR | InLegalBERT |
-|---|---|---|
-| Accuracy | 82.5% | _pending Colab run_ |
-| Macro F1 | 0.740 | _pending Colab run_ |
-| Weighted F1 | 0.824 | _pending Colab run_ |
+| Metric | TF-IDF + LR | InLegalBERT | Winner |
+|---|---|---|---|
+| Accuracy | 82.5% | **85.6%** | InLegalBERT (+3.1 pts) |
+| Macro F1 | **0.740** | 0.708 | TF-IDF+LR (−0.032) |
+| Weighted F1 | 0.824 | **0.847** | InLegalBERT (+0.023) |
+
+> **Not just "BERT wins":** InLegalBERT beats the baseline on accuracy and weighted-F1, but loses on macro-F1 — it scores **0.00 F1 on 5 of the 47 classes**, all among the thinnest in the training set: `AffiliateLicenseLicensee` (support 8), `DPDP` (support 3), `IrrevocableOrPerpetualLicense` (support 5), `NoSolicitOfCustomers` (support 10), `UnlimitedAllYouCanEatLicense` (support 3). Four fine-tuning epochs was enough to fit the well-represented classes but not enough exposure for a 110M-parameter model to generalize past the majority-class prior on the long tail; the simpler TF-IDF baseline degrades more gracefully on those same thin classes. `DPDP` (India's 2023 Digital Personal Data Protection Act) is a genuinely consequential class to be silently useless on, despite the model winning on every aggregate metric except macro-F1 — a concrete argument for reporting class-balanced metrics by default. Full per-class report: `evaluation/results/inlegalbert_47class.json`.
 
 ---
 

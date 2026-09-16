@@ -248,15 +248,17 @@ This is the number the InLegalBERT fine-tune (see below) is being compared again
 
 > **Why this dropped from the old "78.8%" figure:** the embedding fallback stage had a self-match leak — its reference pool included the very row being classified, so a clause could match itself at confidence 1.0. Fixed by switching to leave-one-out reference pooling (`--embeddings loo`, now the default). The 42.9% above is the honest number; the old 78.8%/83.2% figures were inflated by that leak. This is expected: real, messy production text is a genuinely harder task than a clean CUAD-style held-out split.
 
-#### 3. InLegalBERT fine-tune (in progress)
+#### 3. InLegalBERT fine-tune — completed
 
-`pipeline/train_classifier_bert.py` fine-tunes [`law-ai/InLegalBERT`](https://huggingface.co/law-ai/InLegalBERT) — a legal-domain pretrained transformer — on the identical held-out split as benchmark #1, to test whether domain pretraining beats a TF-IDF+LR baseline on this task.
+`pipeline/train_classifier_bert.py` fine-tunes [`law-ai/InLegalBERT`](https://huggingface.co/law-ai/InLegalBERT) — a legal-domain pretrained transformer — on the identical held-out split as benchmark #1, to test whether domain pretraining beats a TF-IDF+LR baseline on this task. Fine-tuned for 4 epochs (lr 2e-5, batch 16, max_length 256) on a free Colab T4 GPU — 28 minutes, vs. the 12+ hour CPU-only estimate.
 
-| Metric | TF-IDF + LR | InLegalBERT |
-|---|---|---|
-| Accuracy | 82.5% | _pending Colab run_ |
-| Macro F1 | 0.740 | _pending Colab run_ |
-| Weighted F1 | 0.824 | _pending Colab run_ |
+| Metric | TF-IDF + LR | InLegalBERT | Winner |
+|---|---|---|---|
+| Accuracy | 82.5% | **85.6%** | InLegalBERT (+3.1 pts) |
+| Macro F1 | **0.740** | 0.708 | TF-IDF+LR (−0.032) |
+| Weighted F1 | 0.824 | **0.847** | InLegalBERT (+0.023) |
+
+> **Not just "BERT wins":** InLegalBERT beats the baseline on accuracy and weighted-F1, but loses on macro-F1 — it scores **0.00 F1 on 5 of the 47 classes**, all among the thinnest in the training set: `AffiliateLicenseLicensee` (support 8), `DPDP` (support 3), `IrrevocableOrPerpetualLicense` (support 5), `NoSolicitOfCustomers` (support 10), `UnlimitedAllYouCanEatLicense` (support 3). Four fine-tuning epochs was enough to fit the well-represented classes but not enough exposure for a 110M-parameter model to generalize past the majority-class prior on the long tail; the simpler TF-IDF baseline degrades more gracefully on those same thin classes. `DPDP` (India's 2023 Digital Personal Data Protection Act) is a genuinely consequential class to be silently useless on, despite the model winning on every aggregate metric except macro-F1 — a concrete argument for reporting class-balanced metrics by default. Full per-class report: `evaluation/results/inlegalbert_47class.json`.
 
 ---
 
@@ -300,7 +302,8 @@ Build an end-to-end **Legal Contract Analyzer** that:
 | Pipeline glue | `pipeline/pipeline.py` | Done |
 | Flask web app | `app/main.py` + `app/templates/index.html` | Done, tested in browser |
 | Evaluation | `evaluation/evaluate_classifier.py` + `evaluate_retriever.py` + `evaluate_classifier_full47.py` | Done |
-| InLegalBERT fine-tune | `pipeline/train_classifier_bert.py` | Written, self-verifying, **not yet run** — needs GPU (see Next Steps #7) |
+| InLegalBERT fine-tune | `pipeline/train_classifier_bert.py` | Done — 85.6% acc / macro-F1 0.708 / weighted-F1 0.847 (see Next Steps #7) |
+| MCP server | `mcp_server/server.py` | Done — 3 tools, verified end-to-end with a real MCP client |
 | Tests | `tests/` (7 files) | **116/116 passing** (pytest + CI) |
 
 ### Data
@@ -316,7 +319,7 @@ Build an end-to-end **Legal Contract Analyzer** that:
 |--------|-------|
 | Classifier — clean 47-class held-out (ML only) | **82.5% acc / macro-F1 0.740** |
 | Classifier — real-world spot check (full cascade, 12 classes) | **42.9% acc** *(was 78.8% — leak fixed, see below)* |
-| Classifier — InLegalBERT fine-tune vs. same 47-class held-out | *pending Colab run* |
+| Classifier — InLegalBERT fine-tune vs. same 47-class held-out | **85.6% acc / macro-F1 0.708 / weighted-F1 0.847** (loses on macro-F1 — 5 thin classes at 0.00 F1) |
 | Retriever Hit@5 — BM25 only | 23.0% |
 | Retriever Hit@5 — statute map + BM25 | **100%** |
 
@@ -408,11 +411,14 @@ Found the real-world spot-check number was inflated because the embedding fallba
 ### 6. ~~Add a clean 47-class held-out benchmark~~ — **DONE** ✅ (25 Jul 2026)
 `evaluation/evaluate_classifier_full47.py` scores the ML model alone (no fallback) across all 47 classes on a proper held-out split, persisted to `evaluation/results/held_out_test_47class.jsonl` for reproducibility. Result: 82.5% acc / macro-F1 0.740 / weighted-F1 0.824 — this is the baseline the InLegalBERT fine-tune (below) is measured against.
 
-### 7. Fine-tune InLegalBERT and compare — **IN PROGRESS** (targeting 19 Sep 2026 Mid Eval-1)
-`pipeline/train_classifier_bert.py` is written and self-verifying (asserts its train/test split matches the persisted 47-class held-out file before training) but was never run — no GPU available, ~12+ hrs estimated on CPU. Packaged as `notebooks/finetune_inlegalbert_colab.ipynb` to run on a free Colab T4 GPU instead (~15-40 min). Once `evaluation/results/inlegalbert_47class.json` comes back: update README/this file with final numbers, decide whether to wire the fine-tuned model into `pipeline/classifier.py` as a new stage (stretch goal, not required for Mid Eval-1's "actual work done, partial results" bar).
+### 7. ~~Fine-tune InLegalBERT and compare~~ — **DONE** ✅ (16 Sep 2026)
+Ran on a free Colab T4 GPU via `notebooks/finetune_inlegalbert_colab.ipynb` — 28 minutes (vs. the 12+ hr CPU-only estimate), 4 epochs, lr 2e-5. Result: accuracy 85.6% (vs. baseline 82.5%, +3.1 pts) and weighted-F1 0.847 (vs. 0.824), but macro-F1 **0.708 — lower than the baseline's 0.740**, because InLegalBERT scores 0.00 F1 on 5 of the thinnest classes (`AffiliateLicenseLicensee`, `DPDP`, `IrrevocableOrPerpetualLicense`, `NoSolicitOfCustomers`, `UnlimitedAllYouCanEatLicense` — all support ≤ 10). See README "Key findings" #3 for the full breakdown. Not wired into `pipeline/classifier.py` yet — see #9 below.
 
-### 8. Merge `finetune-inlegalbert` into `master` — **IN PROGRESS**
-This branch (`claude/kind-newton-jsmo1r`, fast-forwarded onto `finetune-inlegalbert`) will be opened as a PR into `master` once InLegalBERT results land, so `master` reflects the true current state before the review.
+### 8. ~~Merge `finetune-inlegalbert` (+ paper, + MCP server) into `master`~~ — **DONE** ✅ (16 Sep 2026)
+`claude/kind-newton-jsmo1r` (fast-forwarded onto `finetune-inlegalbert`, then merged with the IEEE paper branch) carries everything: the evaluation-leak fix, the 47-class benchmark, the completed InLegalBERT fine-tune, the Colab notebook, and the MCP server (`mcp_server/`). PR opened into `master`.
+
+### 9. Wire the winning classifier into the live pipeline — **NEXT** (toward Mid Eval-2, 21 Nov 2026)
+InLegalBERT wins on accuracy/weighted-F1 but its thin-class failures (#7) make a straight swap risky — `DPDP` is a genuinely consequential class to silently drop. Options to evaluate: class-weighted loss, targeted data augmentation for the 5 failing classes, or more epochs with per-class early stopping, before considering it as a `classifier.py` stage.
 
 ---
 

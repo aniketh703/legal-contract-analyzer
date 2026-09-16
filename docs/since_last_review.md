@@ -37,7 +37,7 @@ Wrote `pipeline/train_classifier_bert.py`: fine-tunes [`law-ai/InLegalBERT`](htt
 
 The script was written but never executed at the time — no GPU was available, and it's estimated at 12+ hours on CPU. For this review, it was run on a free Google Colab T4 GPU (~15-40 min) instead.
 
-**Result:** *see the "Key findings" table in README.md / the slide deck for final numbers.*
+**Result:** InLegalBERT beats the baseline on accuracy (85.6% vs. 82.5%) and weighted-F1 (0.847 vs. 0.824), but *loses* on macro-F1 (0.708 vs. 0.740) — it scores 0.00 F1 on 5 of the thinnest classes (support ≤ 10, including `DPDP`, India's 2023 data-protection law). Not a flat win: see README "Key findings" #3 for the full breakdown.
 
 ## Why this is the right "actual work done" story
 
