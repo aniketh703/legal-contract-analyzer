@@ -51,3 +51,4 @@ data/external/
 app/uploads/*
 !app/uploads/.gitkeep
 
+.venv-mcp/

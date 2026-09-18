@@ -43,6 +43,8 @@ User uploads contract (PDF / TXT)
 
 > **Note on training data:** The CUAD dataset originates from US commercial contracts. It is used solely for *clause type detection* — identifying what kind of clause a piece of text is. This task is largely language-pattern-based and transfers well across jurisdictions. The Indian-law risk analysis (ICA statute mapping, risk explanations, recommended actions) is handled entirely by `retriever.py` and `generator.py`, which are built specifically for the Indian Contract Act 1872.
 
+> **Two separate uses of InLegalBERT, not to be confused:** Stage 3 above uses a pretrained (not fine-tuned) InLegalBERT purely for embedding similarity against curated examples, inside the live pipeline. Separately, `pipeline/train_classifier_bert.py` *fine-tunes* InLegalBERT as a standalone sequence classifier to evaluate against the TF-IDF+LR baseline (see "Key findings" below) — this fine-tuned model is an evaluation/research result, not yet wired into `classify_clauses()`.
+
 ---
 
 ## Repository layout
@@ -208,31 +210,47 @@ CI runs the same suite on push/PR (see `.github/workflows/ci.yml`). Offline env 
 
 The statute map layer (a hardcoded clause-type → ICA section mapping) guarantees the most relevant section is always retrieved, removing dependence on embedding similarity for known clause types.
 
-### Classifier (TF-IDF + Logistic Regression, with keyword fallback)
+### Classifier — three separate evaluations, each measuring something different
 
-Overall accuracy: **83.2%** | Weighted F1: **0.83** | Clause types covered: **42**
+There are three distinct numbers below because they answer three different questions. Conflating them (as an earlier version of this README did) overstates the model.
 
-Training data: 9,598 labeled clauses (9,447 CUAD + 151 Indian supplemental), 80/20 train/test split.
+#### 1. Clean 47-class held-out benchmark (ML model only)
 
-| Clause type | F1 | Notes |
-|---|---|---|
-| GoverningLaw | 0.99 | |
-| Arbitration | 0.95 | boosted by Indian supplemental data |
-| Confidentiality | 0.95 | boosted by Indian supplemental data |
-| Indemnification | 0.95 | boosted by Indian supplemental data |
-| AuditRights | 0.96 | |
-| Insurance | 0.96 | |
-| Parties | 0.96 | |
-| LiabilityCap | 0.87 | |
-| RenewalTerm | 0.89 | |
-| RevenueProfitSharing | 0.89 | |
-| CovenantNotToSue | 0.90 | |
-| Termination | 0.84 | |
-| AntiAssignment | 0.86 | |
-| IPAssignment | 0.85 | |
+The primary, most trustworthy number: `models/clause_classifier.pkl` (TF-IDF + Logistic Regression) scored against a held-out 20% split of its own training data (CUAD + Indian supplemental), across **all 47 clause types**, with no keyword/embedding fallback involved. Run via `evaluation/evaluate_classifier_full47.py`.
 
-> **Previous baseline (keyword rules only):** 78.8% accuracy, 12 clause types.  
-> **Current (ML + Indian supplemental):** 83.2% accuracy, 42 clause types.
+| Metric | Score |
+|---|---|
+| Accuracy | **82.5%** |
+| Macro F1 | **0.740** |
+| Weighted F1 | **0.824** |
+| Test set | 1,940 held-out clauses, 47 classes |
+
+This is the number the InLegalBERT fine-tune (see below) is being compared against — same held-out split, same task.
+
+#### 2. Real-world spot check (full production cascade: ML → keyword → embedding)
+
+`evaluation/evaluate_classifier.py` scores the *entire* production cascade against real, messy scraped Indian-judgment text (`data/processed/clauses.jsonl`) — but only for the 12 clause types that scraping actually covers.
+
+| Metric | Score |
+|---|---|
+| Accuracy | **42.9%** |
+| Weighted F1 | **0.54** |
+| Macro F1 | **0.352** |
+| Test set | 212 real-world examples, 12 classes |
+
+> **Why this dropped from the old "78.8%" figure:** the embedding fallback stage had a self-match leak — its reference pool included the very row being classified, so a clause could match itself at confidence 1.0. Fixed by switching to leave-one-out reference pooling (`--embeddings loo`, now the default). The 42.9% above is the honest number; the old 78.8%/83.2% figures were inflated by that leak. This is expected: real, messy production text is a genuinely harder task than a clean CUAD-style held-out split.
+
+#### 3. InLegalBERT fine-tune — completed
+
+`pipeline/train_classifier_bert.py` fine-tunes [`law-ai/InLegalBERT`](https://huggingface.co/law-ai/InLegalBERT) — a legal-domain pretrained transformer — on the identical held-out split as benchmark #1, to test whether domain pretraining beats a TF-IDF+LR baseline on this task. Fine-tuned for 4 epochs (lr 2e-5, batch 16, max_length 256) on a free Colab T4 GPU — 28 minutes, vs. the 12+ hour CPU-only estimate.
+
+| Metric | TF-IDF + LR | InLegalBERT | Winner |
+|---|---|---|---|
+| Accuracy | 82.5% | **85.6%** | InLegalBERT (+3.1 pts) |
+| Macro F1 | **0.740** | 0.708 | TF-IDF+LR (−0.032) |
+| Weighted F1 | 0.824 | **0.847** | InLegalBERT (+0.023) |
+
+> **Not just "BERT wins":** InLegalBERT beats the baseline on accuracy and weighted-F1, but loses on macro-F1 — it scores **0.00 F1 on 5 of the 47 classes**, all among the thinnest in the training set: `AffiliateLicenseLicensee` (support 8), `DPDP` (support 3), `IrrevocableOrPerpetualLicense` (support 5), `NoSolicitOfCustomers` (support 10), `UnlimitedAllYouCanEatLicense` (support 3). Four fine-tuning epochs was enough to fit the well-represented classes but not enough exposure for a 110M-parameter model to generalize past the majority-class prior on the long tail; the simpler TF-IDF baseline degrades more gracefully on those same thin classes. `DPDP` (India's 2023 Digital Personal Data Protection Act) is a genuinely consequential class to be silently useless on, despite the model winning on every aggregate metric except macro-F1 — a concrete argument for reporting class-balanced metrics by default. Full per-class report: `evaluation/results/inlegalbert_47class.json`.
 
 ---
 
@@ -241,3 +259,4 @@ Training data: 9,598 labeled clauses (9,447 CUAD + 151 Indian supplemental), 80/
 - **No LLM in the pipeline** — the generator is template-based, keeping the project fully offline and reproducible.
 - **3-layer hybrid retriever** — statute map (guaranteed lookup) → FAISS (semantic) → BM25 (lexical), fused with Reciprocal Rank Fusion.
 - **Label Studio annotation skipped** — 212 import tasks are prepared (`label_studio/import_tasks.json`) but annotation was not completed; classifier validation uses scraped labels.
+- **Evaluation kept honest over impressive** — when the embedding-fallback self-match leak was found, the real-world spot-check number was left at its lower, correct value (42.9%) rather than kept at the inflated 78.8%. A clean 47-class held-out benchmark (82.5%) was added specifically so the upcoming InLegalBERT comparison has a fair, leak-free baseline.

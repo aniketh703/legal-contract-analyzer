@@ -1,5 +1,5 @@
 # HANDOFF.md
-> Last updated: 20 May 2026 | Deadline: 24 May 2026
+> Last updated: 15 Sep 2026 | Next milestone: ECD502 Mid Evaluation-1, 19 Sep 2026
 
 ---
 
@@ -25,7 +25,9 @@ Build an end-to-end **Legal Contract Analyzer** that:
 | Generator | `pipeline/generator.py` | Done |
 | Pipeline glue | `pipeline/pipeline.py` | Done |
 | Flask web app | `app/main.py` + `app/templates/index.html` | Done, tested in browser |
-| Evaluation | `evaluation/evaluate_classifier.py` + `evaluate_retriever.py` | Done |
+| Evaluation | `evaluation/evaluate_classifier.py` + `evaluate_retriever.py` + `evaluate_classifier_full47.py` | Done |
+| InLegalBERT fine-tune | `pipeline/train_classifier_bert.py` | Done — 85.6% acc / macro-F1 0.708 / weighted-F1 0.847 (see Next Steps #7) |
+| MCP server | `mcp_server/server.py` | Done — 3 tools, verified end-to-end with a real MCP client |
 | Tests | `tests/` (7 files) | **116/116 passing** (pytest + CI) |
 
 ### Data
@@ -36,29 +38,27 @@ Build an end-to-end **Legal Contract Analyzer** that:
 | Verified (human-labeled) | **0** | Label Studio annotation skipped |
 | ICA 1872 sections indexed | 185 | FAISS + BM25 in `knowledge_base/` |
 
-### Evaluation Results
+### Evaluation Results (revised — see README "Key findings" for full explanation)
 | Metric | Score |
 |--------|-------|
-| Classifier accuracy (unverified labels) | **78.8%** |
-| Classifier weighted F1 | **0.783** |
+| Classifier — clean 47-class held-out (ML only) | **82.5% acc / macro-F1 0.740** |
+| Classifier — real-world spot check (full cascade, 12 classes) | **42.9% acc** *(was 78.8% — leak fixed, see below)* |
+| Classifier — InLegalBERT fine-tune vs. same 47-class held-out | **85.6% acc / macro-F1 0.708 / weighted-F1 0.847** (loses on macro-F1 — 5 thin classes at 0.00 F1) |
 | Retriever Hit@5 — BM25 only | 23.0% |
 | Retriever Hit@5 — statute map + BM25 | **100%** |
 
-### Classifier per-type F1 (latest)
+> The old 78.8%/83.2% headline numbers were inflated by a self-match leak in the embedding fallback (its reference pool included the row being scored). Fixed via leave-one-out pooling — 42.9% is the honest real-world number for the 12-class scraped-text spot check. A separate, clean 47-class held-out benchmark (82.5%) was added as the fair baseline for the InLegalBERT comparison, since the two evaluations measure different things (see `evaluation/evaluate_classifier.py` vs `evaluation/evaluate_classifier_full47.py`).
+
+### Classifier per-type F1 (real-world spot check, 12 classes, post leak-fix)
 | Type | F1 |
 |------|----|
 | Termination | 0.739 |
-| Arbitration | 0.779 |
-| Confidentiality | 0.667 |
-| Indemnification | 0.750 |
-| NonCompete | 0.875 |
+| Arbitration | 0.653 |
+| Confidentiality | 0.444 |
 | ForceMajeure | 0.667 |
-| IPAssignment | 0.947 |
-| LiabilityCap | **0.875** *(was 0.500)* |
-| Jurisdiction | 0.772 |
-| PaymentTerms | **0.780** *(was 0.222)* |
-| GoverningLaw | 0.400 *(held)* |
-| Renewal | 0.848 |
+| GoverningLaw | 0.400 |
+
+Full per-type numbers (47-class held-out) live in `evaluation/results/tfidf_lr_baseline_47class.json`.
 
 ---
 
@@ -110,7 +110,7 @@ Build an end-to-end **Legal Contract Analyzer** that:
 ## Next Steps (in order)
 
 ### 1. ~~Fix classifier weak points~~ — **DONE** ✅
-PaymentTerms F1: 0.222 → 0.780 | LiabilityCap F1: 0.500 → 0.875 | Overall accuracy: 65.6% → 78.8%
+PaymentTerms F1: 0.222 → 0.780 | LiabilityCap F1: 0.500 → 0.875 | Overall accuracy: 65.6% → 78.8% (superseded — see #6)
 See `pipeline/classifier.py` — removed `required_all` for PaymentTerms, added `shall not exceed` / `consequential damages` patterns for LiabilityCap.
 
 ### 2. ~~Write README.md~~ — **DONE** ✅
@@ -128,6 +128,21 @@ Tested on both demo text contract and `app/uploads/test_contract.txt` (a real MS
 - ICA section references verified in report (S73, S36, S130, S74, S48, etc.)
 - All pipeline checks PASS: `<html>` present, risk labels present, ICA refs present
 - `report.html` updated in project root
+
+### 5. ~~Fix embedding-fallback self-match leak~~ — **DONE** ✅ (25 Jul 2026)
+Found the real-world spot-check number was inflated because the embedding fallback's reference pool included the row being classified. Fixed via leave-one-out pooling (`evaluation/evaluate_classifier.py --embeddings loo`, now default). Honest number: 42.9% (was 78.8%). See README "Key findings" for the full explanation of why three different classifier numbers now exist.
+
+### 6. ~~Add a clean 47-class held-out benchmark~~ — **DONE** ✅ (25 Jul 2026)
+`evaluation/evaluate_classifier_full47.py` scores the ML model alone (no fallback) across all 47 classes on a proper held-out split, persisted to `evaluation/results/held_out_test_47class.jsonl` for reproducibility. Result: 82.5% acc / macro-F1 0.740 / weighted-F1 0.824 — this is the baseline the InLegalBERT fine-tune (below) is measured against.
+
+### 7. ~~Fine-tune InLegalBERT and compare~~ — **DONE** ✅ (16 Sep 2026)
+Ran on a free Colab T4 GPU via `notebooks/finetune_inlegalbert_colab.ipynb` — 28 minutes (vs. the 12+ hr CPU-only estimate), 4 epochs, lr 2e-5. Result: accuracy 85.6% (vs. baseline 82.5%, +3.1 pts) and weighted-F1 0.847 (vs. 0.824), but macro-F1 **0.708 — lower than the baseline's 0.740**, because InLegalBERT scores 0.00 F1 on 5 of the thinnest classes (`AffiliateLicenseLicensee`, `DPDP`, `IrrevocableOrPerpetualLicense`, `NoSolicitOfCustomers`, `UnlimitedAllYouCanEatLicense` — all support ≤ 10). See README "Key findings" #3 for the full breakdown. Not wired into `pipeline/classifier.py` yet — see #9 below.
+
+### 8. ~~Merge `finetune-inlegalbert` (+ paper, + MCP server) into `master`~~ — **DONE** ✅ (16 Sep 2026)
+`claude/kind-newton-jsmo1r` (fast-forwarded onto `finetune-inlegalbert`, then merged with the IEEE paper branch) carries everything: the evaluation-leak fix, the 47-class benchmark, the completed InLegalBERT fine-tune, the Colab notebook, and the MCP server (`mcp_server/`). PR opened into `master`.
+
+### 9. Wire the winning classifier into the live pipeline — **NEXT** (toward Mid Eval-2, 21 Nov 2026)
+InLegalBERT wins on accuracy/weighted-F1 but its thin-class failures (#7) make a straight swap risky — `DPDP` is a genuinely consequential class to silently drop. Options to evaluate: class-weighted loss, targeted data augmentation for the 5 failing classes, or more epochs with per-class early stopping, before considering it as a `classifier.py` stage.
 
 ---
 
