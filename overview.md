@@ -83,7 +83,11 @@ Contract (PDF/TXT)
 ### Core pipeline
 - [x] Segmenter — PDF/TXT clause extraction, OCR fallback for scanned PDFs
 - [x] Classifier — 3-stage cascade, 47 clause types
-- [x] Retriever — 3-layer hybrid, **100% Hit@5** (statute map + BM25)
+- [x] Retriever — 3-layer hybrid, **100% Hit@5** (statute map + BM25) —
+      ⚠️ **known measurement flaw**: this number is computed using each
+      clause's ground-truth label, not what the classifier actually predicts,
+      so it only proves the statute map covers all evaluated types — not that
+      the live pipeline hits 100%. See §4 Step 1 for the fix.
 - [x] Generator — template HTML report + AI narrative summary
 - [x] Flask app — all routes, Dockerized, `docker-compose.yml`
 - [x] CI — GitHub Actions, runs the test suite on push/PR (test-only, no deploy step)
@@ -137,7 +141,67 @@ Contract (PDF/TXT)
 
 ---
 
-## 4. Features planned (committed, not yet started)
+## 4. Next phase — v2: LLM-Augmented Generator vs. v1 Template Baseline
+
+A committed, ordered plan (not yet started) to add an LLM behind the existing
+retriever and rigorously measure it against the current template-based generator,
+rather than just swapping it in on faith. Steps are sequential — each depends on
+the one before it.
+
+1. **Fix how the retriever is measured.**
+   The current Hit@5 eval hands the statute map each clause's correct, labelled
+   type, so the 100% figure only proves the map covers all 10 evaluated types —
+   not that the live pipeline hits 100%. Re-run the eval using the types the
+   *classifier actually predicts* instead. That number reflects the real
+   pipeline and may be lower. Keep the existing 171-clause, 10-type eval set and
+   explanation — just change what feeds the statute lookup.
+
+2. **Build an eval set before any LLM code.**
+   Queries, each with the correct ICA section and the expected risk facts.
+   This becomes the **v1 baseline** (scored against the current template
+   generator) before v2 exists, so the comparison in step 4 isn't retrofitted.
+
+3. **Build v2: add an LLM generator behind the existing retriever.**
+   Keep the retriever as-is; put an LLM behind it — **Gemini via Vertex AI**
+   (keeps everything on GCP, pairs with the Cloud Run deploy in step 5).
+   Output **structured JSON with citations**. The generator must **refuse to
+   answer when retrieval confidence is low** rather than let the LLM fill the
+   gap with an unsupported claim.
+
+4. **Measure v1 against v2.**
+   Hand-review at least 30 outputs; write a pass/fail check per failure type.
+   Compare: faithfulness pass rate, missed-risk rate, unsupported-citation
+   rate, Hit@k, p50/p95 latency, and cost per contract.
+
+5. **Add tracing and deploy.**
+   Add **Langfuse** tracing. Deploy on **Google Cloud Run** (the existing
+   Docker setup is the starting point — note this supersedes the Hugging Face
+   Spaces deploy as the long-term target once v2 lands; HF Spaces remains the
+   live URL until then). Result: a live URL.
+
+6. **Package it.**
+   README with the results table, an architecture diagram, and a short note
+   explaining *why* v1 used templates and v2 uses an LLM (not just that it
+   does) — the "evaluation rigor over impressive numbers" throughline this
+   project has kept everywhere else should carry through here too.
+
+7. **Later additions** (after v2 ships and is measured — not blocking it):
+   - A small LangGraph flow (classify → retrieve → draft → verify), or an MCP
+     server that exposes the analyzer (the MCP server already built for v1 —
+     §3 — may cover part of this; revisit scope once v2 exists)
+   - Per-tenant index isolation, so one client's documents never answer
+     another's query
+   - Oversized-document handling
+   - These specifically cover questions Capgemini and Tredence interviewers
+     have asked.
+
+8. **Naukri changes tied to this project.**
+   Replace the current project description there (currently presented as
+   UX/Figma work) with the Python/ML/RAG description used in the report.
+
+---
+
+## 5. Features planned (committed, not yet started)
 
 From HANDOFF.md's "Next Steps," toward Mid Eval-2 (21 Nov) and End-Term (4–5 Jan):
 
@@ -159,7 +223,7 @@ From HANDOFF.md's "Next Steps," toward Mid Eval-2 (21 Nov) and End-Term (4–5 J
 
 ---
 
-## 5. Features thought of (floated, not committed — revisit if useful)
+## 6. Features thought of (floated, not committed — revisit if useful)
 
 - **Continuous deployment**: GitHub Action that auto-pushes to the HF Space on
   every merge to `master` (needs an `HF_TOKEN` repo secret). Skipped for now —
@@ -172,7 +236,7 @@ From HANDOFF.md's "Next Steps," toward Mid Eval-2 (21 Nov) and End-Term (4–5 J
 
 ---
 
-## 6. Checklist — where things stand right now
+## 7. Checklist — where things stand right now
 
 - [x] Core pipeline working end-to-end, tested, Dockerized
 - [x] Evaluation rigor story complete (leak found+fixed, clean benchmark, honest
@@ -188,10 +252,14 @@ From HANDOFF.md's "Next Steps," toward Mid Eval-2 (21 Nov) and End-Term (4–5 J
 - [ ] Paper submitted
 - [ ] Mid Eval-2 (21 Nov 2026)
 - [ ] End-Term (4–5 Jan 2027)
+- [ ] **v2 plan (§4), not started:** retriever eval fixed to use predicted
+      types · v1 eval set built · Gemini/Vertex AI generator built · v1-vs-v2
+      hand-reviewed comparison (≥30 outputs) · Langfuse tracing · Cloud Run
+      deploy · README/diagram/demo-video packaging · Naukri description updated
 
 ---
 
-## 7. Taking this to the next level — ideas beyond current scope
+## 8. Taking this to the next level — ideas beyond current scope
 
 Roughly ordered by "cheap and high-signal" → "bigger lift":
 
