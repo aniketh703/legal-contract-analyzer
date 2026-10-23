@@ -30,8 +30,5 @@ pytest>=8.0.0
 pytesseract>=0.3.10
 Pillow>=10.0.0
 
-# Labeling tool (optional)
-label-studio>=1.23.0
-
 # MCP server (optional — exposes the pipeline as agent tools, see mcp_server/)
 mcp[cli]>=2.0.0
