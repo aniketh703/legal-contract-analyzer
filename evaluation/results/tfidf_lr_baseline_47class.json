@@ -1,0 +1,304 @@
+{
+  "description": "Full 47-class evaluation of models/clause_classifier.pkl (ML stage only, no keyword/embedding fallback) on a held-out slice of the CUAD+Indian training data, using the same split as pipeline/train_classifier.py.",
+  "held_out_source": "C:\\Users\\Ani\\OneDrive\\Desktop\\legal contract Analyzer\\rag-legal-contract-analyzer\\evaluation\\results\\held_out_test_47class.jsonl",
+  "n_test_samples": 1940,
+  "n_classes": 47,
+  "accuracy": 0.8247,
+  "classification_report": {
+    "AffiliateLicenseLicensee": {
+      "precision": 0.42857142857142855,
+      "recall": 0.375,
+      "f1-score": 0.4,
+      "support": 8.0
+    },
+    "AffiliateLicenseLicensor": {
+      "precision": 0.6666666666666666,
+      "recall": 0.5,
+      "f1-score": 0.5714285714285714,
+      "support": 4.0
+    },
+    "AgreementDate": {
+      "precision": 0.6666666666666666,
+      "recall": 0.5,
+      "f1-score": 0.5714285714285714,
+      "support": 4.0
+    },
+    "AntiAssignment": {
+      "precision": 0.8839285714285714,
+      "recall": 0.8181818181818182,
+      "f1-score": 0.8497854077253219,
+      "support": 121.0
+    },
+    "Arbitration": {
+      "precision": 0.8333333333333334,
+      "recall": 1.0,
+      "f1-score": 0.9090909090909091,
+      "support": 10.0
+    },
+    "AuditRights": {
+      "precision": 0.9523809523809523,
+      "recall": 0.9448818897637795,
+      "f1-score": 0.9486166007905138,
+      "support": 127.0
+    },
+    "ChangeOfControl": {
+      "precision": 0.7115384615384616,
+      "recall": 0.7708333333333334,
+      "f1-score": 0.74,
+      "support": 48.0
+    },
+    "CompetitiveRestrictionException": {
+      "precision": 0.4666666666666667,
+      "recall": 0.3684210526315789,
+      "f1-score": 0.4117647058823529,
+      "support": 19.0
+    },
+    "Confidentiality": {
+      "precision": 1.0,
+      "recall": 0.9,
+      "f1-score": 0.9473684210526315,
+      "support": 10.0
+    },
+    "CovenantNotToSue": {
+      "precision": 0.8857142857142857,
+      "recall": 0.9393939393939394,
+      "f1-score": 0.9117647058823529,
+      "support": 33.0
+    },
+    "DPDP": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 3.0
+    },
+    "DocumentName": {
+      "precision": 0.96875,
+      "recall": 0.96875,
+      "f1-score": 0.96875,
+      "support": 32.0
+    },
+    "EffectiveDate": {
+      "precision": 0.68,
+      "recall": 0.6071428571428571,
+      "f1-score": 0.6415094339622641,
+      "support": 28.0
+    },
+    "Exclusivity": {
+      "precision": 0.6712328767123288,
+      "recall": 0.6125,
+      "f1-score": 0.6405228758169934,
+      "support": 80.0
+    },
+    "ExpirationDate": {
+      "precision": 0.8701298701298701,
+      "recall": 0.8170731707317073,
+      "f1-score": 0.8427672955974843,
+      "support": 82.0
+    },
+    "ForceMajeure": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 8.0
+    },
+    "GST": {
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.8,
+      "support": 3.0
+    },
+    "GoverningLaw": {
+      "precision": 1.0,
+      "recall": 0.9555555555555556,
+      "f1-score": 0.9772727272727273,
+      "support": 90.0
+    },
+    "IPAssignment": {
+      "precision": 0.8452380952380952,
+      "recall": 0.8554216867469879,
+      "f1-score": 0.8502994011976048,
+      "support": 83.0
+    },
+    "Indemnification": {
+      "precision": 0.8333333333333334,
+      "recall": 1.0,
+      "f1-score": 0.9090909090909091,
+      "support": 10.0
+    },
+    "Insurance": {
+      "precision": 0.9807692307692307,
+      "recall": 0.9357798165137615,
+      "f1-score": 0.9577464788732394,
+      "support": 109.0
+    },
+    "IrrevocableOrPerpetualLicense": {
+      "precision": 0.125,
+      "recall": 0.2,
+      "f1-score": 0.15384615384615385,
+      "support": 5.0
+    },
+    "LiabilityCap": {
+      "precision": 0.900990099009901,
+      "recall": 0.8348623853211009,
+      "f1-score": 0.8666666666666667,
+      "support": 109.0
+    },
+    "LicenseGrant": {
+      "precision": 0.7578125,
+      "recall": 0.7404580152671756,
+      "f1-score": 0.749034749034749,
+      "support": 131.0
+    },
+    "LiquidatedDamages": {
+      "precision": 0.8421052631578947,
+      "recall": 0.7619047619047619,
+      "f1-score": 0.8,
+      "support": 21.0
+    },
+    "MinimumCommitment": {
+      "precision": 0.7790697674418605,
+      "recall": 0.8481012658227848,
+      "f1-score": 0.8121212121212121,
+      "support": 79.0
+    },
+    "MostFavoredNation": {
+      "precision": 0.6666666666666666,
+      "recall": 0.2857142857142857,
+      "f1-score": 0.4,
+      "support": 7.0
+    },
+    "NoSolicitOfCustomers": {
+      "precision": 0.5,
+      "recall": 0.3,
+      "f1-score": 0.375,
+      "support": 10.0
+    },
+    "NoSolicitOfEmployees": {
+      "precision": 0.8235294117647058,
+      "recall": 0.875,
+      "f1-score": 0.8484848484848485,
+      "support": 16.0
+    },
+    "NonCompete": {
+      "precision": 0.6,
+      "recall": 0.7647058823529411,
+      "f1-score": 0.6724137931034483,
+      "support": 51.0
+    },
+    "NonDisparagement": {
+      "precision": 0.8333333333333334,
+      "recall": 0.4166666666666667,
+      "f1-score": 0.5555555555555556,
+      "support": 12.0
+    },
+    "NonTransferableLicense": {
+      "precision": 0.2608695652173913,
+      "recall": 0.3157894736842105,
+      "f1-score": 0.2857142857142857,
+      "support": 19.0
+    },
+    "Parties": {
+      "precision": 0.9344262295081968,
+      "recall": 0.9743589743589743,
+      "f1-score": 0.9539748953974896,
+      "support": 117.0
+    },
+    "PostTerminationServices": {
+      "precision": 0.7560975609756098,
+      "recall": 0.7560975609756098,
+      "f1-score": 0.7560975609756098,
+      "support": 82.0
+    },
+    "PriceRestrictions": {
+      "precision": 1.0,
+      "recall": 0.6,
+      "f1-score": 0.75,
+      "support": 5.0
+    },
+    "RenewalTerm": {
+      "precision": 0.9090909090909091,
+      "recall": 0.7894736842105263,
+      "f1-score": 0.8450704225352113,
+      "support": 38.0
+    },
+    "RevenueProfitSharing": {
+      "precision": 0.9186046511627907,
+      "recall": 0.9634146341463414,
+      "f1-score": 0.9404761904761905,
+      "support": 82.0
+    },
+    "RofrRofoRofn": {
+      "precision": 0.8441558441558441,
+      "recall": 0.9154929577464789,
+      "f1-score": 0.8783783783783784,
+      "support": 71.0
+    },
+    "SourceCodeEscrow": {
+      "precision": 0.8333333333333334,
+      "recall": 0.8333333333333334,
+      "f1-score": 0.8333333333333334,
+      "support": 12.0
+    },
+    "SpecificPerformance": {
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1-score": 0.8571428571428571,
+      "support": 3.0
+    },
+    "StampDuty": {
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1-score": 0.8,
+      "support": 3.0
+    },
+    "Termination": {
+      "precision": 0.6842105263157895,
+      "recall": 0.8666666666666667,
+      "f1-score": 0.7647058823529411,
+      "support": 45.0
+    },
+    "ThirdPartyBeneficiary": {
+      "precision": 0.75,
+      "recall": 0.75,
+      "f1-score": 0.75,
+      "support": 8.0
+    },
+    "UncappedLiability": {
+      "precision": 0.8125,
+      "recall": 0.7878787878787878,
+      "f1-score": 0.8,
+      "support": 33.0
+    },
+    "UnlimitedAllYouCanEatLicense": {
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1-score": 0.0,
+      "support": 3.0
+    },
+    "VolumeRestriction": {
+      "precision": 0.6153846153846154,
+      "recall": 0.7272727272727273,
+      "f1-score": 0.6666666666666666,
+      "support": 33.0
+    },
+    "WarrantyDuration": {
+      "precision": 0.7317073170731707,
+      "recall": 0.9090909090909091,
+      "f1-score": 0.8108108108108109,
+      "support": 33.0
+    },
+    "accuracy": 0.8247422680412371,
+    "macro avg": {
+      "precision": 0.7654001709094022,
+      "recall": 0.7323096048030411,
+      "f1-score": 0.7398872612274223,
+      "support": 1940.0
+    },
+    "weighted avg": {
+      "precision": 0.8283041226510912,
+      "recall": 0.8247422680412371,
+      "f1-score": 0.8237755353007022,
+      "support": 1940.0
+    }
+  }
+}

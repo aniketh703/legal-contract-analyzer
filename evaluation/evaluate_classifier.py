@@ -1,11 +1,33 @@
 """
 evaluation/evaluate_classifier.py
 ==================================
-Measures classifier accuracy against ground-truth labels in clauses.jsonl.
+SCOPE: this is a real-world scraped-text spot check, NOT a full-taxonomy
+evaluation. It covers only 12 of the 47 clause types the trained classifier
+(models/clause_classifier.pkl) actually supports -- exactly the 12 categories
+pipeline/curate_clauses.py scrapes Indian-judgment text into. The other 35
+CUAD-derived types (LicenseGrant, AuditRights, Insurance, ...) have zero
+representation in data/processed/clauses.jsonl and cannot be scored here.
+
+For full 47-class coverage, run evaluate_classifier_full47.py, which scores
+the ML model against a held-out slice of the actual CUAD+Indian training data.
+
+This script exists to sanity-check the full production cascade
+(ML -> keyword -> embedding) against messy, real Indian-judgment-derived
+clause text, which the held-out CUAD/Indian split does not exercise.
 
 Works in two modes:
   --mode all       : use all clauses (scraped labels as ground truth)
   --mode verified  : use only human-verified clauses (after Label Studio)
+
+Embedding fallback (--embeddings):
+  loo    (default) : leave-one-out reference pool -- excludes the row being
+                      classified from its own nearest-neighbour search, so a
+                      clause can't self-match. Honest numbers.
+  leaky             : reproduces the old bug where the reference pool was the
+                      same clauses.jsonl file used as ground truth, so a
+                      clause could match itself at confidence 1.0. Kept only
+                      so the leaky-vs-fixed delta can be reproduced/compared.
+  off               : disable the embedding fallback entirely (ML+keyword only).
 
 Outputs:
   - Per-type precision, recall, F1
@@ -16,7 +38,8 @@ Outputs:
 Usage:
     python evaluation/evaluate_classifier.py
     python evaluation/evaluate_classifier.py --mode verified
-    python evaluation/evaluate_classifier.py --no-embeddings
+    python evaluation/evaluate_classifier.py --embeddings off
+    python evaluation/evaluate_classifier.py --embeddings leaky
 """
 
 from __future__ import annotations
@@ -31,11 +54,19 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from pipeline.segmenter import segment_contract
-from pipeline.classifier import classify_clauses
+from pipeline.classifier import classify_clauses, _embed, _load_embedding_model, _accept_prediction, _RISK, _UNKNOWN_RISK
 
 CLAUSES_PATH = ROOT / "data" / "processed" / "clauses.jsonl"
 RESULTS_DIR  = ROOT / "evaluation" / "results"
 
+SCOPE_NOTE = (
+    "SCOPE: real-world scraped-text spot check on 12 of the 47 clause types "
+    "the trained classifier supports (see pipeline/curate_clauses.py's scrape "
+    "taxonomy). NOT a full-taxonomy evaluation -- run evaluate_classifier_full47.py "
+    "for that."
+)
+
+# NOTE: only 12 of the classifier's 47 trained types -- see SCOPE_NOTE above.
 CLAUSE_TYPES = [
     "Termination", "Arbitration", "Confidentiality", "Indemnification",
     "NonCompete", "ForceMajeure", "IPAssignment", "LiabilityCap",
@@ -121,10 +152,66 @@ def load_clauses(mode: str) -> list[dict]:
 
 
 # ---------------------------------------------------------------------------
+# Leave-one-out embedding fallback (fixes the self-match leak)
+# ---------------------------------------------------------------------------
+
+def _apply_embedding_stage_leave_one_out(
+    clauses: list[dict],
+    labelled: list[dict],
+    model_name: str = "law-ai/InLegalBERT",
+) -> list[dict]:
+    """
+    Resolve clauses that ML+keyword left as method="none" via embedding
+    similarity, excluding each query's own row from its reference pool.
+
+    Mirrors pipeline.classifier's stage-3 embedding fallback, but computes a
+    per-query reference pool (all clauses minus itself) instead of reusing a
+    shared pool that includes the query -- that's what let a clause match
+    itself at confidence 1.0 in the old (leaky) evaluation path.
+    """
+    unresolved_idx = [i for i, l in enumerate(labelled) if l["method"] == "none"]
+    if not unresolved_idx:
+        return labelled
+
+    import numpy as np
+
+    tokenizer, model, device = _load_embedding_model(model_name)
+
+    print(f"[eval] Embedding {len(clauses)} clauses for leave-one-out fallback "
+          f"({len(unresolved_idx)} unresolved by ML+keyword) ...")
+    all_embs = np.vstack([_embed(c["clause_text"][:512], tokenizer, model, device) for c in clauses])
+    all_labels = [c["clause_type"] for c in clauses]
+
+    for i in unresolved_idx:
+        text = clauses[i]["clause_text"]
+        heading = clauses[i].get("heading", "")
+
+        mask = np.ones(len(all_labels), dtype=bool)
+        mask[i] = False  # leave-one-out: exclude the query's own row
+        scores = all_embs[mask] @ all_embs[i]
+        masked_labels = [lbl for j, lbl in enumerate(all_labels) if j != i]
+
+        best_idx = int(np.argmax(scores))
+        confidence = max(float(scores[best_idx]), 0.0)
+        ctype = masked_labels[best_idx]
+
+        accepted = _accept_prediction(ctype, confidence, text, heading)
+        if accepted is not None:
+            ctype, confidence = accepted
+            labelled[i]["clause_type"] = ctype
+            labelled[i]["risk_level"] = _RISK.get(ctype, _UNKNOWN_RISK)
+            labelled[i]["confidence"] = round(confidence, 3)
+            labelled[i]["method"] = "embedding_loo"
+        # else: leave as method="none" / Unknown, same as production's guard rejection
+
+    return labelled
+
+
+# ---------------------------------------------------------------------------
 # Run evaluation
 # ---------------------------------------------------------------------------
 
-def run(mode: str = "all", use_embeddings: bool = False) -> dict:
+def run(mode: str = "all", embeddings: str = "loo") -> dict:
     clauses = load_clauses(mode)
 
     if not clauses:
@@ -132,7 +219,7 @@ def run(mode: str = "all", use_embeddings: bool = False) -> dict:
               f"Run Label Studio annotation first for --mode verified.")
         sys.exit(1)
 
-    print(f"Evaluating classifier on {len(clauses)} clauses (mode={mode})...")
+    print(f"Evaluating classifier on {len(clauses)} clauses (mode={mode}, embeddings={embeddings})...")
 
     # Build fake segmenter-style dicts from ground-truth clauses
     segments = [
@@ -146,12 +233,19 @@ def run(mode: str = "all", use_embeddings: bool = False) -> dict:
         for i, r in enumerate(clauses)
     ]
 
-    labelled = classify_clauses(segments, use_embeddings=use_embeddings)
+    # "leaky" reproduces the old bug via classify_clauses' built-in embedding
+    # stage (shared reference pool = the ground-truth file itself). "loo" and
+    # "off" both run ML+keyword only here; "loo" then fills gaps itself below.
+    labelled = classify_clauses(segments, use_embeddings=(embeddings == "leaky"))
+
+    if embeddings == "loo":
+        labelled = _apply_embedding_stage_leave_one_out(clauses, labelled)
 
     y_true = [r["clause_type"] for r in clauses]
     y_pred = [l["clause_type"] for l in labelled]
 
     metrics = compute_metrics(y_true, y_pred)
+    metrics["embeddings_mode"] = embeddings
     return metrics
 
 
@@ -161,8 +255,10 @@ def run(mode: str = "all", use_embeddings: bool = False) -> dict:
 
 def print_report(metrics: dict, mode: str) -> None:
     print(f"\n{'='*60}")
-    print(f"CLASSIFIER EVALUATION  (mode={mode}, n={metrics['n_samples']})")
+    print(f"CLASSIFIER EVALUATION -- 12/47-CLASS SPOT CHECK  (mode={mode}, "
+          f"embeddings={metrics.get('embeddings_mode', '?')}, n={metrics['n_samples']})")
     print(f"{'='*60}")
+    print(SCOPE_NOTE)
     print(f"\n{'Type':<20} {'Prec':>6} {'Rec':>6} {'F1':>6} {'Support':>8}")
     print(f"{'-'*48}")
 
@@ -184,7 +280,7 @@ def print_report(metrics: dict, mode: str) -> None:
 def save_report(metrics: dict, mode: str) -> None:
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     out = RESULTS_DIR / "classifier_report.json"
-    payload = {"mode": mode, **metrics}
+    payload = {"scope": SCOPE_NOTE, "mode": mode, **metrics}
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print(f"\nSaved -> {out}")
 
@@ -196,10 +292,15 @@ def save_report(metrics: dict, mode: str) -> None:
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=["all", "verified"], default="all")
-    parser.add_argument("--no-embeddings", action="store_true")
+    parser.add_argument(
+        "--embeddings", choices=["loo", "leaky", "off"], default="loo",
+        help="loo (default): leave-one-out fallback, no self-match leak. "
+             "leaky: old buggy shared-pool behavior, for comparison only. "
+             "off: ML+keyword stages only.",
+    )
     args = parser.parse_args()
 
-    metrics = run(mode=args.mode, use_embeddings=not args.no_embeddings)
+    metrics = run(mode=args.mode, embeddings=args.embeddings)
     print_report(metrics, args.mode)
     save_report(metrics, args.mode)
 

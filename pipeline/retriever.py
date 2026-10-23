@@ -37,6 +37,7 @@ from __future__ import annotations
 import json
 import math
 import re
+import sys
 import warnings
 from pathlib import Path
 from typing import Any
@@ -304,11 +305,11 @@ def load_kb_artifacts(
     if cache_key in cache:
         return cache[cache_key]
 
-    print("[retriever] Loading knowledge base artifacts...")
+    print("[retriever] Loading knowledge base artifacts...", file=sys.stderr)
     registry = _load_registry(kb_dir)
     section_ids = list(registry.keys())
 
-    print("[retriever] Building BM25 index...")
+    print("[retriever] Building BM25 index...", file=sys.stderr)
     _, bm25_corpus, bm25_fn = _build_bm25(registry)
 
     faiss_index = None
@@ -317,8 +318,8 @@ def load_kb_artifacts(
     if faiss_path.exists():
         try:
             faiss_index = _load_faiss(kb_dir)
-            print(f"[retriever] FAISS index: {faiss_index.ntotal} vectors")
-            print(f"[retriever] Loading model: {model_name}")
+            print(f"[retriever] FAISS index: {faiss_index.ntotal} vectors", file=sys.stderr)
+            print(f"[retriever] Loading model: {model_name}", file=sys.stderr)
             tok, mdl, device = _load_model(model_name)
         except Exception as exc:
             warnings.warn(
@@ -395,7 +396,7 @@ def retrieve_statutes(
         enriched["retrieved_sections"] = sections
         results.append(enriched)
 
-    print(f"[retriever] Done. Retrieved statutes for {len(results)} clauses.")
+    print(f"[retriever] Done. Retrieved statutes for {len(results)} clauses.", file=sys.stderr)
     return results
 
 
@@ -404,7 +405,6 @@ def retrieve_statutes(
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    import sys
     from pipeline.segmenter import segment_contract
     from pipeline.classifier import classify_clauses
 

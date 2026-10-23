@@ -1,0 +1,41 @@
+======================================================================
+TOOLS DISCOVERED: ['analyze_contract', 'lookup_statute_section', 'list_clause_types']
+======================================================================
+
+--- list_clause_types() ---
+count: 47
+sample: {'AffiliateLicenseLicensee': 'LOW', 'AffiliateLicenseLicensor': 'LOW', 'AgreementDate': 'LOW', 'AntiAssignment': 'HIGH', 'Arbitration': 'MEDIUM'}
+
+--- lookup_statute_section('73') ---
+section_number: 73
+title: Compensation for loss or damage caused by breach of contract
+text (first 200 chars): Section 73. Compensation for loss or damage caused by breach of contract. Compensation for failure to discharge obligation resembling those created by contract.
+
+been
+broken, the party who suffers by 
+
+--- analyze_contract(demo contract) ---
+contract_name: MCP Test Contract
+summary: {'total_clauses': 5, 'high_risk': 3, 'medium_risk': 2, 'low_risk': 0}
+  - type=ExpirationDate       risk=HIGH     sections=['ICA_S62', 'ICA_S130', 'ICA_S58']
+  - type=Termination          risk=HIGH     sections=['ICA_S74', 'ICA_S73', 'ICA_S215']
+  - type=Confidentiality      risk=MEDIUM   sections=['ICA_S27', 'IT_S79', 'ICA_S132']
+  - type=Indemnification      risk=HIGH     sections=['ICA_S125', 'ICA_S124', 'ICA_S222']
+
+======================================================================
+ALL THREE TOOLS CALLED SUCCESSFULLY
+======================================================================
+
+--- re-verification after fixing the thread-safety + error-message bugs ---
+
+=== Finding 1: concurrent analyze_contract calls ===
+All 3 concurrent calls succeeded, no JSON-RPC corruption.
+
+=== Finding 2: non-contract text (resume) rejection message ===
+{
+  "error": "This file does not appear to be a legal contract. Please upload a commercial agreement (MSA, NDA, employment contract, etc.). LinkedIn profiles and resumes are not supported.",
+  "contract_name": "Resume"
+}
+Specific gate-rejection message correctly surfaced (not the generic fallback).
+
+=== ALL CHECKS PASSED ===

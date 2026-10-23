@@ -58,35 +58,56 @@ def normalize_type(raw: str) -> str:
     return "".join(w.capitalize() for w in words if w)
 
 
-def main() -> None:
+def load_combined_source(verbose: bool = False, log_prefix: str = "[train]") -> pd.DataFrame:
+    """
+    Load + filter the CUAD and (if present) Indian supplemental clause CSVs,
+    concatenate them, and add a normalised `type_norm` column.
+
+    Shared by train_classifier.py, evaluate_classifier_full47.py, and
+    train_classifier_bert.py so the loading/filtering/normalisation logic
+    that defines "the training data" lives in exactly one place.
+    """
     if not CSV_PATH.exists():
-        sys.exit(f"[train] CSV not found: {CSV_PATH}\nExpected path: {CSV_PATH}")
+        sys.exit(f"{log_prefix} CSV not found: {CSV_PATH}\nExpected path: {CSV_PATH}")
 
     # --- Load primary CUAD dataset (US contracts) ---
-    print(f"[train] Loading {CSV_PATH.name} (CUAD) ...")
+    if verbose:
+        print(f"{log_prefix} Loading {CSV_PATH.name} (CUAD) ...")
     df_cuad = pd.read_csv(CSV_PATH)
     df_cuad = df_cuad.dropna(subset=["clause_text", "clause_type", "risk_level"])
     df_cuad["clause_text"] = df_cuad["clause_text"].astype(str).str.strip()
     df_cuad = df_cuad[df_cuad["clause_text"].str.len() > 10]
-    print(f"[train]   CUAD rows: {len(df_cuad):,}")
+    if verbose:
+        print(f"{log_prefix}   CUAD rows: {len(df_cuad):,}")
 
     # --- Load supplemental Indian clauses ---
     if INDIAN_CSV_PATH.exists():
-        print(f"[train] Loading {INDIAN_CSV_PATH.name} (Indian supplemental) ...")
+        if verbose:
+            print(f"{log_prefix} Loading {INDIAN_CSV_PATH.name} (Indian supplemental) ...")
         df_indian = pd.read_csv(INDIAN_CSV_PATH)
         df_indian = df_indian.dropna(subset=["clause_text", "clause_type", "risk_level"])
         df_indian["clause_text"] = df_indian["clause_text"].astype(str).str.strip()
         df_indian = df_indian[df_indian["clause_text"].str.len() > 10]
-        print(f"[train]   Indian rows: {len(df_indian):,} ({df_indian['clause_type'].nunique()} types)")
+        if verbose:
+            print(f"{log_prefix}   Indian rows: {len(df_indian):,} ({df_indian['clause_type'].nunique()} types)")
         df = pd.concat([df_cuad, df_indian], ignore_index=True)
     else:
-        print(f"[train] No Indian supplemental CSV found at {INDIAN_CSV_PATH}, skipping.")
+        if verbose:
+            print(f"{log_prefix} No Indian supplemental CSV found at {INDIAN_CSV_PATH}, skipping.")
         df = df_cuad
 
-    print(f"[train] Combined: {len(df):,} rows | {df['clause_type'].nunique()} raw types")
+    if verbose:
+        print(f"{log_prefix} Combined: {len(df):,} rows | {df['clause_type'].nunique()} raw types")
 
     df["type_norm"] = df["clause_type"].apply(normalize_type)
-    print(f"[train] {df['type_norm'].nunique()} normalised types after aliasing")
+    if verbose:
+        print(f"{log_prefix} {df['type_norm'].nunique()} normalised types after aliasing")
+
+    return df
+
+
+def main() -> None:
+    df = load_combined_source(verbose=True)
 
     # Majority risk level per normalised type (stored uppercase)
     risk_map: dict[str, str] = (
