@@ -175,7 +175,16 @@ the one before it.
    This becomes the **v1 baseline** (scored against the current template
    generator) before v2 exists, so the comparison in step 4 isn't retrofitted.
 
-   **Status: data collection in progress (by hand, from Indian Kanoon).** Schema,
+   **Status: tooling built (loader + v1 scorer, 46 tests); data collection in
+   progress (by hand, from Indian Kanoon).** `evaluation/gold_set.py` loads and
+   validates the CSV (rejects bad rows, reused judgments, and clauses overlapping
+   the training pool; computes scope in/mixed/out from the KB index).
+   `evaluation/score_analyzer.py` scores any analyzer through a small `Analyzer`
+   interface — v1 is wrapped as `V1Analyzer`, v2 will plug into the same harness —
+   reporting hit@k / recall / MRR, type accuracy, citation precision,
+   unsupported-citation rate, refusal behaviour, p50/p95 latency and cost, and
+   writes the stratified hand-review sheet for Step 4. Not yet run on real data;
+   the v1 baseline number lands once rows arrive. Schema,
    inclusion rules, targets and a do-not-reuse list of the 93 judgments already
    used live in `data/eval/`. Why a new set: `clauses.jsonl` is auto-extracted
    (0 verified, `statute_reference` empty in all 212 rows), and the expected-statute

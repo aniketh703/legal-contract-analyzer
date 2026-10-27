@@ -2,6 +2,7 @@
 
 Independent ground truth for the v2 comparison (see `overview.md` §4). Each row is one
 contract clause quoted **verbatim** in a court judgment, plus what *the court* said about it.
+Save your rows as `data/eval/kanoon_gold.csv` (start from `kanoon_gold_template.csv`).
 
 ## Why this exists
 
@@ -20,52 +21,94 @@ the same assumptions. Court-stated sections break that circularity.
 - A commercial/employment contract clause. Skip pure tax, service-law and criminal matters.
 - Not in `exclude_kanoon_doc_ids.txt` (93 judgments the classifier/retriever data already used).
 - At most 2 rows per judgment. The clause must make sense on its own (≤ ~150 words).
-- Fill the fields by **reading**; don't have an LLM label them, or the eval inherits its blind spots.
+- `sections_applied`, `outcome` and `holding` come from **your own reading** of the judgment.
+  `clause_type` and `risk_facts` may be left blank: they are drafted from your `holding` and you
+  confirm them before anything is scored.
 
 ## Columns (`kanoon_gold_template.csv`)
 
-| Column | Content |
-|---|---|
-| `id` | `KAN-001`, `KAN-002`, ... |
-| `url` | `https://indiankanoon.org/doc/<id>/` |
-| `case_name`, `court` | e.g. `SC`, `HC-Delhi`, `HC-Bombay` |
-| `judgment_date` | `YYYY-MM-DD` (year only if that's all you can find) |
-| `clause_text` | verbatim clause, keep the clause number if given |
-| `clause_type` | one of the 47 types in `models/risk_map.json`, else `OTHER` |
-| `sections_applied` | sections the court applied to this clause, `;`-separated, as `<ACT>_S<n>` |
-| `outcome` | `unenforceable` \| `enforceable` \| `partly_enforceable` (read down / narrowed) |
-| `holding` | 1-2 sentences: what the court held about this clause |
-| `risk_facts` | 1-3 atomic facts a correct analysis must state, separated by ` \|\| ` |
-| `source_para` | paragraph number(s) where the clause and its treatment appear |
-| `notes` | anything odd |
+| Column | Required | Content |
+|---|---|---|
+| `url` | yes | `https://indiankanoon.org/doc/<id>/` |
+| `clause_text` | yes | verbatim clause, keep the clause number if given |
+| `sections_applied` | yes | section(s) the court applied to this clause, `;`-separated, as `<ACT>_S<n>` |
+| `outcome` | yes | `unenforceable` \| `enforceable` \| `partly_enforceable` (read down / narrowed) |
+| `holding` | yes | 1-2 sentences: what the court held about this clause |
+| `id` | no | `KAN-001`, ... (auto-assigned if blank) |
+| `case_name`, `court`, `judgment_date` | no, but wanted | e.g. `SC`, `HC-Delhi`; date as `YYYY-MM-DD` (year alone is fine) |
+| `clause_type` | no | one of the 47 types in `models/risk_map.json`, else `OTHER` |
+| `risk_facts` | no | 1-3 atomic facts a correct analysis must state, separated by ` \|\| ` |
+| `source_para` | no | paragraph number(s) where the clause and its treatment appear |
+| `notes` | no | anything odd |
 
-`risk_facts` are phrased as statements of law about the clause, each independently checkable
-(these become the per-fact pass/fail checks for the missed-risk rate). Format only, not data:
-`A restraint that operates after employment ends is void under S.27 ICA || A restraint operating
-only during employment is not caught by S.27`.
+`risk_facts` are statements of law about the clause, each independently checkable (the per-fact
+pass/fail in the hand review). Format only, not data: `A restraint that operates after employment
+ends is void under S.27 ICA || A restraint operating only during employment is not caught by S.27`.
 
 Act prefixes: `ICA_S27` (Contract Act 1872), `ARB_S34` (Arbitration and Conciliation Act 1996),
 `SRA_S14` (Specific Relief), `STAMP_S35`, `COPY_S18`, `CPC_S20`, `LIM_S3`, `CPA_S2`, `COMP_S3`,
-`IT_S43A`, `DPDP_S4`. Any new short prefix is fine.
+`IT_S43A`, `DPDP_S4`. Any new short prefix is fine. A bare "Section 27" is rejected: say which Act.
+The outcome column also accepts `void`, `valid`, `upheld`, `partial`, `read down` and maps them.
 
 ## Scope is computed, not entered
 
-The retriever index holds ICA (185 sections), `ARB_S8`, `ARB_S11`, `IT_S43A`, `IT_S79`. A row is
-**in scope** when every section in `sections_applied` is in the index; otherwise it is an
-out-of-scope row used to test refusal. Index gaps (absent from the index): ICA S.16, S.76-123
-(repealed Sale of Goods part), S.151, 161, 185, 186, 213. Record what the court applied even
-when it's missing here; those rows expose real KB gaps.
+The retriever index holds ICA (185 sections), `ARB_S8`, `ARB_S11`, `IT_S43A`, `IT_S79`. For each row
+the loader compares `sections_applied` with the index:
+
+| Scope | Meaning | Used for |
+|---|---|---|
+| `in` | every applied section is in the index | retrieval metrics, and "should not refuse" |
+| `mixed` | some are | retrieval metrics only (scored against the in-index sections) |
+| `out` | none are | "should refuse" test |
+
+Index gaps (absent from the index): ICA S.16, S.76-123 (repealed Sale of Goods part), S.151, 161,
+185, 186, 213. Record what the court applied even when it's missing here; those rows expose real
+KB gaps.
+
+## Check your file
+
+```
+python evaluation/gold_set.py data/eval/kanoon_gold.csv
+```
+
+Prints every error (a row with an error is not scored), warnings, and progress against the targets
+below. Catches: missing/odd fields, duplicate ids or clause text, judgments on the exclude list, and
+clauses that overlap `data/processed/clauses.jsonl` (the classifier's reference pool).
 
 ## Targets
 
 | | Minimum | Target |
 |---|---|---|
-| Total rows | 30 | 60 |
-| In-scope, by type (S.27 restraints, S.74 damages/penalty, S.73 breach/termination, S.56 force majeure / frustration, S.124-125 indemnity, liability limits, S.28 arbitration / jurisdiction, payment / time, novation / renewal) | >= 3 each | >= 5 each |
+| Total usable rows | 30 | 60 |
+| In-scope, by section group (S.27, S.74, S.73, S.56, S.124-125, S.28/arbitration, S.55, S.62, liability limits) | >= 3 each | >= 5 each |
 | Out-of-scope (other statute governs: IP assignment, specific performance, stamp duty, A&C Act, consumer / competition, data protection) | 6 | 12-15 |
-| Outcome `enforceable` / `partly_enforceable` | >= 30% | >= 40% of in-scope |
+| Outcome `enforceable` / `partly_enforceable` | >= 30% of in-scope | >= 40% |
 | Judgments dated 2024-2026 | >= 1/3 | >= 1/2 |
 | Landmark / famous cases | <= 1/3 | <= 1/3 |
+
+## Scoring v1 (and later v2)
+
+```
+python evaluation/score_analyzer.py --gold data/eval/kanoon_gold.csv --review-sheet review.csv
+```
+
+Add `--no-embeddings` where torch / the InLegalBERT download isn't available (the numbers then
+approximate the live pipeline). Automatic metrics: hit@1/3/5, recall@k, MRR, clause-type accuracy,
+citation precision against the court's sections, unsupported-citation rate, refusal behaviour,
+p50/p95 latency and cost. v2 is scored by the same code through the same `Analyzer` interface.
+
+## Hand-review checks
+
+`--review-sheet` writes a stratified sample (default 30) with these blank columns. Read the
+analyzer's output next to the court's holding and mark each:
+
+| Check | Pass when |
+|---|---|
+| `faithful` | every legal claim in the output is supported by the retrieved section text or the court's holding; nothing invented |
+| `missed_risk_facts` | count of `risk_facts` the output does not state or clearly imply (pass = 0) |
+| `unsupported_citation` | no cited section is missing from the retrieved context (pass = N) |
+| `contradicts_court` | the output never says the clause is valid when the court held it void, or the reverse (pass = N) |
+| `overflags_valid_clause` | for `enforceable` rows, the output doesn't call the clause void or illegal (pass = N) |
 
 ## Hard rules
 
