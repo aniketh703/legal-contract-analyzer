@@ -60,6 +60,9 @@ pipeline/
 data/
   raw/                330 Indian Kanoon judgment JSONs (git-ignored)
   processed/          clauses.jsonl — curated clause examples
+  legal_contract_clauses.csv  CUAD training data (9.4k labeled clauses) for train_classifier.py
+  samples/kanoon_pages/  saved Indian Kanoon pages (search results, a judgment, a fragment view)
+  eval/               gold eval set spec + tooling inputs (never used for training)
   indian_clauses.csv  151 hand-crafted Indian contract examples (Arbitration / Confidentiality / Indemnification)
   create_indian_clauses.py  script that generates indian_clauses.csv
 knowledge_base/       FAISS index + BM25 index + chunk_registry.json (185 ICA sections)
@@ -67,7 +70,8 @@ evaluation/           evaluate_classifier.py, evaluate_retriever.py, results/
 label_studio/         import_tasks.json (212 tasks), prepare_import.py
 models/               tfidf_vectorizer.pkl, clause_classifier.pkl, risk_map.json
 tests/                116 unit tests (pytest)
-notebooks/            exploration notebooks
+notebooks/            exploration notebooks + Colab fine-tune (and its executed copy with outputs)
+docs/report/          project report .docx files and the scripts that built them
 build_knowledge_base.py   one-time KB build script
 requirements.txt
 ```
@@ -149,7 +153,7 @@ The ML classifier is pre-trained and saved in `models/`. To retrain (e.g. after 
 # Regenerate the Indian supplemental CSV (if you edited create_indian_clauses.py)
 python data/create_indian_clauses.py
 
-# Retrain on CUAD + Indian supplemental data
+# Retrain on CUAD (data/legal_contract_clauses.csv) + Indian supplemental data
 python pipeline/train_classifier.py
 ```
 
