@@ -7,7 +7,8 @@ Run from the project root:
     python pipeline/train_classifier.py
 
 Expects:
-    <project-root>/../legal_contract_clauses.csv
+    <project-root>/data/legal_contract_clauses.csv
+    (falls back to the legacy <project-root>/../legal_contract_clauses.csv)
 
 Writes to models/:
     tfidf_vectorizer.pkl
@@ -30,7 +31,11 @@ from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
 
 ROOT = Path(__file__).resolve().parent.parent
-CSV_PATH = ROOT.parent / "legal_contract_clauses.csv"          # CUAD (US contracts)
+_CSV_CANDIDATES = [
+    ROOT / "data" / "legal_contract_clauses.csv",                # CUAD (US contracts)
+    ROOT.parent / "legal_contract_clauses.csv",                  # legacy location
+]
+CSV_PATH = next((p for p in _CSV_CANDIDATES if p.exists()), _CSV_CANDIDATES[0])
 INDIAN_CSV_PATH = ROOT / "data" / "indian_clauses.csv"         # supplemental Indian clauses
 MODELS_DIR = ROOT / "models"
 

@@ -52,3 +52,6 @@ app/uploads/*
 !app/uploads/.gitkeep
 
 .venv-mcp/
+
+# Office lock files
+~$*
