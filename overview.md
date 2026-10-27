@@ -46,7 +46,7 @@ Contract (PDF/TXT)
                         3. InLegalBERT embedding similarity — fallback
       │
       ▼
- Retriever              3-layer hybrid over Indian Contract Act 1872 (185 sections):
+ Retriever              3-layer hybrid over Indian Contract Act 1872 (193 sections):
                         1. Statute map — hardcoded clause-type → section, guaranteed
                         2. FAISS — semantic search
                         3. BM25 — lexical search
@@ -86,9 +86,17 @@ Contract (PDF/TXT)
 - [x] Retriever — 3-layer hybrid. The old **100% Hit@5** was a measurement flaw
       (statute map was fed each clause's ground-truth label, so it only proved
       the map covers all 10 types). Re-measured with the classifier's *predicted*
-      types (v2 Step 1, §4): **67.3% micro / 64.4% macro Hit@5** on the same
-      171 clauses (BM25 alone: 29.8% micro), ML + keyword stages only — the
-      canonical run with the InLegalBERT fallback is still pending (see §4).
+      types (v2 Step 1, §4): **66.1% micro / 63.8% macro Hit@5** on the same
+      171 clauses (BM25 alone: 32.1% micro), ML + keyword stages only, on the
+      corrected KB text — the canonical run with the InLegalBERT fallback is
+      still pending (see §4).
+- [x] KB statute text fixed — every ICA section had lost its operative opening
+      (S.27 began "ined from exercising…") because the segmenter read the
+      table of contents as headers and swallowed 80 chars of each real header.
+      Re-segmented from `ica_1872_clean.txt`; 8 sections the old parser lost
+      are now indexed (S.16 undue influence, 19A, 151, 161, 178, 185, 186, 213).
+      FAISS vectors still describe the old text until re-embedded (needs torch:
+      `python build_knowledge_base.py --clean-text knowledge_base/statutes/ica_1872_clean.txt`).
 - [x] Generator — template HTML report + AI narrative summary
 - [x] Flask app — all routes, Dockerized, `docker-compose.yml`
 - [x] CI — GitHub Actions, runs the test suite on push/PR (test-only, no deploy step)
@@ -161,9 +169,10 @@ the one before it.
    now classifies each clause with the real classifier and keys the statute map on
    the *predicted* type (ground truth still defines what counts as a hit). Result,
    ML + keyword stages only (`--embeddings off`): classifier type accuracy **48.5%**;
-   statute map + BM25 Hit@5 **67.3% micro / 64.4% macro** (was 100%); BM25-only
-   unchanged at 29.8% micro. This is lower than the old figure, as expected — and
-   it is the number to quote. The default mode (`--embeddings loo`, adds the
+   statute map + BM25 Hit@5 **66.1% micro / 63.8% macro** (was 100%); BM25-only
+   32.1% micro. (First measured at 67.3% / 64.4%, BM25 29.8%, on the truncated KB
+   text; re-measured after the KB text fix, see §3.) This is lower than the old
+   figure, as expected — and it is the number to quote. The default mode (`--embeddings loo`, adds the
    leave-one-out InLegalBERT fallback to match the live classifier) needs torch +
    a Hugging Face model download, which this sandbox blocks; run it on a machine
    or Colab that has them. The `off` run is saved separately in
@@ -191,7 +200,7 @@ the one before it.
    dict is hand-written by the same author as the statute map. Court-stated
    sections give independent ground truth, and also let us check the map itself
    (e.g. `IPAssignment`→S.10/S.11, `StampDuty`, `SpecificPerformance` and
-   `DPDP`→IT Act are all debatable; ICA S.16 is missing from the index).
+   `DPDP`→IT Act are all debatable).
    The set also needs upheld clauses (to measure over-flagging) and out-of-scope
    clauses (to test the low-confidence refusal in Step 3).
 

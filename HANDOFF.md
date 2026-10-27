@@ -195,7 +195,7 @@ User uploads contract (PDF / TXT)
         │
         ▼
   retriever.py        → adds retrieved_sections from ICA 1872 KB
-  (statute map        → FAISS index of 185 ICA sections
+  (statute map        → FAISS index of 193 ICA sections
   + FAISS + BM25
   + RRF fusion)
         │
@@ -213,4 +213,4 @@ User uploads contract (PDF / TXT)
 | Source | Used for |
 |--------|---------|
 | **Indian Kanoon JSONs** | Training/evaluation data — 212 clause examples to validate the classifier |
-| **Indian Contract Act 1872 PDF** | Knowledge base — 185 legal sections retrieved when explaining risk to the user |
+| **Indian Contract Act 1872 PDF** | Knowledge base — 193 legal sections retrieved when explaining risk to the user |

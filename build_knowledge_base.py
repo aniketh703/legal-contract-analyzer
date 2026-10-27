@@ -16,6 +16,8 @@ What this script does:
 
 Usage:
   python build_knowledge_base.py --pdf path/to/indian_contract_act_1872.pdf
+  python build_knowledge_base.py --clean-text knowledge_base/statutes/ica_1872_clean.txt
+  python build_knowledge_base.py --refresh-registry      # rewrite texts only, no torch
 
 Requirements (already in your requirements.txt):
   pip install pdfplumber pymupdf faiss-cpu transformers torch numpy tqdm
@@ -29,7 +31,6 @@ import sys
 import numpy as np
 from pathlib import Path
 from tqdm import tqdm
-from fix_segmentation import segment_into_sections_v2
 
 # ── 1. PDF TEXT EXTRACTION ────────────────────────────────────────────────────
 
@@ -95,75 +96,117 @@ def clean_text(text: str) -> str:
 
 # ── 3. SECTION SEGMENTATION ───────────────────────────────────────────────────
 
-def segment_into_sections(text: str) -> list[dict]:
+# A section header in the body of the Act: "27. Agreement in restraint of trade, void.—Every ..."
+# Some headers carry an amendment marker ("1[16.“Undue influence” defined.—") and some have no
+# space after the number ("73.Compensation for loss ..."), and two have a footnote superscript
+# glued to the number ("1151. Care to be taken by bailee" is footnote 1 + S.151).
+_HEADER_RE = re.compile(r"^(?:\d\[|\d(?=\d{3}\.))?(\d{1,3})([A-Z]{0,2})\.\s*(?=[^\d\s.])", re.MULTILINE)
+# Title runs from the header to the first em-dash; may wrap onto a second line.
+_TITLE_RE = re.compile(r"([^—]{2,350}?)\.?\s*—", re.DOTALL)
+# Page-footer amendment notes: "1. Subs. by Act 6 of 1899, s. 2, for the original s. 16."
+_FOOTNOTE_LINE_RE = re.compile(
+    r"^\d{1,2}\.\s*(?:Subs|Ins|Rep|Omitted|The words|Added|Certain|Cl\.|Section|S\.|Ss\.|Now|See|Cf\.)\b.*$",
+    re.MULTILINE,
+)
+_AMENDMENT_MARK_RE = re.compile(r"(?<![\w\[])\d{1,2}\[")
+MAX_SECTION_CHARS = 3000
+
+
+def _section_key(num: str, suffix: str) -> tuple[int, str]:
+    return int(num), suffix
+
+
+def segment_into_sections(text: str, verbose: bool = True) -> list[dict]:
     """
-    Split the ICA text into sections using regex patterns.
+    Split the cleaned ICA text into one chunk per section.
 
-    ICA 1872 section headers typically look like:
-      "1. Short title."
-      "Section 27.—Agreement in restraint of trade, void."
-      "27. Agreement in restraint of trade, void."
-      "CHAPTER III"
+    The cleaned text opens with an "ARRANGEMENT OF SECTIONS" table of contents whose lines
+    look like headers ("27. Agreement in restraint of trade, void."), so parsing starts at the
+    second "1. Short title". In the body a real header always has an em-dash after its title,
+    and section numbers only go up, which rejects footnote lines ("1. Subs. by Act ...") and
+    numbered lists inside a section.
+
+    The section's operative text (everything after the em-dash) is kept in full; an earlier
+    segmenter captured a fixed 80-char title and silently dropped the opening words of every
+    section (e.g. S.27 began "ined from exercising ...").
     """
-    print("\n[3/5] Segmenting into sections...")
+    if verbose:
+        print("\n[3/5] Segmenting into sections...")
 
-    # Pattern covers multiple header formats found in indiacode PDFs
-    # Group 1 = section number, Group 2 = section title
-    SECTION_PATTERN = re.compile(
-        r'(?:^|\n)'                              # start of line
-        r'(?:Section\s+)?'                        # optional "Section"
-        r'(\d{1,3}[A-Z]?)'                        # section number e.g. 27, 73A
-        r'(?:[\.\-—\s]+)'                          # separator
-        r'([A-Z][^\n]{5,80}?)'                    # title (starts with capital)
-        r'(?:\.|\n|—)',                            # ends with . or newline
-        re.MULTILINE
-    )
+    toc_ends = [m.start() for m in re.finditer(r"^1\.\s*Short title", text, re.MULTILINE)]
+    body_start = toc_ends[1] if len(toc_ends) > 1 else (toc_ends[0] if toc_ends else 0)
 
-    matches = list(SECTION_PATTERN.finditer(text))
-    print(f"      Section headers detected: {len(matches)}")
-
-    if len(matches) < 5:
-        # Fallback: split on any "number followed by period" pattern
-        print("      Primary pattern found few sections — trying fallback pattern...")
-        SECTION_PATTERN = re.compile(
-            r'(?:^|\n)(\d{1,3})\.\s+([A-Z][^\n]{5,80})',
-            re.MULTILINE
-        )
-        matches = list(SECTION_PATTERN.finditer(text))
-        print(f"      Fallback sections detected: {len(matches)}")
+    headers = []
+    last = (0, "")
+    for m in _HEADER_RE.finditer(text, body_start):
+        key = _section_key(m.group(1), m.group(2))
+        if key <= last:
+            continue
+        window = text[m.end(): m.end() + 400]
+        if not (_TITLE_RE.match(window) or window.startswith("[")):
+            continue
+        headers.append(m)
+        last = key
 
     sections = []
-    for i, match in enumerate(matches):
-        section_num = match.group(1).strip()
-        section_title = match.group(2).strip().rstrip('.')
+    for i, m in enumerate(headers):
+        end = headers[i + 1].start() if i + 1 < len(headers) else len(text)
+        chunk = text[m.end():end]
+        title_m = _TITLE_RE.match(chunk)
+        if not title_m:
+            continue  # "[Repealed.]" stubs and other title-less entries
+        title = " ".join(title_m.group(1).split()).strip().rstrip(".")
+        body = chunk[title_m.end():]
+        body = _FOOTNOTE_LINE_RE.sub("", body)
+        body = _AMENDMENT_MARK_RE.sub("", body)
+        body = re.sub(r"\n{2,}", "\n", body).strip()
+        if len(body) < 20 or title.startswith("[") or "Repealed" in title:
+            continue  # repealed stubs: "[Delivery how made.] Rep. by s. 65, ibid."
+        if len(body) > MAX_SECTION_CHARS:
+            body = body[:MAX_SECTION_CHARS] + "..."
 
-        # Text = from this match to the next match (or end of document)
-        start = match.end()
-        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
-        section_text = text[start:end].strip()
-
-        # Skip very short sections (likely false positives)
-        if len(section_text) < 30:
-            continue
-
-        # Truncate very long sections at 2000 chars for embedding sanity
-        if len(section_text) > 2000:
-            section_text = section_text[:2000] + "..."
-
-        section_id = f"ICA_S{section_num}"
+        section_num = f"{m.group(1)}{m.group(2)}"
         sections.append({
-            "id": section_id,
+            "id": f"ICA_S{section_num}",
             "section_number": section_num,
-            "title": section_title,
-            "text": f"Section {section_num}. {section_title}. {section_text}",
-            "source": "Indian Contract Act 1872"
+            "title": title,
+            "text": f"Section {section_num}. {title}. {body}",
+            "source": "Indian Contract Act 1872",
         })
 
-    print(f"      Valid sections extracted: {len(sections)}")
-    if sections:
-        print(f"      Section IDs sample: {[s['id'] for s in sections[:5]]}")
-
+    if verbose:
+        print(f"      Valid sections extracted: {len(sections)}")
+        if sections:
+            print(f"      Section IDs sample: {[s['id'] for s in sections[:5]]}")
     return sections
+
+
+def refresh_registry_texts(registry: dict[str, dict], sections: list[dict]) -> tuple[dict[str, dict], dict]:
+    """
+    Rewrite the ICA entries of an existing chunk registry from freshly segmented sections,
+    without re-embedding.
+
+    Existing ids keep their position, so FAISS row i still maps to the i-th registry key.
+    Sections missing from the registry are appended at the end: BM25 and the statute map can
+    reach them immediately, FAISS only after the index is rebuilt. Non-ICA entries are untouched.
+    """
+    by_id = {s["id"]: s for s in sections}
+    updated, unchanged, not_found = [], [], []
+    out: dict[str, dict] = {}
+    for sid, entry in registry.items():
+        fresh = by_id.get(sid)
+        if not sid.startswith("ICA_") or fresh is None:
+            if sid.startswith("ICA_"):
+                not_found.append(sid)
+            out[sid] = entry
+            continue
+        new_entry = dict(entry, title=fresh["title"], text=fresh["text"])
+        (updated if new_entry != entry else unchanged).append(sid)
+        out[sid] = new_entry
+    added = [s["id"] for s in sections if s["id"] not in registry]
+    for sid in added:
+        out[sid] = by_id[sid]
+    return out, {"updated": updated, "unchanged": unchanged, "not_found": not_found, "added": added}
 
 
 # ── 4. EMBEDDING + FAISS INDEX ────────────────────────────────────────────────
@@ -336,42 +379,79 @@ def run_retrieval_test(chunk_registry, faiss_index, model_name="law-ai/InLegalBE
     print("="*60)
 
 
+def refresh_registry_main(clean_text_path: str, output_dir: str) -> None:
+    registry_path = f"{output_dir}/chunk_registry.json"
+    with open(clean_text_path, encoding="utf-8") as f:
+        clean = f.read()
+    with open(registry_path, encoding="utf-8") as f:
+        registry = json.load(f)
+
+    sections = segment_into_sections(clean)
+    refreshed, report = refresh_registry_texts(registry, sections)
+    with open(registry_path, "w", encoding="utf-8") as f:
+        json.dump(refreshed, f, indent=2, ensure_ascii=False)
+
+    print(f"\nRefreshed {registry_path}")
+    print(f"  updated   : {len(report['updated'])}")
+    print(f"  unchanged : {len(report['unchanged'])}")
+    print(f"  not found : {report['not_found'] or 'none'}")
+    print(f"  appended  : {report['added'] or 'none'}")
+    print("FAISS vectors now describe the old text. Re-embed on a machine with torch:")
+    print("  python build_knowledge_base.py --clean-text knowledge_base/statutes/ica_1872_clean.txt")
+
+
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 
 def main():
     parser = argparse.ArgumentParser(description="Build ICA 1872 knowledge base for RAG pipeline")
-    parser.add_argument("--pdf", required=True, help="Path to indian_contract_act_1872.pdf")
+    parser.add_argument("--pdf", help="Path to indian_contract_act_1872.pdf")
+    parser.add_argument("--clean-text", help="Use an already-cleaned text file instead of extracting from --pdf "
+                        "(e.g. knowledge_base/statutes/ica_1872_clean.txt)")
+    parser.add_argument("--refresh-registry", action="store_true",
+                        help="Re-segment --clean-text (default: <output>/statutes/ica_1872_clean.txt) and rewrite "
+                             "the ICA texts in chunk_registry.json in place, keeping id order so the existing "
+                             "FAISS index stays aligned. No PDF, torch or embedding model needed.")
     parser.add_argument("--output", default="knowledge_base", help="Output directory (default: knowledge_base/)")
     parser.add_argument("--model", default="law-ai/InLegalBERT", help="HuggingFace model for embeddings")
     parser.add_argument("--skip-embed", action="store_true", help="Skip embedding (use if FAISS index already exists)")
     args = parser.parse_args()
 
-    if not os.path.exists(args.pdf):
-        print(f"ERROR: PDF not found at '{args.pdf}'")
-        print("Download the Indian Contract Act 1872 PDF from https://indiacode.nic.in")
-        sys.exit(1)
+    if args.refresh_registry:
+        refresh_registry_main(args.clean_text or f"{args.output}/statutes/ica_1872_clean.txt", args.output)
+        return
 
-    # Step 1: Extract
-    raw_text = extract_text_from_pdf(args.pdf)
+    if args.clean_text:
+        with open(args.clean_text, encoding="utf-8") as f:
+            clean = f.read()
+        print(f"Using cleaned text from {args.clean_text}")
+    else:
+        if not args.pdf or not os.path.exists(args.pdf):
+            print(f"ERROR: PDF not found at '{args.pdf}'")
+            print("Download the Indian Contract Act 1872 PDF from https://indiacode.nic.in,")
+            print("or pass --clean-text knowledge_base/statutes/ica_1872_clean.txt")
+            sys.exit(1)
 
-    # Step 2: Clean
-    clean = clean_text(raw_text)
+        # Step 1: Extract
+        raw_text = extract_text_from_pdf(args.pdf)
 
-    # Save cleaned text for inspection
-    os.makedirs(f"{args.output}/statutes", exist_ok=True)
-    with open(f"{args.output}/statutes/ica_1872_clean.txt", "w", encoding="utf-8") as f:
-        f.write(clean)
-    print(f"\n      Saved cleaned text -> {args.output}/statutes/ica_1872_clean.txt")
-    print("      WARNING: Open this file and verify section headers were detected correctly before proceeding!")
+        # Step 2: Clean
+        clean = clean_text(raw_text)
+
+        # Save cleaned text for inspection
+        os.makedirs(f"{args.output}/statutes", exist_ok=True)
+        with open(f"{args.output}/statutes/ica_1872_clean.txt", "w", encoding="utf-8") as f:
+            f.write(clean)
+        print(f"\n      Saved cleaned text -> {args.output}/statutes/ica_1872_clean.txt")
+        print("      WARNING: Open this file and verify section headers were detected correctly before proceeding!")
 
     # Step 3: Segment
-    sections = segment_into_sections_v2(clean, statute_prefix="ICA")
+    sections = segment_into_sections(clean)
 
     if len(sections) < 5:
         print("\nWARNING: Very few sections detected.")
         print("   Open knowledge_base/statutes/ica_1872_clean.txt")
         print("   Find how section headers actually look in your PDF")
-        print("   Then edit the SECTION_PATTERN regex in segment_into_sections()")
+        print("   Then edit _HEADER_RE / _TITLE_RE used by segment_into_sections()")
         print("   Common issue: indiacode PDFs sometimes have non-standard formatting")
 
     # Inject stubs for Multi-statute KB (Arbitration Act 1996 & IT Act 2000)

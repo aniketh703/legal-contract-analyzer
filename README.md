@@ -21,7 +21,7 @@ User uploads contract (PDF / TXT)
         ▼
   retriever.py        → adds retrieved_sections from ICA 1872 KB
   (statute map +        3-layer hybrid: statute map → FAISS → BM25
-   FAISS + BM25 +       185 ICA sections indexed
+   FAISS + BM25 +       193 ICA sections indexed
    RRF fusion)
         │
         ▼
@@ -39,7 +39,7 @@ User uploads contract (PDF / TXT)
 |--------|---------|
 | **CUAD dataset** (US commercial contracts, ~9,400 labeled clauses) | Primary classifier training — 39 clause types, text-pattern recognition |
 | **Hand-crafted Indian clauses** (151 examples, 3 types) | Supplemental training — Arbitration, Confidentiality, Indemnification in Indian legal drafting style |
-| **Indian Contract Act 1872 PDF** | Knowledge base — 185 legal sections retrieved to explain risk |
+| **Indian Contract Act 1872 PDF** | Knowledge base — 193 legal sections retrieved to explain risk |
 
 > **Note on training data:** The CUAD dataset originates from US commercial contracts. It is used solely for *clause type detection* — identifying what kind of clause a piece of text is. This task is largely language-pattern-based and transfers well across jurisdictions. The Indian-law risk analysis (ICA statute mapping, risk explanations, recommended actions) is handled entirely by `retriever.py` and `generator.py`, which are built specifically for the Indian Contract Act 1872.
 
@@ -65,7 +65,7 @@ data/
   eval/               gold eval set spec + tooling inputs (never used for training)
   indian_clauses.csv  151 hand-crafted Indian contract examples (Arbitration / Confidentiality / Indemnification)
   create_indian_clauses.py  script that generates indian_clauses.csv
-knowledge_base/       FAISS index + BM25 index + chunk_registry.json (185 ICA sections)
+knowledge_base/       FAISS index + BM25 index + chunk_registry.json (193 ICA sections)
 evaluation/           evaluate_classifier.py, evaluate_retriever.py, results/
 label_studio/         import_tasks.json (212 tasks), prepare_import.py
 models/               tfidf_vectorizer.pkl, clause_classifier.pkl, risk_map.json
@@ -104,7 +104,7 @@ Requires the **Indian Contract Act 1872** PDF placed anywhere accessible:
 python build_knowledge_base.py --pdf path\to\indian_contract_act_1872.pdf
 ```
 
-This produces `knowledge_base/chunk_registry.json`, `knowledge_base/faiss_index.bin`, and `knowledge_base/bm25_corpus.pkl` (185 ICA sections indexed).
+This produces `knowledge_base/chunk_registry.json`, `knowledge_base/faiss_index.bin`, and `knowledge_base/bm25_corpus.pkl` (193 ICA sections indexed).
 
 ---
 
