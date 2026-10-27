@@ -95,7 +95,16 @@ python evaluation/score_analyzer.py --gold data/eval/kanoon_gold.csv --review-sh
 Add `--no-embeddings` where torch / the InLegalBERT download isn't available (the numbers then
 approximate the live pipeline). Automatic metrics: hit@1/3/5, recall@k, MRR, clause-type accuracy,
 citation precision against the court's sections, unsupported-citation rate, refusal behaviour,
-p50/p95 latency and cost. v2 is scored by the same code through the same `Analyzer` interface.
+p50/p95 latency and cost. v2 is scored by the same code through the same `Analyzer` interface:
+
+```
+python evaluation/score_analyzer.py --analyzer v2 --gold data/eval/kanoon_gold.csv --review-sheet review_v2.csv
+python evaluation/score_analyzer.py --analyzer v2 --llm-backend fake --gold ...   # dry run, no credentials
+```
+
+v2 needs `GOOGLE_CLOUD_PROJECT` and Application Default Credentials (see `pipeline/llm_client.py`).
+It writes `evaluation/results/v2_<model>_baseline.json` and adds `metrics.checks` (gate and model
+refusals, invalid JSON, dropped risks, ungrounded quotes).
 
 ## Hand-review checks
 

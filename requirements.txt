@@ -30,5 +30,9 @@ pytest>=8.0.0
 pytesseract>=0.3.10
 Pillow>=10.0.0
 
+# v2 LLM generator on Vertex AI (pipeline/llm_client.py): ADC auth; google-genai only for the Gemini arm
+google-auth>=2.30.0
+google-genai>=1.0.0
+
 # MCP server (optional — exposes the pipeline as agent tools, see mcp_server/)
 mcp[cli]>=2.0.0

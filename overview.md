@@ -4,7 +4,7 @@
 > it's the single place to see what this project *is*, not just what's in README.md
 > (user-facing setup/usage) or HANDOFF.md (point-in-time status snapshots).
 >
-> Last updated: 23 Oct 2026
+> Last updated: 27 Oct 2026
 
 ---
 
@@ -211,6 +211,48 @@ the one before it.
    answer when retrieval confidence is low** rather than let the LLM fill the
    gap with an unsupported claim.
 
+   **Status: built and tested offline; first live run pending (needs your GCP
+   credentials).** Model: **Gemma 4 26B (open weights) as Vertex AI's managed
+   API** (`google/gemma-4-26b-a4b-it-maas`), **$0.15 / $0.60 per 1M input /
+   output tokens**, about 10× cheaper than Gemini Flash ($1.50 / $7.50–9.00).
+   Gemini stays one flag away as a comparison arm (`--llm-backend genai`).
+   - **Region trade-off.** The managed Gemma 4 API is listed only in the
+     `global` location, not `asia-south1` (Mumbai), so requests may be served
+     outside India. If data residency matters, self-deploy Gemma 4 from Model
+     Garden to an endpoint in `asia-south1`; that bills per GPU-hour even when
+     idle. The location is an env var (`LCA_LLM_LOCATION`), not code.
+   - **Code.** `pipeline/llm_client.py` (Vertex OpenAI-compatible endpoint,
+     google-genai, and an offline fake) and `pipeline/llm_generator.py`.
+     `V2Analyzer` in `evaluation/score_analyzer.py` reuses v1's classify →
+     retrieve step, so retrieval numbers match and only the generator differs.
+   - **Refusal, in three layers.** (1) A retrieval gate before any model call:
+     answer only if the statute map supplied a section for the predicted type,
+     or FAISS and BM25 agree on the top section (RRF score above one list's
+     maximum). It has no fitted threshold, so nothing is tuned on the gold set.
+     (2) The model may refuse when the sections don't govern the clause.
+     (3) A code-side grounding check: every risk must cite a retrieved section
+     and quote ≤25 words of it verbatim. Risks that fail are dropped and
+     counted; if none survive, the clause is refused.
+   - **Metrics.** The scorer gets the model's raw citations, so the
+     unsupported-citation rate measures the model, not the filter. Gate and
+     model refusals, invalid JSON, dropped risks and ungrounded quotes are
+     summed under `metrics.checks`.
+   - **Known gaps.** (a) The statute map sends `IPAssignment` to ICA
+     S.10/S.11, so an out-of-scope copyright assignment passes the gate and
+     only the model can refuse it; Step 4 measures how often it does.
+     (b) Without FAISS (no torch), only BM25 ranks types the statute map
+     doesn't cover, so the gate refuses them all.
+   - **Your first live run:**
+     ```
+     gcloud auth application-default login
+     export GOOGLE_CLOUD_PROJECT=<your-project>
+     python -m pipeline.llm_client --smoke          # checks endpoint + model id + auth
+     python evaluation/score_analyzer.py --analyzer v2 --gold data/eval/kanoon_gold.csv --review-sheet review_v2.csv
+     ```
+     If the smoke test says the model id or endpoint is wrong, fix it with
+     `LCA_LLM_MODEL` (the docs domain was blocked here, so the id came from the
+     pricing page and a search result rather than the model card).
+
 4. **Measure v1 against v2.**
    Hand-review at least 30 outputs; write a pass/fail check per failure type.
    Compare: faithfulness pass rate, missed-risk rate, unsupported-citation
@@ -287,7 +329,11 @@ From HANDOFF.md's "Next Steps," toward Mid Eval-2 (21 Nov) and End-Term (4–5 J
 - [x] MCP server built, bug-fixed, verified
 - [x] IEEE paper drafted and compiling
 - [x] Mid Eval-1 presented (19 Sep 2026) with a template-compliant deck
-- [x] All work merged to `master` (PR #1, 23 Oct 2026)
+- [x] All work merged to `master` (PR #1, 23 Oct 2026). The last unmerged branch,
+      `main` (report docs, CUAD CSV, executed Colab run), merged in PR #2 (27 Oct);
+      `main` now tracks `master`. `claude/ieee-paper` and `finetune-inlegalbert` are fully
+      merged and can be deleted from GitHub's branch page.
+- [x] KB statute text fixed (PR #3, 27 Oct) — see §3
 - [ ] **Live public deployment** — in progress right now
 - [ ] InLegalBERT wired into production (blocked on deciding the thin-class
       guardrail approach)
@@ -296,7 +342,9 @@ From HANDOFF.md's "Next Steps," toward Mid Eval-2 (21 Nov) and End-Term (4–5 J
 - [ ] Mid Eval-2 (21 Nov 2026)
 - [ ] End-Term (4–5 Jan 2027)
 - [ ] **v2 plan (§4), in progress:** ✅ retriever eval fixed to use predicted
-      types (canonical `loo` run still to do) · v1 eval set built · Gemini/Vertex AI generator built · v1-vs-v2
+      types (canonical `loo` run still to do) · ✅ eval tooling built (gold rows
+      being collected) · ✅ Gemma 4 / Vertex AI generator built (first live run on
+      your machine) · re-embed FAISS after the KB text fix · v1-vs-v2
       hand-reviewed comparison (≥30 outputs) · Langfuse tracing · Cloud Run
       deploy · README/diagram/demo-video packaging · Naukri description updated
 

@@ -239,3 +239,82 @@ def test_main_refuses_invalid_rows_unless_skipped(tmp_path, monkeypatch):
     assert sa.main(["--analyzer", "fake", "--gold", str(gold_csv), "--out", str(out)]) == 2
     assert sa.main(["--analyzer", "fake", "--gold", str(gold_csv), "--out", str(out), "--skip-invalid"]) == 0
     assert json.loads(out.read_text())["rows_skipped_invalid"] == 1
+
+
+# --- v2 adapter ---------------------------------------------------------------
+
+def _fake_pipeline(monkeypatch, sections):
+    import pipeline.classifier as classifier
+    import pipeline.retriever as retriever
+
+    monkeypatch.setattr(classifier, "classify_clauses", lambda clauses, use_embeddings=True, **kw: [
+        dict(c, clause_type="NonCompete", risk_level="HIGH", method="ml", confidence=0.8) for c in clauses])
+    monkeypatch.setattr(retriever, "retrieve_statutes", lambda clauses, top_k=5, cache=None, **kw: [
+        dict(c, retrieved_sections=sections) for c in clauses])
+
+
+V2_SECTIONS = [
+    {"section_id": "ICA_S27", "title": "Restraint", "score": 0.0328, "source": "statute_map",
+     "text": "Section 27. Restraint. Every agreement by which any one is restrained from exercising a lawful profession."},
+    {"section_id": "ICA_S73", "title": "Damages", "score": 0.0161, "source": "bm25",
+     "text": "Section 73. Damages. When a contract has been broken, the party who suffers is compensated."},
+]
+
+
+def test_v2_adapter_reports_raw_citations_and_checks(monkeypatch):
+    from pipeline.llm_client import FakeClient
+    from evaluation.score_analyzer import V2Analyzer
+
+    _fake_pipeline(monkeypatch, V2_SECTIONS)
+    reply = json.dumps({"status": "answered", "risk_level": "high", "enforceability": "likely_unenforceable",
+                        "risks": [{"statement": "Void restraint.", "citations": ["ICA_S27"],
+                                   "evidence_quote": "is restrained from exercising a lawful profession"},
+                                  {"statement": "Invented.", "citations": ["SRA_S14"], "evidence_quote": "x"}],
+                        "recommended_action": "Narrow it."})
+    analyzer = V2Analyzer(use_embeddings=False, client=FakeClient(responses=[reply]))
+    res = analyzer.analyze("The employee shall not compete for two years.")
+    assert analyzer.name == "v2_fake-echo" and analyzer.config()["backend"] == "fake"
+    assert res.retrieved == ["ICA_S27", "ICA_S73"]
+    assert res.cited == ["ICA_S27", "SRA_S14"]              # raw: the scorer counts SRA_S14 as unsupported
+    assert res.extra["shown_citations"] == ["ICA_S27"]
+    assert res.extra["checks"]["risks_dropped"] == 1 and not res.refused
+    assert "SRA_S14" not in res.answer_text and "Narrow it." in res.answer_text
+
+
+def test_v2_warmup_spends_no_llm_call(monkeypatch):
+    from pipeline.llm_client import FakeClient
+    from evaluation.score_analyzer import V2Analyzer
+
+    _fake_pipeline(monkeypatch, V2_SECTIONS)
+    client = FakeClient(responses=[])
+    V2Analyzer(use_embeddings=False, client=client).warmup()
+    assert client.calls == []
+
+
+def test_checks_are_summed_only_when_present():
+    rows = [gold("A", "in", ["ICA_S27"]), gold("B", "in", ["ICA_S27"])]
+    plain = [result(["ICA_S27"]), result(["ICA_S27"])]
+    assert "checks" not in score_results(rows, plain)
+    with_checks = [result(["ICA_S27"]), result(["ICA_S27"])]
+    with_checks[0].extra = {"checks": {"risks_dropped": 1, "llm_calls": 1}}
+    with_checks[1].extra = {"checks": {"risks_dropped": 2, "llm_calls": 2, "note": "ignored"}}
+    assert score_results(rows, with_checks)["checks"] == {"risks_dropped": 3, "llm_calls": 3}
+
+
+def test_main_v2_with_fake_backend_end_to_end(tmp_path, monkeypatch):
+    _fake_pipeline(monkeypatch, V2_SECTIONS)
+    gold_csv = tmp_path / "gold.csv"
+    _write_gold(gold_csv, [{
+        "id": "T1", "url": "https://indiankanoon.org/doc/9000001/", "clause_type": "NonCompete",
+        "clause_text": "The Employee shall not, for two years after leaving the Company, work for a competitor.",
+        "sections_applied": "ICA_S27", "outcome": "unenforceable", "holding": "Held void.",
+    }])
+    out = tmp_path / "v2.json"
+    rc = sa.main(["--analyzer", "v2", "--llm-backend", "fake", "--no-embeddings",
+                  "--gold", str(gold_csv), "--out", str(out)])
+    assert rc == 0
+    report = json.loads(out.read_text())
+    assert report["analyzer"] == "v2_fake-echo" and report["config"]["model"] == "fake-echo"
+    m = report["metrics"]
+    assert m["checks"]["llm_calls"] == 1 and m["refusal"]["false_refusal_in_scope"] == 0.0
+    assert m["citations"]["unsupported_rate"] == 0.0
