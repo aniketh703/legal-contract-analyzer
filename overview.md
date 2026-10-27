@@ -175,6 +175,17 @@ the one before it.
    This becomes the **v1 baseline** (scored against the current template
    generator) before v2 exists, so the comparison in step 4 isn't retrofitted.
 
+   **Status: data collection in progress (by hand, from Indian Kanoon).** Schema,
+   inclusion rules, targets and a do-not-reuse list of the 93 judgments already
+   used live in `data/eval/`. Why a new set: `clauses.jsonl` is auto-extracted
+   (0 verified, `statute_reference` empty in all 212 rows), and the expected-statute
+   dict is hand-written by the same author as the statute map. Court-stated
+   sections give independent ground truth, and also let us check the map itself
+   (e.g. `IPAssignment`→S.10/S.11, `StampDuty`, `SpecificPerformance` and
+   `DPDP`→IT Act are all debatable; ICA S.16 is missing from the index).
+   The set also needs upheld clauses (to measure over-flagging) and out-of-scope
+   clauses (to test the low-confidence refusal in Step 3).
+
 3. **Build v2: add an LLM generator behind the existing retriever.**
    Keep the retriever as-is; put an LLM behind it — **Gemini via Vertex AI**
    (keeps everything on GCP, pairs with the Cloud Run deploy in step 5).
