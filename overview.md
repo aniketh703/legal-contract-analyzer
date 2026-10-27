@@ -83,11 +83,12 @@ Contract (PDF/TXT)
 ### Core pipeline
 - [x] Segmenter — PDF/TXT clause extraction, OCR fallback for scanned PDFs
 - [x] Classifier — 3-stage cascade, 47 clause types
-- [x] Retriever — 3-layer hybrid, **100% Hit@5** (statute map + BM25) —
-      ⚠️ **known measurement flaw**: this number is computed using each
-      clause's ground-truth label, not what the classifier actually predicts,
-      so it only proves the statute map covers all evaluated types — not that
-      the live pipeline hits 100%. See §4 Step 1 for the fix.
+- [x] Retriever — 3-layer hybrid. The old **100% Hit@5** was a measurement flaw
+      (statute map was fed each clause's ground-truth label, so it only proved
+      the map covers all 10 types). Re-measured with the classifier's *predicted*
+      types (v2 Step 1, §4): **67.3% micro / 64.4% macro Hit@5** on the same
+      171 clauses (BM25 alone: 29.8% micro), ML + keyword stages only — the
+      canonical run with the InLegalBERT fallback is still pending (see §4).
 - [x] Generator — template HTML report + AI narrative summary
 - [x] Flask app — all routes, Dockerized, `docker-compose.yml`
 - [x] CI — GitHub Actions, runs the test suite on push/PR (test-only, no deploy step)
@@ -155,6 +156,19 @@ the one before it.
    *classifier actually predicts* instead. That number reflects the real
    pipeline and may be lower. Keep the existing 171-clause, 10-type eval set and
    explanation — just change what feeds the statute lookup.
+
+   **Status: done (code), canonical number pending.** `evaluation/evaluate_retriever.py`
+   now classifies each clause with the real classifier and keys the statute map on
+   the *predicted* type (ground truth still defines what counts as a hit). Result,
+   ML + keyword stages only (`--embeddings off`): classifier type accuracy **48.5%**;
+   statute map + BM25 Hit@5 **67.3% micro / 64.4% macro** (was 100%); BM25-only
+   unchanged at 29.8% micro. This is lower than the old figure, as expected — and
+   it is the number to quote. The default mode (`--embeddings loo`, adds the
+   leave-one-out InLegalBERT fallback to match the live classifier) needs torch +
+   a Hugging Face model download, which this sandbox blocks; run it on a machine
+   or Colab that has them. The `off` run is saved separately in
+   `evaluation/results/retriever_report_ml_keyword_only.json` so it can't overwrite
+   the canonical `retriever_report.json`.
 
 2. **Build an eval set before any LLM code.**
    Queries, each with the correct ICA section and the expected risk facts.
@@ -252,8 +266,8 @@ From HANDOFF.md's "Next Steps," toward Mid Eval-2 (21 Nov) and End-Term (4–5 J
 - [ ] Paper submitted
 - [ ] Mid Eval-2 (21 Nov 2026)
 - [ ] End-Term (4–5 Jan 2027)
-- [ ] **v2 plan (§4), not started:** retriever eval fixed to use predicted
-      types · v1 eval set built · Gemini/Vertex AI generator built · v1-vs-v2
+- [ ] **v2 plan (§4), in progress:** ✅ retriever eval fixed to use predicted
+      types (canonical `loo` run still to do) · v1 eval set built · Gemini/Vertex AI generator built · v1-vs-v2
       hand-reviewed comparison (≥30 outputs) · Langfuse tracing · Cloud Run
       deploy · README/diagram/demo-video packaging · Naukri description updated
 
