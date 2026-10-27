@@ -4,11 +4,11 @@
   "classifier_type_accuracy": 0.485,
   "bm25_only": {
     "Arbitration": {
-      "hit_rate": 0.97,
+      "hit_rate": 0.939,
       "n": 33
     },
     "Termination": {
-      "hit_rate": 0.0,
+      "hit_rate": 0.176,
       "n": 17
     },
     "PaymentTerms": {
@@ -16,7 +16,7 @@
       "n": 16
     },
     "IPAssignment": {
-      "hit_rate": 0.067,
+      "hit_rate": 0.1,
       "n": 30
     },
     "NonCompete": {
@@ -32,7 +32,7 @@
       "n": 14
     },
     "Indemnification": {
-      "hit_rate": 0.25,
+      "hit_rate": 0.5,
       "n": 4
     },
     "Renewal": {
@@ -46,7 +46,7 @@
   },
   "statute_map_plus_bm25": {
     "Arbitration": {
-      "hit_rate": 1.0,
+      "hit_rate": 0.97,
       "n": 33
     },
     "Termination": {
@@ -58,7 +58,7 @@
       "n": 16
     },
     "IPAssignment": {
-      "hit_rate": 0.4,
+      "hit_rate": 0.367,
       "n": 30
     },
     "NonCompete": {

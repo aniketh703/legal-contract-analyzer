@@ -52,7 +52,7 @@ The outcome column also accepts `void`, `valid`, `upheld`, `partial`, `read down
 
 ## Scope is computed, not entered
 
-The retriever index holds ICA (185 sections), `ARB_S8`, `ARB_S11`, `IT_S43A`, `IT_S79`. For each row
+The retriever index holds ICA (193 sections), `ARB_S8`, `ARB_S11`, `IT_S43A`, `IT_S79`. For each row
 the loader compares `sections_applied` with the index:
 
 | Scope | Meaning | Used for |
@@ -61,9 +61,9 @@ the loader compares `sections_applied` with the index:
 | `mixed` | some are | retrieval metrics only (scored against the in-index sections) |
 | `out` | none are | "should refuse" test |
 
-Index gaps (absent from the index): ICA S.16, S.76-123 (repealed Sale of Goods part), S.151, 161,
-185, 186, 213. Record what the court applied even when it's missing here; those rows expose real
-KB gaps.
+Index gaps (absent from the index): ICA S.76-123 (the repealed Sale of Goods part) and repealed
+sections such as S.239-266. Record what the court applied even when it's missing here; those rows
+expose real KB gaps.
 
 ## Check your file
 
