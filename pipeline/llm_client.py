@@ -126,6 +126,16 @@ class VertexOpenAICompatClient:
                 f"/endpoints/openapi/chat/completions")
 
     def complete(self, messages: list[dict], json_mode: bool = True, max_tokens: int = 1024) -> LLMResponse:
+        # Timeouts, connection errors, auth refresh and SDK errors all become LLMError, so the
+        # generator records a refusal for this clause instead of aborting a whole scoring run.
+        try:
+            return self._complete(messages, json_mode, max_tokens)
+        except LLMError:
+            raise
+        except Exception as exc:
+            raise LLMError(f"{self.backend} request failed: {type(exc).__name__}: {exc}") from exc
+
+    def _complete(self, messages: list[dict], json_mode: bool, max_tokens: int) -> LLMResponse:
         body = {
             "model": self.model,
             "messages": _fold_system(messages) if "gemma" in self.model.lower() else messages,
@@ -168,6 +178,14 @@ class GenAIClient:
         self.model, self._client = model, client
 
     def complete(self, messages: list[dict], json_mode: bool = True, max_tokens: int = 1024) -> LLMResponse:
+        try:
+            return self._complete(messages, json_mode, max_tokens)
+        except LLMError:
+            raise
+        except Exception as exc:
+            raise LLMError(f"{self.backend} request failed: {type(exc).__name__}: {exc}") from exc
+
+    def _complete(self, messages: list[dict], json_mode: bool, max_tokens: int) -> LLMResponse:
         from google.genai import types
 
         system = "\n\n".join(m["content"] for m in messages if m["role"] == "system") or None

@@ -10,7 +10,8 @@ as structured JSON with citations, and refuses when the retrieval is too weak to
                            refused                     refused
 
 Grounding is checked in code, not trusted to the model: every risk must cite a section that
-was actually retrieved, and its evidence quote must appear in that section's text. Risks that
+was actually retrieved, and its evidence quote (at most 25 words) must appear in that section's
+text. Risks that
 fail are dropped from the output and counted in `checks`; if none survive, the clause is refused.
 
 Retrieval gate. RRF scores are rank-based, so a raw threshold means little. The gate passes when
@@ -209,9 +210,10 @@ def ground_risks(risks: list[dict], sections: list[dict]) -> tuple[list[dict], d
         grounded = bool(quote) and any(quote in texts[c] for c in supported)
         if not grounded:
             checks["quotes_ungrounded"] += 1
-        if len(r["evidence_quote"].split()) > MAX_QUOTE_WORDS:
+        too_long = len(r["evidence_quote"].split()) > MAX_QUOTE_WORDS
+        if too_long:
             checks["quotes_too_long"] += 1
-        if supported and grounded:
+        if supported and grounded and not too_long:
             kept.append(dict(r, citations=supported))
         else:
             checks["risks_dropped"] += 1

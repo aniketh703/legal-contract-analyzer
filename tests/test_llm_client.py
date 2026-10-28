@@ -121,3 +121,49 @@ def test_genai_client_maps_roles_and_usage():
     assert kw["config"].system_instruction == "Be brief."
     assert kw["config"].response_mime_type == "application/json"
     assert (resp.input_tokens, resp.output_tokens) == (7, 3)
+
+
+class RaisingSession:
+    def __init__(self, exc):
+        self.exc = exc
+
+    def post(self, *a, **kw):
+        raise self.exc
+
+
+def test_transport_errors_become_llm_error():
+    import requests
+
+    with pytest.raises(LLMError, match="Timeout"):
+        make(RaisingSession(requests.Timeout("read timed out"))).complete(MSGS)
+    with pytest.raises(LLMError, match="ConnectionError"):
+        make(RaisingSession(requests.ConnectionError("reset"))).complete(MSGS)
+
+
+def test_non_json_body_becomes_llm_error():
+    class BadJSON(FakeResponse):
+        def json(self):
+            raise ValueError("Expecting value")
+
+    with pytest.raises(LLMError, match="ValueError"):
+        make(FakeSession([BadJSON(200, text="<html>")])).complete(MSGS)
+
+
+def test_token_refresh_failure_becomes_llm_error():
+    def no_creds():
+        raise RuntimeError("default credentials not found")
+
+    client = VertexOpenAICompatClient("p", token_provider=no_creds, session=FakeSession([]))
+    with pytest.raises(LLMError, match="credentials"):
+        client.complete(MSGS)
+
+
+def test_genai_sdk_errors_become_llm_error():
+    pytest.importorskip("google.genai")
+    from unittest.mock import MagicMock
+    from pipeline.llm_client import GenAIClient
+
+    sdk = MagicMock()
+    sdk.models.generate_content.side_effect = RuntimeError("503 unavailable")
+    with pytest.raises(LLMError, match="503"):
+        GenAIClient("p", client=sdk).complete(MSGS)
