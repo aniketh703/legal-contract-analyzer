@@ -281,10 +281,17 @@ def _parse_yn(value: str, where: str) -> bool | None:
 def parse_review(sheet_rows: list[dict], key: dict) -> tuple[list[dict], list[str]]:
     """Validated per-output review records, plus a list of incomplete review ids."""
     records, incomplete = [], []
-    for row in sheet_rows:
+    seen: dict[str, int] = {}
+    for n, row in enumerate(sheet_rows, start=2):   # row 1 is the header
         rid = row.get("review_id", "").strip()
         if rid not in key:
             raise SheetError(f"review id {rid!r} is not in the key (was the sheet edited or re-sorted with ids changed?)")
+        if rid in seen:
+            # A copied row would be counted twice in the pass rates and silently override the
+            # other copy in the paired tests.
+            raise SheetError(f"review id {rid!r} appears more than once (rows {seen[rid]} and {n}); "
+                             "remove the duplicate row")
+        seen[rid] = n
         refused = row.get("refused", "").strip().upper() == "Y"
         n_facts = int(row.get("n_risk_facts") or 0)
         scope, outcome = row.get("scope", ""), row.get("outcome_gold", "")

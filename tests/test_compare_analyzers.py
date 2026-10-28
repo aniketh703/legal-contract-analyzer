@@ -254,3 +254,25 @@ def test_score_rejects_a_sheet_with_rows_removed(tmp_path, monkeypatch):
     lines = sheet_path.read_text(encoding="utf-8-sig").splitlines()
     sheet_path.write_text("\n".join(lines[:-1]) + "\n", encoding="utf-8-sig")
     assert ca.main(["score", "--out-dir", str(out)]) == 2
+
+
+def test_parse_rejects_duplicate_review_id():
+    rows = [sheet_row("R001", faithful="Y"), sheet_row("R002"), sheet_row("R001", faithful="N")]
+    with pytest.raises(ca.SheetError, match=r"more than once \(rows 2 and 4\)"):
+        ca.parse_review(rows, KEY)
+
+
+def test_score_rejects_a_sheet_with_a_duplicated_row(tmp_path, monkeypatch):
+    _fake_pipeline(monkeypatch)
+    gold_csv, out = tmp_path / "gold.csv", tmp_path / "cmp"
+    _write_gold(gold_csv)
+    ca.main(["run", "--gold", str(gold_csv), "--out-dir", str(out), "--no-embeddings",
+             "--llm-backend", "fake", "--review-n", "2"])
+    sheet_path = out / ca.SHEET_NAME
+    with open(sheet_path, encoding="utf-8-sig") as fh:
+        rows = list(csv.DictReader(fh))
+    with open(sheet_path, "w", encoding="utf-8-sig", newline="") as fh:
+        w = csv.DictWriter(fh, fieldnames=list(rows[0]))
+        w.writeheader()
+        w.writerows(rows + [rows[0]])
+    assert ca.main(["score", "--out-dir", str(out)]) == 2
