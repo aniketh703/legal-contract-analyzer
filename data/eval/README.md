@@ -119,6 +119,32 @@ analyzer's output next to the court's holding and mark each:
 | `contradicts_court` | the output never says the clause is valid when the court held it void, or the reverse (pass = N) |
 | `overflags_valid_clause` | for `enforceable` rows, the output doesn't call the clause void or illegal (pass = N) |
 
+A refused output needs no marks: it claims nothing (faithful, no unsupported citation, no
+contradiction, no over-flag) and misses every risk fact. `missed_risk_facts` is only scored on
+in-scope and mixed rows, so a correct refusal of an out-of-scope clause isn't penalised.
+
+## v1 vs v2 (Step 4)
+
+```
+python evaluation/compare_analyzers.py run   --gold data/eval/kanoon_gold.csv --out-dir evaluation/results/compare \
+       --contracts path/to/contract1.pdf path/to/contract2.pdf
+# fill in evaluation/results/compare/review_blind.csv
+python evaluation/compare_analyzers.py score --out-dir evaluation/results/compare
+```
+
+`run` scores both analyzers and writes **one blinded sheet**: the same 30 clauses (stratified by
+scope and outcome) for both, each output under an anonymous id (R001, R002, ...), the two outputs
+of a clause next to each other in random order. Section texts are in `review_sections.md`.
+Which analyzer wrote which output is in `review_key.json`: **don't open it until you've finished
+the sheet**. Blinding is partial (template and LLM outputs read differently), but you never see a
+label. `--contracts` segments a few real contracts to turn cost per clause into cost per contract.
+
+`score` writes `comparison.md` (the results table) and `comparison.json`: hand-review pass rates
+with 95% Wilson intervals, exact McNemar p-values on the paired clauses, and the automatic
+metrics (hit@k, unsupported-citation rate, refusals, court-outcome agreement for v2, p50/p95
+latency, cost per clause and per contract). With 30 clauses an interval is roughly ±15 points,
+so read small differences as ties.
+
 ## Hard rules
 
 - **Never merge these rows into** `data/processed/clauses.jsonl`, `data/indian_clauses.csv`, the

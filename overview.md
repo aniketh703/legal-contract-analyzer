@@ -4,7 +4,7 @@
 > it's the single place to see what this project *is*, not just what's in README.md
 > (user-facing setup/usage) or HANDOFF.md (point-in-time status snapshots).
 >
-> Last updated: 27 Oct 2026
+> Last updated: 28 Oct 2026
 
 ---
 
@@ -258,6 +258,18 @@ the one before it.
    Compare: faithfulness pass rate, missed-risk rate, unsupported-citation
    rate, Hit@k, p50/p95 latency, and cost per contract.
 
+   **Status: tooling built and tested; waiting on gold rows + a live Gemma run.**
+   `evaluation/compare_analyzers.py run` scores v1 and v2 on the same gold rows
+   and writes one **blinded** review sheet: the same 30 stratified clauses for
+   both, anonymous ids, labels in a separate key file. `score` reads the filled
+   sheet and writes `comparison.md`: the five pass/fail checks (definitions in
+   `data/eval/README.md`) with 95% Wilson intervals, paired McNemar tests, and
+   the automatic metrics side by side, including cost per contract (from
+   segmenting real contracts). Refusals are auto-filled (claims nothing, misses
+   every fact); missed-risk counts only in-scope rows so correct out-of-scope
+   refusals aren't penalised. At n=30 an interval is about ±15 points, so the
+   write-up should call small gaps ties rather than wins.
+
 5. **Add tracing and deploy.**
    Add **Langfuse** tracing. Deploy on **Google Cloud Run** (the existing
    Docker setup is the starting point — note this supersedes the Hugging Face
@@ -344,7 +356,8 @@ From HANDOFF.md's "Next Steps," toward Mid Eval-2 (21 Nov) and End-Term (4–5 J
 - [ ] **v2 plan (§4), in progress:** ✅ retriever eval fixed to use predicted
       types (canonical `loo` run still to do) · ✅ eval tooling built (gold rows
       being collected) · ✅ Gemma 4 / Vertex AI generator built (first live run on
-      your machine) · re-embed FAISS after the KB text fix · v1-vs-v2
+      your machine) · re-embed FAISS after the KB text fix · ✅ v1-vs-v2 comparison
+      tooling (blind sheet + scorer) · v1-vs-v2
       hand-reviewed comparison (≥30 outputs) · Langfuse tracing · Cloud Run
       deploy · README/diagram/demo-video packaging · Naukri description updated
 
