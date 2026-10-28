@@ -182,3 +182,12 @@ def test_cost_from_usage(monkeypatch):
 def test_echo_fake_produces_a_grounded_answer():
     res = generate_clause_analysis(CLAUSE, "NonCompete", [S27, S73], FakeClient())
     assert res.status == "answered" and res.cited == ["ICA_S27"]
+
+
+def test_over_long_quote_is_dropped_even_when_grounded():
+    long_sec = dict(S27, text="Section 27. Restraint. " + " ".join(f"w{i}" for i in range(40)))
+    quote = " ".join(f"w{i}" for i in range(30))          # verbatim, but 30 words > 25
+    reply = answer([risk(["ICA_S27"], quote)])
+    res = generate_clause_analysis(CLAUSE, "NonCompete", [long_sec], FakeClient(responses=[reply]))
+    assert res.checks["quotes_too_long"] == 1 and res.checks["risks_dropped"] == 1
+    assert res.refused and res.checks["refused_ungrounded"] == 1

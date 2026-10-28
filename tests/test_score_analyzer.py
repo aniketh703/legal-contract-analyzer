@@ -318,3 +318,50 @@ def test_main_v2_with_fake_backend_end_to_end(tmp_path, monkeypatch):
     m = report["metrics"]
     assert m["checks"]["llm_calls"] == 1 and m["refusal"]["false_refusal_in_scope"] == 0.0
     assert m["citations"]["unsupported_rate"] == 0.0
+
+
+def test_unknown_cost_is_not_reported_as_zero():
+    rows = [gold("A", "in", ["ICA_S27"]), gold("B", "in", ["ICA_S27"])]
+    known = [result(["ICA_S27"], cost=0.001), result(["ICA_S27"], cost=0.002)]
+    c = score_results(rows, known)["cost_usd"]
+    assert c["rows_unknown"] == 0 and c["total"] == pytest.approx(0.003)
+
+    mixed = [result(["ICA_S27"], cost=0.001), result(["ICA_S27"])]
+    mixed[1].cost_known = False
+    m = score_results(rows, mixed)
+    assert m["cost_usd"] == {"total": None, "per_clause": None, "rows_unknown": 1}
+    assert [r["cost_known"] for r in m["rows"]] == [True, False]
+
+
+def test_v2_adapter_marks_unpriced_model(monkeypatch):
+    from pipeline.llm_client import FakeClient
+    from evaluation.score_analyzer import V2Analyzer
+
+    _fake_pipeline(monkeypatch, V2_SECTIONS)
+    res = V2Analyzer(use_embeddings=False, client=FakeClient(model="unpriced-model")).analyze("No competing.")
+    assert res.cost_known is False and res.cost_usd == 0.0
+
+
+def test_scoring_run_survives_a_failing_llm_call(tmp_path, monkeypatch):
+    from pipeline.llm_client import FakeClient, LLMError
+
+    class FlakyClient(FakeClient):
+        def complete(self, messages, json_mode=True, max_tokens=1024):
+            if len(self.calls) == 0:
+                self.calls.append(messages)
+                raise LLMError("vertex_openai request failed: Timeout: read timed out")
+            return super().complete(messages, json_mode, max_tokens)
+
+    _fake_pipeline(monkeypatch, V2_SECTIONS)
+    monkeypatch.setitem(sa.ANALYZERS, "flaky", lambda args: sa.V2Analyzer(use_embeddings=False, client=FlakyClient()))
+    gold_csv = tmp_path / "gold.csv"
+    _write_gold(gold_csv, [
+        {"id": f"T{i}", "url": f"https://indiankanoon.org/doc/900000{i}/", "clause_type": "NonCompete",
+         "clause_text": f"The Employee shall not, for {i} years after leaving the Company, work for a competitor.",
+         "sections_applied": "ICA_S27", "outcome": "unenforceable", "holding": "Held void."}
+        for i in (1, 2)
+    ])
+    out = tmp_path / "flaky.json"
+    assert sa.main(["--analyzer", "flaky", "--gold", str(gold_csv), "--out", str(out)]) == 0
+    m = json.loads(out.read_text())["metrics"]
+    assert m["checks"]["llm_errors"] == 1 and m["counts"]["rows"] == 2

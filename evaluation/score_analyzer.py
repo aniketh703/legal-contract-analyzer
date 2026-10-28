@@ -69,6 +69,7 @@ class AnalysisResult:
     refused: bool = False
     latency_s: float = 0.0                               # set by the scorer, not the analyzer
     cost_usd: float = 0.0
+    cost_known: bool = True                              # False when the model has no price entry
     extra: dict = field(default_factory=dict)
 
 
@@ -170,13 +171,13 @@ class V2Analyzer(V1Analyzer):
             answer_text=gen.answer_text(),
             refused=gen.refused,
             cost_usd=gen.cost_usd or 0.0,
+            cost_known=gen.cost_usd is not None,
             extra={
                 "checks": gen.checks,
                 "enforceability": gen.enforceability,
                 "refusal_reason": gen.refusal_reason,
                 "shown_citations": gen.cited,
                 "tokens": {"input": gen.input_tokens, "output": gen.output_tokens},
-                "cost_known": gen.cost_usd is not None,
             },
         )
 
@@ -215,6 +216,7 @@ def row_record(row: GoldRow, res: AnalysisResult, ks: tuple[int, ...]) -> dict:
         "retrieved": res.retrieved, "cited": res.cited,
         "top_score": res.retrieved_scores[0] if res.retrieved_scores else None,
         "refused": res.refused, "latency_ms": round(res.latency_s * 1000, 2), "cost_usd": res.cost_usd,
+        "cost_known": res.cost_known,
         "first_hit_rank": rank,
     }
     if row.scope in ("in", "mixed"):
@@ -252,6 +254,7 @@ def score_results(rows: list[GoldRow], results: list[AnalysisResult], ks: tuple[
     rows_unsupported = sum(1 for res in results if any(c not in res.retrieved for c in res.cited))
 
     latencies = [res.latency_s * 1000 for res in results]
+    cost_unknown = sum(1 for res in results if not res.cost_known)
     checks: dict[str, float] = {}
     for res in results:
         for key, value in (res.extra.get("checks") or {}).items():
@@ -284,8 +287,10 @@ def score_results(rows: list[GoldRow], results: list[AnalysisResult], ks: tuple[
         },
         "retrieval_confidence": {"mean_top_score_in_scope": _mean(top_in), "mean_top_score_out_of_scope": _mean(top_out)},
         "latency_ms": {"p50": percentile(latencies, 50), "p95": percentile(latencies, 95)},
-        "cost_usd": {"total": sum(res.cost_usd for res in results),
-                     "per_clause": _mean([res.cost_usd for res in results])},
+        # A partial sum would pass as the real cost, so any unpriced row makes the totals unknown.
+        "cost_usd": {"total": None if cost_unknown else sum(res.cost_usd for res in results),
+                     "per_clause": None if cost_unknown else _mean([res.cost_usd for res in results]),
+                     "rows_unknown": cost_unknown},
         **({"checks": checks} if checks else {}),
         "by_outcome": grouped(lambda rec: rec["outcome"]),
         "by_gold_type": grouped(lambda rec: rec["gold_type"] or "(blank)"),
@@ -382,7 +387,10 @@ def print_summary(name: str, m: dict, ks: tuple[int, ...]) -> None:
     rf = m["refusal"]
     print(f"  refusal    out-of-scope refused: {_fmt(rf['refused_out_of_scope'])}   in-scope wrongly refused: {_fmt(rf['false_refusal_in_scope'])}")
     lat = m["latency_ms"]
-    print(f"  latency    p50 {_fmt(lat['p50'], pct=False)} ms   p95 {_fmt(lat['p95'], pct=False)} ms   cost/clause ${m['cost_usd']['per_clause'] or 0:.4f}")
+    cost = m["cost_usd"]
+    cost_text = (f"unknown ({cost['rows_unknown']} rows without a price; set LCA_LLM_PRICE_IN/OUT)"
+                 if cost["rows_unknown"] else f"${cost['per_clause'] or 0:.4f}")
+    print(f"  latency    p50 {_fmt(lat['p50'], pct=False)} ms   p95 {_fmt(lat['p95'], pct=False)} ms   cost/clause {cost_text}")
     if "checks" in m:
         ck = m["checks"]
         print(f"  generator  refused by gate {ck.get('refused_by_gate', 0)}, by model {ck.get('refused_by_model', 0)}, "
